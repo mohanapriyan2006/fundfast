@@ -1,0 +1,43 @@
+package com.e_wallet.fundfast.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.e_wallet.fundfast.model.User;
+import com.e_wallet.fundfast.repository.UserRepository;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public User creatUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public List<User> getAllUser() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public User updateUser(Long id , User user){
+        if(userRepository.existsById(id)){
+            return userRepository.save(user);
+        }else{
+            return null;
+        }
+    }
+
+}

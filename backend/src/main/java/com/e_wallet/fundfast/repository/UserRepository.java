@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.e_wallet.fundfast.model.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<Long, User> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
 }
