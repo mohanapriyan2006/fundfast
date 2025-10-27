@@ -51,8 +51,9 @@ public class TransactionService {
         return transactionRepository.findByWalletId(id);
     }
 
-    public List<Transaction> getTransactionByWalletIdPageAndSort(Long id , Integer pageNo , Integer pageSize , String sortBy , String sortDir) {
-          if (sortBy == null || sortBy.isEmpty()) {
+    public List<Transaction> getTransactionByWalletIdPageAndSort(Long id, Integer pageNo, Integer pageSize,
+            String sortBy, String sortDir) {
+        if (sortBy == null || sortBy.isEmpty()) {
             sortBy = "timestamp";
         }
         if (sortDir == null || sortDir.isEmpty()) {
@@ -65,7 +66,7 @@ public class TransactionService {
             pageSize = 10;
         }
         Sort sort = sortDir.equalsIgnoreCase("ASC") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        return transactionRepository.findByWalletId(PageRequest.of(pageNo, pageSize, sort));
+        return transactionRepository.findByWalletId(id, PageRequest.of(pageNo, pageSize, sort)).getContent();
     }
 
     // public void deleteTransaction(Long id){
