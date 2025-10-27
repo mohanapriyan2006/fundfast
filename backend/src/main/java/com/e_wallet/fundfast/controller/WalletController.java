@@ -95,13 +95,14 @@ public class WalletController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteWallet(@PathVariable Long id) {
-        Optional<Wallet> existing = walletService.getWalletById(id);
-        if (existing.isPresent()) {
+    public ResponseEntity<String> deleteWallet(@PathVariable Long id) {
+        try {
             walletService.deleteWallet(id);
-            return ResponseEntity.ok("Wallet deleted successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Wallet not found!");
+            return ResponseEntity.ok("Wallet and its transactions deleted successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to delete wallet: " + e.getMessage());
         }
     }
 

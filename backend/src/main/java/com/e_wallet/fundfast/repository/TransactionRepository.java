@@ -23,4 +23,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findByToWallet_Id(Long walletId);
 
+    void deleteByFromWallet_IdOrToWallet_Id(Long fromId, Long toId);
+
 }

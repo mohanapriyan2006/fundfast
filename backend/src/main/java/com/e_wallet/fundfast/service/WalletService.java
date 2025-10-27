@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.e_wallet.fundfast.model.Transaction;
 import com.e_wallet.fundfast.model.User;
@@ -45,8 +46,12 @@ public class WalletService {
         return walletRepository.findByOwnerId(ownerId);
     }
 
+    @Transactional
     public void deleteWallet(Long id) {
-        walletRepository.deleteById(id);
+        Wallet wallet = walletRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Wallet not found with id: " + id));
+        transactionRepository.deleteByFromWallet_IdOrToWallet_Id(id, id);
+        walletRepository.delete(wallet);
     }
 
     public Wallet updateWallet(Long id, Wallet wallet) throws Exception {
@@ -79,7 +84,7 @@ public class WalletService {
     public Transaction transfer(Long fromWalletId, Long toWalletId, Double amount) throws Exception {
         Wallet fromWallet = walletRepository.findById(fromWalletId).orElse(null);
         Wallet toWallet = walletRepository.findById(toWalletId).orElse(null);
-        if(amount == null || amount <= 0)
+        if (amount == null || amount <= 0)
             throw new Exception("Transfer amount must be positive!");
         if (fromWallet == null || toWallet == null)
             throw new Exception("Wallet not found!");
