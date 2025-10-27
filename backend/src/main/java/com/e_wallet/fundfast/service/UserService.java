@@ -7,15 +7,23 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.e_wallet.fundfast.model.User;
+import com.e_wallet.fundfast.model.Wallet;
+import com.e_wallet.fundfast.repository.TransactionRepository;
 import com.e_wallet.fundfast.repository.UserRepository;
+import com.e_wallet.fundfast.repository.WalletRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final WalletRepository walletRepository;
+    private final TransactionRepository transactionRepository;
 
     public User createUser(User user) throws Exception {
         if (userRepository.existsByUsername(user.getUsername()))
@@ -34,8 +42,23 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+
+        List<Wallet> wallets = walletRepository.findByOwnerId(userId);
+
+        for (Wallet w : wallets) {
+            Long walletId = w.getId();
+            if (walletId != null) {
+                transactionRepository.deleteByFromWallet_IdOrToWallet_Id(walletId, walletId);
+            }
+        }
+        if (!wallets.isEmpty()) {
+            walletRepository.deleteAll(wallets);
+        }
+        userRepository.delete(user);
     }
 
     public User updateUser(Long id, User user) {

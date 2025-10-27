@@ -71,12 +71,13 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        Optional<User> existing = userService.getUserById(id);
-        if (existing.isPresent()) {
+        try {
             userService.deleteUser(id);
-            return ResponseEntity.ok("User deleted successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found!");
+            return ResponseEntity.ok("User, their wallets and transactions deleted successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to delete user: " + e.getMessage());
         }
     }
 
