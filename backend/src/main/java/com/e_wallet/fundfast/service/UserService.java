@@ -17,7 +17,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User createUser(User user) {
+    public User createUser(User user) throws Exception {
+        if (userRepository.existsByUsername(user.getUsername()))
+            throw new IllegalArgumentException("Username already exist !");
         Date now = new Date();
         user.setCreatedAt(now);
         user.setUpdatedAt(now);

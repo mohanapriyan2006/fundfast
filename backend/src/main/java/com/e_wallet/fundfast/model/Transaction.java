@@ -2,6 +2,9 @@ package com.e_wallet.fundfast.model;
 
 import java.util.Date;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,10 +22,14 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "from_wallet_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Wallet fromWallet;
+
     @ManyToOne
     @JoinColumn(name = "to_wallet_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Wallet toWallet;
+    
     private Double amount;
     private String type;
     private Date timestamp;

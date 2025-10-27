@@ -19,4 +19,5 @@ public class Wallet {
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
     private Double balance;
+    
 }

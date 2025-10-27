@@ -27,7 +27,7 @@ public class TransactionService {
 
     public List<Transaction> getAllTransactionPageAndSort(Integer pageNo, Integer pageSize, String sortBy,
             String sortDir) {
-        if (sortBy == null || sortBy.isEmpty()) {
+        if (sortBy == null || sortBy.isEmpty() || sortBy.equalsIgnoreCase("Time")) {
             sortBy = "timestamp";
         }
         if (sortDir == null || sortDir.isEmpty()) {
@@ -53,7 +53,7 @@ public class TransactionService {
 
     public List<Transaction> getTransactionByWalletIdPageAndSort(Long id, Integer pageNo, Integer pageSize,
             String sortBy, String sortDir) {
-        if (sortBy == null || sortBy.isEmpty()) {
+        if (sortBy == null || sortBy.isEmpty() || sortBy.equalsIgnoreCase("Time")) {
             sortBy = "timestamp";
         }
         if (sortDir == null || sortDir.isEmpty()) {
