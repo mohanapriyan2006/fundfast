@@ -1,22 +1,36 @@
 package com.e_wallet.fundfast.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.e_wallet.fundfast.model.Transaction;
+import com.e_wallet.fundfast.model.User;
 import com.e_wallet.fundfast.model.Wallet;
+import com.e_wallet.fundfast.repository.TransactionRepository;
+import com.e_wallet.fundfast.repository.UserRepository;
 import com.e_wallet.fundfast.repository.WalletRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class WalletService {
 
-    @Autowired
-    private WalletRepository walletRepository;
+    private final WalletRepository walletRepository;
+    private final UserRepository userRepository;
+    private final TransactionRepository transactionRepository;
 
-    public Wallet creatWallet(Wallet wallet) {
-        return walletRepository.save(wallet);
+    public Wallet createWallet(Long user_id, Wallet wallet) throws Exception {
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user != null) {
+            wallet.setOwner(user);
+            return walletRepository.save(wallet);
+        } else
+            throw new IllegalArgumentException("User not found with id: " + user_id);
     }
 
     public List<Wallet> getAllWallet() {
@@ -27,16 +41,63 @@ public class WalletService {
         return walletRepository.findById(id);
     }
 
-    public void deleteWallet(Long id){
+    public List<Wallet> getWalletByOwnerId(Long ownerId) {
+        return walletRepository.findByOwnerId(ownerId);
+    }
+
+    public void deleteWallet(Long id) {
         walletRepository.deleteById(id);
     }
 
-    public Wallet updateWallet(Long id , Wallet wallet){
-        if(walletRepository.existsById(id)){
+    public Wallet updateWallet(Long id, Wallet wallet) throws Exception {
+        if (walletRepository.existsById(id)) {
             return walletRepository.save(wallet);
-        }else{
-            return null;
+        } else {
+            throw new IllegalArgumentException("Wallet not found!");
         }
+    }
+
+    public Wallet deposit(Long id, Double amount) throws Exception {
+        Wallet wallet = walletRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Wallet not found!"));
+        if (amount == null || amount <= 0)
+            throw new IllegalArgumentException("Deposit amount must be positive!");
+        Double cur_amt = wallet.getBalance() == null ? 0.0 : wallet.getBalance();
+        wallet.setBalance(cur_amt + amount);
+        Wallet saved = walletRepository.save(wallet);
+
+        Transaction transaction = new Transaction();
+        transaction.setToWallet(wallet);
+        transaction.setAmount(amount);
+        transaction.setType("DEPOSIT");
+        transaction.setTimestamp(new Date());
+        transactionRepository.save(transaction);
+
+        return saved;
+    }
+
+    public Transaction transfer(Long fromWalletId, Long toWalletId, Double amount) throws Exception {
+        Wallet fromWallet = walletRepository.findById(fromWalletId).orElse(null);
+        Wallet toWallet = walletRepository.findById(toWalletId).orElse(null);
+        if(amount == null || amount <= 0)
+            throw new Exception("Transfer amount must be positive!");
+        if (fromWallet == null || toWallet == null)
+            throw new Exception("Wallet not found!");
+        if (fromWallet.getBalance() < amount)
+            throw new Exception("Insufficient balance!");
+
+        fromWallet.setBalance(fromWallet.getBalance() - amount);
+        toWallet.setBalance(toWallet.getBalance() + amount);
+        walletRepository.save(fromWallet);
+        walletRepository.save(toWallet);
+
+        Transaction transaction = new Transaction();
+        transaction.setFromWallet(fromWallet);
+        transaction.setToWallet(toWallet);
+        transaction.setAmount(amount);
+        transaction.setType("TRANSFER");
+        transaction.setTimestamp(new Date());
+        return transactionRepository.save(transaction);
     }
 
 }

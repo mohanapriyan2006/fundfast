@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.e_wallet.fundfast.repository.TransactionRepository;
 import com.e_wallet.fundfast.model.Transaction;
 import com.e_wallet.fundfast.service.TransactionService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,18 +28,22 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @GetMapping("/test")
-    public String testTransaction(){
+    public String testTransaction() {
         return "Transaction API works.";
     }
 
-    @PostMapping
-    public Transaction createTransaction(@RequestBody Transaction transaction) {
-        return transactionService.creatTransaction(transaction);
-    }
+    // @PostMapping
+    // public Transaction createTransaction(@RequestBody Transaction transaction) {
+    // return transactionService.createTransaction(transaction);
+    // }
 
     @GetMapping("/all")
-    public List<Transaction> getAllTransaction() {
-        return transactionService.getAllTransaction();
+    public List<Transaction> getAllTransaction(@RequestParam(required = false) Integer pageNo,
+            @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortDir) {
+        if (pageNo == null && pageSize == null && sortBy == null && sortDir == null)
+            return transactionService.getAllTransaction();
+        return transactionService.getAllTransactionPageAndSort(pageNo, pageSize, sortBy, sortDir);
     }
 
     @GetMapping("/{id}")
@@ -45,20 +51,32 @@ public class TransactionController {
         return transactionService.getTransactionById(id);
     }
 
-    @PutMapping("/{id}")
-    public Transaction updateTransaction(@PathVariable Long id, @RequestBody Transaction transaction) {
-        return transactionService.updateTransaction(id, transaction);
+    @GetMapping("/walletId/{walletId}")
+    public List<Transaction> getTransactionByWalletId(@PathVariable Long walletId,
+            @RequestParam(required = false) Integer pageNo,
+            @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortDir) {
+        if (pageNo == null && pageSize == null && sortBy == null && sortDir == null)
+            transactionService.getTransactionByWalletId(walletId);
+        return transactionService.getTransactionByWalletIdPageAndSort(walletId, pageNo, pageSize, sortBy, sortDir);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTransaction(@PathVariable Long id) {
-        Optional<Transaction> existing = transactionService.getTransactionById(id);
-        if (existing.isPresent()) {
-            transactionService.deleteTransaction(id);
-            return ResponseEntity.ok("Transaction deleted successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction not found!");
-        }
-    }
+    // @PutMapping("/{id}")
+    // public Transaction updateTransaction(@PathVariable Long id, @RequestBody
+    // Transaction transaction) {
+    // return transactionService.updateTransaction(id, transaction);
+    // }
+
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<?> deleteTransaction(@PathVariable Long id) {
+    // Optional<Transaction> existing = transactionService.getTransactionById(id);
+    // if (existing.isPresent()) {
+    // transactionService.deleteTransaction(id);
+    // return ResponseEntity.ok("Transaction deleted successfully");
+    // } else {
+    // return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction not
+    // found!");
+    // }
+    // }
 
 }

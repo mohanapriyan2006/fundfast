@@ -32,7 +32,7 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        return userService.creatUser(user);
+        return userService.createUser(user);
     }
 
     @GetMapping("/all")

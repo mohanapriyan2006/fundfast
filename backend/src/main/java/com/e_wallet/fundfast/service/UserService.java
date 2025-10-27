@@ -1,10 +1,11 @@
 package com.e_wallet.fundfast.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 import com.e_wallet.fundfast.model.User;
@@ -16,7 +17,10 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User creatUser(User user) {
+    public User createUser(User user) {
+        Date now = new Date();
+        user.setCreatedAt(now);
+        user.setUpdatedAt(now);
         return userRepository.save(user);
     }
 
@@ -32,10 +36,13 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User updateUser(Long id , User user){
-        if(userRepository.existsById(id)){
+    public User updateUser(Long id, User user) {
+        if (userRepository.existsById(id)) {
+            Date now = new Date();
+            user.setId(id);
+            user.setUpdatedAt(now);
             return userRepository.save(user);
-        }else{
+        } else {
             return null;
         }
     }
