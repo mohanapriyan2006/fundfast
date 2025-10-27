@@ -1,5 +1,6 @@
 package com.e_wallet.fundfast.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.hibernate.annotations.OnDelete;
@@ -29,9 +30,9 @@ public class Transaction {
     @JoinColumn(name = "to_wallet_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Wallet toWallet;
-    
+
     private Double amount;
     private String type;
-    private Date timestamp;
+    private LocalDateTime timestamp;
 
 }

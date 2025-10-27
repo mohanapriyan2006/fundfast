@@ -1,6 +1,7 @@
 package com.e_wallet.fundfast.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,12 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody @Valid User user, BindingResult br) {
         if (br.hasErrors()) {
-            return ResponseEntity.badRequest().body(br.getAllErrors());
+            Map<String, String> fieldErrors = br.getFieldErrors().stream()
+                    .collect(
+                            java.util.stream.Collectors.toMap(
+                                    error -> error.getField(),
+                                    error -> error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(fieldErrors);
         }
         try {
             User createdUser = userService.createUser(user);
@@ -60,7 +66,12 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid User user, BindingResult br) {
         if (br.hasErrors()) {
-            return ResponseEntity.badRequest().body(br.getAllErrors());
+            Map<String, String> fieldErrors = br.getFieldErrors().stream()
+                    .collect(
+                            java.util.stream.Collectors.toMap(
+                                    error -> error.getField(),
+                                    error -> error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(fieldErrors);
         }
         try {
             return ResponseEntity.ok().body(userService.updateUser(id, user));

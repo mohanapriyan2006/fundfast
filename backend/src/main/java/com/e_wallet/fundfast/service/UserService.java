@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +24,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final WalletRepository walletRepository;
     private final TransactionRepository transactionRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User createUser(User user) throws Exception {
         if (userRepository.existsByUsername(user.getUsername()))
             throw new IllegalArgumentException("Username already exist !");
-        Date now = new Date();
-        user.setCreatedAt(now);
-        user.setUpdatedAt(now);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -63,9 +62,8 @@ public class UserService {
 
     public User updateUser(Long id, User user) {
         if (userRepository.existsById(id)) {
-            Date now = new Date();
             user.setId(id);
-            user.setUpdatedAt(now);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         } else {
             return null;

@@ -1,5 +1,6 @@
 package com.e_wallet.fundfast.service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -75,7 +76,7 @@ public class WalletService {
         transaction.setToWallet(wallet);
         transaction.setAmount(amount);
         transaction.setType("DEPOSIT");
-        transaction.setTimestamp(new Date());
+        transaction.setTimestamp(LocalDateTime.now());
         transactionRepository.save(transaction);
 
         return saved;
@@ -101,7 +102,7 @@ public class WalletService {
         transaction.setToWallet(toWallet);
         transaction.setAmount(amount);
         transaction.setType("TRANSFER");
-        transaction.setTimestamp(new Date());
+        transaction.setTimestamp(LocalDateTime.now());
         return transactionRepository.save(transaction);
     }
 
