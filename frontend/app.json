@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "fundfast",
-    "slug": "fundfast",
+    "name": "FundFast",
+    "slug": "FundFast",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
-    "scheme": "fundfast",
+    "scheme": "FundFast",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
