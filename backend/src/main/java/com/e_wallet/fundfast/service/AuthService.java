@@ -1,14 +1,11 @@
 package com.e_wallet.fundfast.service;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.e_wallet.fundfast.model.Role;
 import com.e_wallet.fundfast.model.User;
 import com.e_wallet.fundfast.repository.UserRepository;
 
@@ -22,25 +19,26 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public User login(User user) throws Exception {
-        if(user.getUsername() == null || user.getUsername().isEmpty())
+        if (user.getUsername() == null || user.getUsername().isEmpty())
             throw new IllegalArgumentException("Username is required !");
-        if(user.getPassword() == null || user.getPassword().isEmpty())
+        if (user.getPassword() == null || user.getPassword().isEmpty())
             throw new IllegalArgumentException("Password is required !");
         if (!userRepository.existsByUsername(user.getUsername()))
             throw new IllegalArgumentException("Invalid username !");
-        User existingUser = userRepository.findByUsername(user.getUsername());
-        if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword()))
+        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+        if (!passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword()))
             throw new IllegalArgumentException("Invalid password !");
-        return existingUser;
+        return existingUser.get();
     }
 
     public User register(User user) throws Exception {
         if (userRepository.existsByUsername(user.getUsername()))
             throw new IllegalArgumentException("Username already exist !");
-        Date now = new Date();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getRole() == null) {
+            user.setRole(Role.USER);
+        }
         return userRepository.save(user);
     }
-   
 
 }

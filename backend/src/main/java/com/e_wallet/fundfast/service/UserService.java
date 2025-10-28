@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.e_wallet.fundfast.model.Role;
 import com.e_wallet.fundfast.model.User;
 import com.e_wallet.fundfast.model.Wallet;
 import com.e_wallet.fundfast.repository.TransactionRepository;
@@ -30,6 +31,9 @@ public class UserService {
         if (userRepository.existsByUsername(user.getUsername()))
             throw new IllegalArgumentException("Username already exist !");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getRole() == null) {
+            user.setRole(Role.USER);
+        }
         return userRepository.save(user);
     }
 

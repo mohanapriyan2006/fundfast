@@ -7,6 +7,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +34,10 @@ public class Transaction {
     private Wallet toWallet;
 
     private Double amount;
-    private String type;
+
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
+
     private LocalDateTime timestamp;
 
 }

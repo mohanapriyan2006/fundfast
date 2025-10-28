@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.e_wallet.fundfast.model.Transaction;
+import com.e_wallet.fundfast.model.TransactionType;
 import com.e_wallet.fundfast.model.User;
 import com.e_wallet.fundfast.model.Wallet;
 import com.e_wallet.fundfast.repository.TransactionRepository;
@@ -75,7 +76,7 @@ public class WalletService {
         Transaction transaction = new Transaction();
         transaction.setToWallet(wallet);
         transaction.setAmount(amount);
-        transaction.setType("DEPOSIT");
+        transaction.setType(TransactionType.DEPOSIT);
         transaction.setTimestamp(LocalDateTime.now());
         transactionRepository.save(transaction);
 
@@ -101,7 +102,7 @@ public class WalletService {
         transaction.setFromWallet(fromWallet);
         transaction.setToWallet(toWallet);
         transaction.setAmount(amount);
-        transaction.setType("TRANSFER");
+        transaction.setType(TransactionType.TRANSFER);
         transaction.setTimestamp(LocalDateTime.now());
         return transactionRepository.save(transaction);
     }

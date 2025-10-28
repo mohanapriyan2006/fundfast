@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,11 +43,14 @@ public class User {
     @Email(message = "Email should be valid")
     private String email;
 
+    @JsonIgnore
     @NotBlank(message = "Password is required")
     private String password;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
 
+    @JsonIgnore
     private String PIN;
 
     @JsonIgnore
