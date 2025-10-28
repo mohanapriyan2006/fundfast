@@ -43,14 +43,13 @@ public class User {
     @Email(message = "Email should be valid")
     private String email;
 
-    @JsonIgnore
     @NotBlank(message = "Password is required")
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    @JsonIgnore
+    @NotBlank(message = "PIN is required")
     private String PIN;
 
     @JsonIgnore

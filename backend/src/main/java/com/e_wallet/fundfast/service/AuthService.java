@@ -35,6 +35,7 @@ public class AuthService {
         if (userRepository.existsByUsername(user.getUsername()))
             throw new IllegalArgumentException("Username already exist !");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPIN(passwordEncoder.encode(user.getPIN()));
         if (user.getRole() == null) {
             user.setRole(Role.USER);
         }

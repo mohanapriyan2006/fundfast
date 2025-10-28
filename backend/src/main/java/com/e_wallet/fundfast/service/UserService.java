@@ -31,6 +31,7 @@ public class UserService {
         if (userRepository.existsByUsername(user.getUsername()))
             throw new IllegalArgumentException("Username already exist !");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPIN(passwordEncoder.encode(user.getPIN()));
         if (user.getRole() == null) {
             user.setRole(Role.USER);
         }
@@ -68,6 +69,7 @@ public class UserService {
         if (userRepository.existsById(id)) {
             user.setId(id);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPIN(passwordEncoder.encode(user.getPIN()));
             return userRepository.save(user);
         } else {
             return null;
