@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ public class WalletController {
         return "Wallet API works.";
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/{user_id}")
     public ResponseEntity<?> createWallet(@PathVariable Long user_id, @RequestBody Wallet wallet) {
         try {
@@ -41,21 +43,25 @@ public class WalletController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public List<Wallet> getAllWallet() {
         return walletService.getAllWallet();
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{id}")
     public Optional<Wallet> getWalletById(@PathVariable Long id) {
         return walletService.getWalletById(id);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/ownerId/{ownerId}")
     public List<Wallet> getWalletByOwnerId(@PathVariable Long ownerId) {
         return walletService.getWalletByOwnerId(ownerId);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateWallet(@PathVariable Long id, @RequestBody Wallet wallet) {
         try {
@@ -65,6 +71,7 @@ public class WalletController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/{id}/deposit")
     public ResponseEntity<?> deposit(@PathVariable Long id, @RequestParam Double amt) {
         try {
@@ -77,6 +84,7 @@ public class WalletController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/{fromWallet_id}/transfer/{toWallet_id}")
     public ResponseEntity<?> transfer(@PathVariable Long fromWallet_id, @PathVariable Long toWallet_id,
             @RequestParam Double amount) {
@@ -94,6 +102,7 @@ public class WalletController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteWallet(@PathVariable Long id) {
         try {

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,7 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/test")
     public String testTransaction() {
         return "Transaction API works.";
@@ -37,6 +39,7 @@ public class TransactionController {
     // return transactionService.createTransaction(transaction);
     // }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public List<Transaction> getAllTransaction(@RequestParam(required = false) Integer pageNo,
             @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortBy,
@@ -46,11 +49,13 @@ public class TransactionController {
         return transactionService.getAllTransactionPageAndSort(pageNo, pageSize, sortBy, sortDir);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{id}")
     public Optional<Transaction> getTransactionById(@PathVariable Long id) {
         return transactionService.getTransactionById(id);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/walletId/{walletId}")
     public List<Transaction> getTransactionByWalletId(@PathVariable Long walletId,
             @RequestParam(required = false) Integer pageNo,
@@ -67,16 +72,16 @@ public class TransactionController {
     // return transactionService.updateTransaction(id, transaction);
     // }
 
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<?> deleteTransaction(@PathVariable Long id) {
-    // Optional<Transaction> existing = transactionService.getTransactionById(id);
-    // if (existing.isPresent()) {
-    // transactionService.deleteTransaction(id);
-    // return ResponseEntity.ok("Transaction deleted successfully");
-    // } else {
-    // return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction not
-    // found!");
-    // }
-    // }
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTransaction(@PathVariable Long id) {
+        Optional<Transaction> existing = transactionService.getTransactionById(id);
+        if (existing.isPresent()) {
+            transactionService.deleteTransaction(id);
+            return ResponseEntity.ok("Transaction deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Transaction not found!");
+        }
+    }
 
 }

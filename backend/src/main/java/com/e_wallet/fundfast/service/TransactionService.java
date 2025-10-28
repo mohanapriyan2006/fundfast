@@ -69,16 +69,16 @@ public class TransactionService {
         return transactionRepository.findByWalletId(id, PageRequest.of(pageNo, pageSize, sort)).getContent();
     }
 
-    // public void deleteTransaction(Long id){
-    // transactionRepository.deleteById(id);
-    // }
+    public void deleteTransaction(Long id) {
+        transactionRepository.deleteById(id);
+    }
 
-    // public Transaction updateTransaction(Long id , Transaction transaction){
-    // if(transactionRepository.existsById(id)){
-    // return transactionRepository.save(transaction);
-    // }else{
-    // return null;
-    // }
+    // public Transaction updateTransaction(Long id, Transaction transaction) {
+    //     if (transactionRepository.existsById(id)) {
+    //         return transactionRepository.save(transaction);
+    //     } else {
+    //         return null;
+    //     }
     // }
 
 }
