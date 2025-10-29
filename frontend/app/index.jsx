@@ -1,7 +1,9 @@
-import Home from "../screens/Home";
+// import Home from "../screens/Home";
+
+import RootLayout from "./Rootlayout";
 
 export default function Index() {
   return (
-      <Home />
+      <RootLayout/>
   );
 }

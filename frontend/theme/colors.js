@@ -16,7 +16,7 @@ const ACCENT = {
   white: '#FFFFFF',
 };
 
-export const primary = (shade = 'DEFAULT') => PRIMARY[shade] ?? PRIMARY.DEFAULT;
-export const accent = (shade = 'DEFAULT') => ACCENT[shade] ?? ACCENT.DEFAULT;
+export const primary = PRIMARY;
+export const accent = ACCENT;
 
 export const colors = { primary: PRIMARY, accent: ACCENT };
