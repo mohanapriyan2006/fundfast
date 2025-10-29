@@ -115,7 +115,7 @@ const HomeScreen = () => {
                 </View>
 
                 {/* promo & discount */}
-                <View style={[styles.sectionPadding, { marginBottom: 40 }]}>
+                <View style={[styles.sectionPadding, { marginBottom: 100 }]}>
                     <Text style={styles.sectionTitle}>Promo & Discounts</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.promoScrollContent}>
                         {promoAndDiscounts.map((item) => (
