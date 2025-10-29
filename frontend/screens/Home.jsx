@@ -1,5 +1,6 @@
 import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import RoundMenu from '../components/RoundMenu';
 
 
 const Home = () => {
@@ -33,7 +34,7 @@ const Home = () => {
             header: "25% OFF",
             name: 'Every Friday deal',
             description: "Get 25% off on all recharges every Friday.",
-            logo: require('../assets/images/creditcard.png'),
+            logo: require('../assets/images/wallet2.png'),
         },
         {
             id: 2,
@@ -47,7 +48,7 @@ const Home = () => {
             header: "Upto $100",
             name: 'Refer a Friend & Earn',
             description: "Get $100 for every friend you refer.",
-            logo: require('../assets/images/creditcard.png'),
+            logo: require('../assets/images/giftbox.png'),
         }
     ];
 
@@ -57,11 +58,11 @@ const Home = () => {
             <ScrollView>
 
                 {/* Header */}
-                <View style={{ height: 220, width: '100%' }} className="relative bg-primary-mid p-4">
+                <View style={{ height: 220, width: '100%', position: 'relative' }} className="bg-primary-mid p-4">
 
-                    <View className="flex flex-row justify-between items-center mx-8">
+                    <View className="flex flex-row justify-around items-center">
                         <View className="flex gap-2">
-                            <Text className="text-white text-lg">Hello !</Text>
+                            <Text className="text-white italic text-lg">Hello !</Text>
                             <Text className="text-white text-2xl font-semibold capitalize">Tony stark,</Text>
                         </View>
                         <View className="flex items-center justify-center ">
@@ -73,12 +74,12 @@ const Home = () => {
                     </View>
 
                     {/* Round menu */}
-                    <View>
+                    {/* <View>
                         <Image
                             source={require('../assets/images/round-menu.png')}
-                            style={{ height: 200, width: 200, position: 'absolute', top: 0, right: 65, zIndex: 9999 , transform: [{rotate: '45deg'}] }}
+                            style={{ height: 200, width: 200, position: 'absolute', top: 0, right: 50, left: 50, zIndex: 9999 , transform: [{rotate: '45deg'}] }}
                         />
-                    </View>
+                    </View> */}
 
                     {/* Coins Images */}
                     <View>
@@ -114,18 +115,22 @@ const Home = () => {
                         style={{ height: 160, width: '120%', position: 'absolute', top: 220, left: -40, zIndex: -1 }}
                     />
 
+                    {/* Round Menu   */}
+                    <RoundMenu />
+
+
                 </View>
 
 
                 {/* payment list */}
-                <View style={{ marginTop: 120 , paddingHorizontal: 10 }} className="px-4">
+                <View style={{ marginTop: 120, paddingHorizontal: 10 }} className="px-4">
                     <Text className="text-lg font-semibold">Payment List</Text>
                     <View className="mt-2 flex flex-row justify-between mx-4">
                         {paymentList.map((item) => (
                             <TouchableOpacity key={item.id} className="flex items-center mb-4">
                                 <View className="p-4 mb-1 bg-primary-lighter/20 rounded-lg">
                                     <Image source={item.logo}
-                                    style={{ height: 30, width: 30 }} />
+                                        style={{ height: 30, width: 30 }} />
                                 </View>
                                 <Text className="text-sm">{item.name}</Text>
                             </TouchableOpacity>
@@ -136,15 +141,15 @@ const Home = () => {
                 {/* promo & discount */}
                 <View className="mt-4 px-4">
                     <Text className="text-lg font-semibold">Promo & Discounts</Text>
-                    <ScrollView horizontal className="mt-2 flex flex-row mx-4 gap-2">
+                    <ScrollView horizontal className="mt-2 flex flex-row mx-4">
                         {promoAndDiscounts.map((item) => (
-                            <View style={{ width: 300 }} key={item.id} className="flex flex-row items-center p-4 bg-primary-dark rounded-lg shadow-xl mb-4">
+                            <View style={{ width: 300, height: 150 }} key={item.id} className="flex flex-row items-center p-4 bg-primary-dark rounded-lg shadow-xl mb-4 mr-4">
                                 <View className="w-2/3 px-2">
                                     <Text className="text-xl font-bold text-white">{item.header}</Text>
                                     <Text className="text-md font-semibold text-white mt-1">{item.name}</Text>
                                     <Text className="text-sm text-white mt-1">{item.description}</Text>
                                 </View>
-                                <View className="p-4 mr-4">
+                                <View className="w-1/3 items-center justify-center">
                                     <Image source={item.logo} style={{ height: 100, width: 100 }} />
                                 </View>
                             </View>
@@ -152,7 +157,12 @@ const Home = () => {
                     </ScrollView>
                 </View>
 
+                <View className="mt-10 items-center justify-center mb-10">
+                    <Text className=" text-primary-dark">Thank you for using our app!</Text>
+                </View>
+
             </ScrollView>
+
         </SafeAreaView>
     )
 }
