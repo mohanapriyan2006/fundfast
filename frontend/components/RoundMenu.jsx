@@ -1,9 +1,13 @@
 import { Image } from 'expo-image'
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { primary } from "../theme/colors";
+import DataContext from '../context/DataContext';
 
 const RoundMenu = () => {
+
+    const { setActiveModal } = useContext(DataContext);
+
     return (
         <View style={styles.container}>
             <View style={styles.outerCircle}>
@@ -13,19 +17,31 @@ const RoundMenu = () => {
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={[styles.iconTopCenter]}>
+                <TouchableOpacity
+                    style={[styles.iconTopCenter]}
+                    onPress={() => { setActiveModal("My wallets"); }}
+                >
                     <Image source={require('../assets/images/wallet-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.iconRight}>
+                <TouchableOpacity
+                    style={styles.iconRight}
+                    onPress={() => { setActiveModal("Deposit"); }}
+                >
                     <Image source={require('../assets/images/cash-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.iconBottomCenter}>
+                <TouchableOpacity
+                    style={styles.iconBottomCenter}
+                    onPress={() => { setActiveModal("Transfer"); }}
+                >
                     <Image source={require('../assets/images/transfer-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.iconLeft}>
+                <TouchableOpacity
+                    style={styles.iconLeft}
+                    onPress={() => { setActiveModal("History"); }}
+                >
                     <Image source={require('../assets/images/history-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
             </View>

@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { primary } from '../theme/colors';
+import DataContext from '../context/DataContext';
 
-const RoundMenuHeader = ({ title = 'My wallets' }) => {
+const RoundMenuHeader = () => {
+
+    const { activeModal } = useContext(DataContext);
+
     return (
         <View style={styles.outerContainer}>
             <View style={styles.container}>
-                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.title}>{activeModal}</Text>
             </View>
         </View>
     )

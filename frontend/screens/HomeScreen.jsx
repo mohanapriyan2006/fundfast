@@ -1,58 +1,14 @@
 import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { primary, accent } from '../theme/colors'
-import RoundMenu from '../components/RoundMenu'
-import RoundMenuHeader from '../components/RoundMenuHeader'
+import HeaderModal from '../components/HeaderModal'
+import { useContext } from 'react'
+import DataContext from '../context/DataContext'
 
 
 const HomeScreen = () => {
 
-    const paymentList = [
-        {
-            id: 1,
-            name: 'Electricity',
-            logo: require('../assets/images/electricity.png'),
-        },
-        {
-            id: 2,
-            name: 'Recharge',
-            logo: require('../assets/images/recharge.png'),
-        },
-        {
-            id: 3,
-            name: 'Vouchers',
-            logo: require('../assets/images/voucher.png'),
-        },
-        {
-            id: 4,
-            name: 'DTH',
-            logo: require('../assets/images/dth.png'),
-        }
-    ];
-
-    const promoAndDiscounts = [
-        {
-            id: 1,
-            header: "25% OFF",
-            name: 'Every Friday deal',
-            description: "Get 25% off on all recharges every Friday.",
-            logo: require('../assets/images/wallet2.png'),
-        },
-        {
-            id: 2,
-            header: "40% OFF",
-            name: 'Special Credit Card Offer',
-            description: "Get 40% off on every payment via credit card.",
-            logo: require('../assets/images/creditcard.png'),
-        },
-        {
-            id: 3,
-            header: "Upto $100",
-            name: 'Refer a Friend & Earn',
-            description: "Get $100 for every friend you refer.",
-            logo: require('../assets/images/giftbox.png'),
-        }
-    ];
+    const { pathname, paymentList, promoAndDiscounts } = useContext(DataContext);
 
     return (
         <SafeAreaView style={[styles.flex1, { backgroundColor: accent.DEFAULT }]}>
@@ -60,44 +16,7 @@ const HomeScreen = () => {
             <ScrollView>
 
                 {/* Header */}
-                <View style={[styles.headerContainer]}>
-
-                    <View style={styles.headerRow}>
-                        <View style={styles.headerTextGroup}>
-                            <Text style={styles.helloText}>hello !</Text>
-                            <Text style={styles.nameText}>Tony stark,</Text>
-                        </View>
-                        <View style={styles.walletImageWrap}>
-                            <Image
-                                source={require('../assets/images/wallet1.png')}
-                                style={styles.walletImage}
-                            />
-                        </View>
-                    </View>
-
-                    {/* Round menu */}
-                    <RoundMenuHeader />
-                    <RoundMenu />
-
-                    {/* Coins Images */}
-                    <View>
-                        <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { top: 0, left: 0 }]} />
-                        <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: -65, left: 20 }]} />
-                        <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { top: 70, left: 0 }]} />
-                        <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: -135, left: 20 }]} />
-                        <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { top: 0, right: 0 }]} />
-                        <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: -65, right: 20 }]} />
-                        <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { top: 70, right: 0 }]} />
-                        <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: -135, right: 20 }]} />
-                    </View>
-
-                    {/* wave image */}
-                    <Image
-                        source={require('../assets/images/wave.png')}
-                        style={styles.wave}
-                    />
-
-                </View>
+                {pathname === '/home' && <HeaderModal />}
 
                 {/* payment list */}
                 <View style={styles.sectionContainer}>
@@ -142,63 +61,6 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
     flex1: { flex: 1 },
-
-    headerContainer: {
-        height: 220,
-        width: '100%',
-        position: 'relative',
-        backgroundColor: primary.mid,
-        padding: 16,
-    },
-
-    headerRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-    },
-
-    headerTextGroup: {
-        // replace gap-2
-        rowGap: 8,
-    },
-
-    helloText: {
-        fontStyle: 'italic',
-        color: '#FFFFFF',
-        fontSize: 18,
-    },
-
-    nameText: {
-        color: '#FFFFFF',
-        fontSize: 24,
-        fontWeight: '600',
-        textTransform: 'capitalize',
-    },
-
-    walletImageWrap: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    walletImage: {
-        height: 120,
-        width: 120,
-    },
-
-    coin: {
-        height: 30,
-        width: 30,
-        position: 'absolute',
-    },
-
-    wave: {
-        height: 160,
-        width: '120%',
-        position: 'absolute',
-        top: 220,
-        left: -40,
-        zIndex: -1,
-    },
 
     sectionContainer: {
         marginTop: 120,

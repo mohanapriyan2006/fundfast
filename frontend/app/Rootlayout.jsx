@@ -34,7 +34,7 @@ export default function RootLayout() {
             left: 0,
             right: 0,
             backgroundColor: '#ffffff',
-            height: 60,
+            height: 70,
             paddingTop: 5,
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
@@ -50,8 +50,8 @@ export default function RootLayout() {
         <Tab.Screen name="profile" component={HomeScreen} />
       </Tab.Navigator>
 
-      <TouchableOpacity style={{ position: 'absolute', bottom: 30, left: '50%', marginLeft: -30 }}>
-        <Image style={{ width: 60, height: 60 }} source={require("../assets/images/qrscan.png")} />
+      <TouchableOpacity style={{ position: 'absolute', bottom: 40, left: '50%', marginLeft: -25 , zIndex: 9999 }}>
+        <Image style={{ width: 50, height: 50 }} source={require("../assets/images/qrscan.png")} />
       </TouchableOpacity>
     </View >
   );
