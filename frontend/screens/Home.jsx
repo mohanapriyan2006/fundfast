@@ -1,5 +1,6 @@
-import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { primary, accent } from '../theme'
 
 
 const Home = () => {
@@ -51,110 +52,261 @@ const Home = () => {
         }
     ];
 
-    return (
-        <SafeAreaView className="flex-1 bg-accent">
-            <StatusBar barStyle="light-content" backgroundColor="#005631" />
-            <ScrollView>
+        return (
+            <SafeAreaView style={[styles.flex1, { backgroundColor: accent() }]}>
+                <StatusBar barStyle="light-content" backgroundColor={primary('dark')} />
+                <ScrollView>
 
-                {/* Header */}
-                <View style={{ height: 220, width: '100%' }} className="relative bg-primary-mid p-4">
+                    {/* Header */}
+                    <View style={[styles.headerContainer]}>
 
-                    <View className="flex flex-row justify-between items-center mx-8">
-                        <View className="flex gap-2">
-                            <Text className="text-white text-lg">Hello !</Text>
-                            <Text className="text-white text-2xl font-semibold capitalize">Tony stark,</Text>
+                        <View style={styles.headerRow}>
+                            <View style={styles.headerTextGroup}>
+                                <Text style={styles.helloText}>Hello !</Text>
+                                <Text style={styles.nameText}>Tony stark,</Text>
+                            </View>
+                            <View style={styles.walletImageWrap}>
+                                <Image
+                                    source={require('../assets/images/wallet1.png')}
+                                    style={styles.walletImage}
+                                />
+                            </View>
                         </View>
-                        <View className="flex items-center justify-center ">
+
+                        {/* Round menu */}
+                        <View>
                             <Image
-                                source={require('../assets/images/wallet1.png')}
-                                style={{ height: 120, width: 120 }}
+                                source={require('../assets/images/round-menu.png')}
+                                style={styles.roundMenu}
                             />
                         </View>
-                    </View>
 
-                    {/* Round menu */}
-                    <View>
+                        {/* Coins Images */}
+                        <View>
+                            <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { top: 0, left: 0 }]} />
+                            <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: -65, left: 20 }]} />
+                            <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { top: 70, left: 0 }]} />
+                            <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: -135, left: 20 }]} />
+                            <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { top: 0, right: 0 }]} />
+                            <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: -65, right: 20 }]} />
+                            <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { top: 70, right: 0 }]} />
+                            <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: -135, right: 20 }]} />
+                        </View>
+
+                        {/* wave image */}
                         <Image
-                            source={require('../assets/images/round-menu.png')}
-                            style={{ height: 200, width: 200, position: 'absolute', top: 0, right: 65, zIndex: 9999 , transform: [{rotate: '45deg'}] }}
+                            source={require('../assets/images/wave.png')}
+                            style={styles.wave}
                         />
+
                     </View>
 
-                    {/* Coins Images */}
-                    <View>
-                        <Image source={require('../assets/images/coin1.png')}
-                            style={{ height: 30, width: 30, position: 'absolute', top: 0, left: 0 }}
-                        />
-                        <Image source={require('../assets/images/coin2.png')}
-                            style={{ height: 30, width: 30, position: 'absolute', bottom: -65, left: 20 }}
-                        />
-                        <Image source={require('../assets/images/coin1.png')}
-                            style={{ height: 30, width: 30, position: 'absolute', top: 70, left: 0 }}
-                        />
-                        <Image source={require('../assets/images/coin2.png')}
-                            style={{ height: 30, width: 30, position: 'absolute', bottom: -135, left: 20 }}
-                        />
-                        <Image source={require('../assets/images/coin2.png')}
-                            style={{ height: 30, width: 30, position: 'absolute', top: 0, right: 0 }}
-                        />
-                        <Image source={require('../assets/images/coin1.png')}
-                            style={{ height: 30, width: 30, position: 'absolute', bottom: -65, right: 20 }}
-                        />
-                        <Image source={require('../assets/images/coin2.png')}
-                            style={{ height: 30, width: 30, position: 'absolute', top: 70, right: 0 }}
-                        />
-                        <Image source={require('../assets/images/coin1.png')}
-                            style={{ height: 30, width: 30, position: 'absolute', bottom: -135, right: 20 }}
-                        />
+                    {/* payment list */}
+                    <View style={styles.sectionContainer}>
+                        <Text style={styles.sectionTitle}>Payment List</Text>
+                        <View style={styles.paymentRow}>
+                            {paymentList.map((item) => (
+                                <TouchableOpacity key={item.id} style={styles.paymentItem}>
+                                    <View style={styles.paymentIconWrap}>
+                                        <Image source={item.logo} style={styles.paymentIcon} />
+                                    </View>
+                                    <Text style={styles.paymentLabel}>{item.name}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
                     </View>
 
-                    {/* wave image */}
-                    <Image
-                        source={require('../assets/images/wave.png')}
-                        style={{ height: 160, width: '120%', position: 'absolute', top: 220, left: -40, zIndex: -1 }}
-                    />
-
-                </View>
-
-
-                {/* payment list */}
-                <View style={{ marginTop: 120 , paddingHorizontal: 10 }} className="px-4">
-                    <Text className="text-lg font-semibold">Payment List</Text>
-                    <View className="mt-2 flex flex-row justify-between mx-4">
-                        {paymentList.map((item) => (
-                            <TouchableOpacity key={item.id} className="flex items-center mb-4">
-                                <View className="p-4 mb-1 bg-primary-lighter/20 rounded-lg">
-                                    <Image source={item.logo}
-                                    style={{ height: 30, width: 30 }} />
+                    {/* promo & discount */}
+                    <View style={styles.sectionPadding}>
+                        <Text style={styles.sectionTitle}>Promo & Discounts</Text>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.promoScrollContent}>
+                            {promoAndDiscounts.map((item) => (
+                                <View style={styles.promoCard} key={item.id}>
+                                    <View style={styles.promoTextWrap}>
+                                        <Text style={styles.promoHeader}>{item.header}</Text>
+                                        <Text style={styles.promoName}>{item.name}</Text>
+                                        <Text style={styles.promoDescription}>{item.description}</Text>
+                                    </View>
+                                    <View style={styles.promoImageWrap}>
+                                        <Image source={item.logo} style={styles.promoImage} />
+                                    </View>
                                 </View>
-                                <Text className="text-sm">{item.name}</Text>
-                            </TouchableOpacity>
-                        ))}
+                            ))}
+                        </ScrollView>
                     </View>
-                </View>
 
-                {/* promo & discount */}
-                <View className="mt-4 px-4">
-                    <Text className="text-lg font-semibold">Promo & Discounts</Text>
-                    <ScrollView horizontal className="mt-2 flex flex-row mx-4 gap-2">
-                        {promoAndDiscounts.map((item) => (
-                            <View style={{ width: 300 }} key={item.id} className="flex flex-row items-center p-4 bg-primary-dark rounded-lg shadow-xl mb-4">
-                                <View className="w-2/3 px-2">
-                                    <Text className="text-xl font-bold text-white">{item.header}</Text>
-                                    <Text className="text-md font-semibold text-white mt-1">{item.name}</Text>
-                                    <Text className="text-sm text-white mt-1">{item.description}</Text>
-                                </View>
-                                <View className="p-4 mr-4">
-                                    <Image source={item.logo} style={{ height: 100, width: 100 }} />
-                                </View>
-                            </View>
-                        ))}
-                    </ScrollView>
-                </View>
-
-            </ScrollView>
-        </SafeAreaView>
-    )
+                </ScrollView>
+            </SafeAreaView>
+        )
 }
 
 export default Home
+
+const styles = StyleSheet.create({
+    flex1: { flex: 1 },
+
+    headerContainer: {
+        height: 220,
+        width: '100%',
+        position: 'relative',
+        backgroundColor: primary('mid'),
+        padding: 16,
+    },
+
+    headerRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 32,
+    },
+
+    headerTextGroup: {
+        // replace gap-2
+        rowGap: 8,
+    },
+
+    helloText: {
+        color: accent('white'),
+        fontSize: 18,
+    },
+
+    nameText: {
+        color: accent('white'),
+        fontSize: 24,
+        fontWeight: '600',
+        textTransform: 'capitalize',
+    },
+
+    walletImageWrap: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    walletImage: {
+        height: 120,
+        width: 120,
+    },
+
+    roundMenu: {
+        height: 200,
+        width: 200,
+        position: 'absolute',
+        top: 0,
+        right: 65,
+        zIndex: 9999,
+        transform: [{ rotate: '45deg' }],
+    },
+
+    coin: {
+        height: 30,
+        width: 30,
+        position: 'absolute',
+    },
+
+    wave: {
+        height: 160,
+        width: '120%',
+        position: 'absolute',
+        top: 220,
+        left: -40,
+        zIndex: -1,
+    },
+
+    sectionContainer: {
+        marginTop: 120,
+        paddingHorizontal: 10,
+    },
+
+    sectionPadding: {
+        marginTop: 16,
+        paddingHorizontal: 16,
+    },
+
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+    },
+
+    paymentRow: {
+        marginTop: 8,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 16,
+    },
+
+    paymentItem: {
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+
+    paymentIconWrap: {
+        padding: 16,
+        marginBottom: 4,
+        backgroundColor: 'rgba(76, 208, 128, 0.2)', // primary lighter at 20%
+        borderRadius: 12,
+    },
+
+    paymentIcon: {
+        height: 30,
+        width: 30,
+    },
+
+    paymentLabel: {
+        fontSize: 14,
+    },
+
+    promoScrollContent: {
+        paddingHorizontal: 16,
+        columnGap: 8,
+    },
+
+    promoCard: {
+        width: 300,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 16,
+        backgroundColor: primary('dark'),
+        borderRadius: 12,
+        marginBottom: 16,
+        // Shadow (iOS) + elevation (Android)
+        shadowColor: '#000',
+        shadowOpacity: 0.25,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+        elevation: 6,
+    },
+
+    promoTextWrap: {
+        width: '66%',
+        paddingHorizontal: 8,
+    },
+
+    promoHeader: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: accent('white'),
+    },
+
+    promoName: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: accent('white'),
+        marginTop: 4,
+    },
+
+    promoDescription: {
+        fontSize: 14,
+        color: accent('white'),
+        marginTop: 4,
+    },
+
+    promoImageWrap: {
+        padding: 16,
+        marginRight: 16,
+    },
+
+    promoImage: {
+        height: 100,
+        width: 100,
+    },
+});
