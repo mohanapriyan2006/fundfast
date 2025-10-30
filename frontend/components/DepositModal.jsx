@@ -1,13 +1,12 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors';
-import DataContext from '../context/DataContext';
-import { Image } from 'expo-image';
+import { Picker } from '@react-native-picker/picker';
 
 const DepositModal = () => {
 
     return (
-        <View>
+        <View style={{ paddingBottom: 140 }}>
             {/* My Wallets Modal Content */}
             <View style={styles.headingContainer}>
                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Deposit Money</Text>
@@ -17,9 +16,20 @@ const DepositModal = () => {
             {/* Form Container */}
             <View style={styles.formContainer}>
                 <Text style={styles.formLabel}>Select Wallet:</Text>
-                <View style={styles.walletPicker}>
-                    {/* Wallet Picker Component */}
+                <View style={styles.pickerWrapper}>
+                    <Picker
+                        selectedValue={"wallet1"}
+                        // onValueChange={setFromWallet}
+                        mode="dropdown"
+                        dropdownIconColor="#fff"
+                        style={styles.picker}
+                        itemStyle={styles.pickerItem}
+                    >
+                        <Picker.Item label="Wallet 1" value="wallet1" />
+                        <Picker.Item label="Wallet 2" value="wallet2" />
+                    </Picker>
                 </View>
+
 
                 <Text style={styles.formLabel}>Amount:</Text>
                 <View style={styles.amountInput}>
@@ -31,7 +41,7 @@ const DepositModal = () => {
                 </View>
 
                 <TouchableOpacity style={styles.submitButton}>
-                    <Text style={{ color: 'white', fontSize: 18 , fontWeight: 'bold'}}>Deposit</Text>
+                    <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Deposit</Text>
                 </TouchableOpacity>
             </View>
 
@@ -69,15 +79,6 @@ const styles = StyleSheet.create({
         color: accent.dark,
     },
 
-    walletPicker: {
-        height: 50,
-        backgroundColor: primary.mid,
-        borderRadius: 8,
-        marginBottom: 20,
-        justifyContent: 'center',
-        paddingHorizontal: 10,
-    },
-
     amountInput: {
         height: 50,
         backgroundColor: '#FFFFFF',
@@ -94,6 +95,27 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 8,
         alignItems: 'center',
+    },
+
+    pickerWrapper: {
+        height: 50,
+        backgroundColor: primary.mid,
+        borderRadius: 10,
+        overflow: 'hidden',
+        marginBottom: 20,
+        justifyContent: 'center',
+    },
+
+    picker: {
+        color: 'white',
+        backgroundColor: 'transparent',
+        width: '100%',
+        height: '100%',
+    },
+
+    pickerItem: {
+        color: 'white',
+        fontSize: 16,
     },
 
 
