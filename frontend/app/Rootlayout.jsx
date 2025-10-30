@@ -7,7 +7,6 @@ import { primary } from "../theme/colors";
 import { useContext } from "react";
 import DataContext from "../context/DataContext";
 import TransferModal from "../components/TransferModel";
-import DepositModal from "../components/DepositModal";
 import HistoryModal from "../components/HistoryModal";
 import ProfileScreen from "../screens/ProfileScreen";
 
@@ -60,9 +59,6 @@ export default function RootLayout() {
             paddingTop: 5,
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
-            borderWidth: 0.5,
-            borderColor: '#4a4a4aff',
-            borderBottomColor: '#ffffff'
           },
         })}
       >
