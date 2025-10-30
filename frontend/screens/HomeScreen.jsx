@@ -1,6 +1,6 @@
 import { ScrollView, StatusBar, View } from 'react-native'
 import { primary, accent } from '../theme/colors'
-import HeaderModal from '../components/HeaderModal'
+import HeaderModal from '../components/HomeHeaderModal'
 import { useContext } from 'react'
 import DataContext from '../context/DataContext'
 import HomeModal from '../components/HomeModal'
@@ -8,6 +8,7 @@ import MyWalletsModal from '../components/MyWalletsModal'
 import DepositModal from '../components/DepositModal'
 import TransferModal from '../components/TransferModel'
 import HistoryModal from '../components/HistoryModal'
+import HomeHeaderModal from '../components/HomeHeaderModal'
 
 
 const HomeScreen = () => {
@@ -17,10 +18,9 @@ const HomeScreen = () => {
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT }}>
             <ScrollView style={{ flex: 1 }}>
-                <StatusBar barStyle="light-content" backgroundColor={primary.dark} />
 
                 {/* Header */}
-                {(pathname === '/home' || pathname === '') && <HeaderModal />}
+                {(pathname === '/home' || pathname === '') && <HomeHeaderModal />}
 
                 {/* Home Modal */}
                 {activeModal === 'home' && <HomeModal />}

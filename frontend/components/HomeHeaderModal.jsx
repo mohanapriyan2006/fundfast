@@ -6,14 +6,14 @@ import { Image } from 'expo-image';
 import { primary } from '../theme/colors';
 import DataContext from '../context/DataContext';
 
-const HeaderModal = () => {
+const HomeHeaderModal = () => {
 
-    const { pathname, activeModal, setActiveModal } = useContext(DataContext);
+    const { pathname, activeModal } = useContext(DataContext);
 
     return (
         <View style={[styles.headerContainer]}>
 
-            {(pathname === '/home' || pathname === '')&& <View style={styles.headerRow}>
+            {(pathname === '/home' || pathname === '') && <View style={styles.headerRow}>
                 <View style={styles.headerTextGroup}>
                     <Text style={styles.helloText}>hello !</Text>
                     <Text style={styles.nameText}>Tony stark,</Text>
@@ -52,7 +52,7 @@ const HeaderModal = () => {
     )
 }
 
-export default HeaderModal;
+export default HomeHeaderModal;
 
 
 const styles = StyleSheet.create({
