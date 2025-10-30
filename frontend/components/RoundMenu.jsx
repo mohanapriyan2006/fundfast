@@ -64,7 +64,7 @@ const HALF = SIZE / 2;
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        top: 130,
+        top: 140,
         left: '50%',
         marginLeft: -HALF * 0.8,
         transform: [{ rotate: '45deg' }],

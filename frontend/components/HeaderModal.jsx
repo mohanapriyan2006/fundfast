@@ -10,10 +10,6 @@ const HeaderModal = () => {
 
     const { pathname, activeModal, setActiveModal } = useContext(DataContext);
 
-    useEffect(() => {
-        console.log(activeModal, " Clicked !");
-    }, [activeModal])
-
     return (
         <View style={[styles.headerContainer]}>
 
@@ -43,7 +39,7 @@ const HeaderModal = () => {
                 <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { top: 0, right: 0 }]} />
                 <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: -65, right: 20 }]} />
                 <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { top: 70, right: 0 }]} />
-                <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: -135, right: 20 }]} />
+                <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: -125, right: 20 }]} />
             </View>
 
             {/* wave image */}
@@ -68,6 +64,7 @@ const styles = StyleSheet.create({
         position: 'relative',
         backgroundColor: primary.mid,
         padding: 16,
+        paddingTop: 30,
     },
 
     headerRow: {
@@ -115,7 +112,7 @@ const styles = StyleSheet.create({
         width: '120%',
         position: 'absolute',
         top: 220,
-        left: -40,
+        left: 0,
         zIndex: -1,
     }
 });

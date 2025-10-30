@@ -1,5 +1,4 @@
-import { ScrollView, StatusBar, StyleSheet, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { ScrollView, StatusBar, View } from 'react-native'
 import { primary, accent } from '../theme/colors'
 import HeaderModal from '../components/HeaderModal'
 import { useContext } from 'react'
@@ -16,9 +15,9 @@ const HomeScreen = () => {
     const { pathname, activeModal } = useContext(DataContext);
 
     return (
-        <SafeAreaView style={[styles.flex1, { backgroundColor: accent.DEFAULT }]}>
-            <StatusBar barStyle="light-content" backgroundColor={primary.dark} />
-            <ScrollView style={styles.flex1}>
+        <View style={{ flex: 1, backgroundColor: accent.DEFAULT }}>
+            <ScrollView style={{ flex: 1 }}>
+                <StatusBar barStyle="light-content" backgroundColor={primary.dark} />
 
                 {/* Header */}
                 {(pathname === '/home' || pathname === '') && <HeaderModal />}
@@ -41,12 +40,8 @@ const HomeScreen = () => {
                 <View style={{ height: 100 }}></View>
 
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-    flex1: { flex: 1 },
-});

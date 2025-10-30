@@ -74,7 +74,7 @@ export const DataProvider = ({ children }) => {
     console.log("Current Pathname:", pathname);
 
     useEffect(() => {
-        if (pathname === '/home' || pathname === '') setActiveModal("home");
+        setActiveModal("home");
     }, [pathname]);
 
 
