@@ -1,8 +1,12 @@
-import { View } from "react-native";
-import Home from "../screens/Home";
+// import Home from "../screens/Home";
+
+import { DataProvider } from "../context/DataContext";
+import RootLayout from "./Rootlayout";
 
 export default function Index() {
   return (
-      <Home />
+    <DataProvider>
+      <RootLayout />
+    </DataProvider>
   );
 }
