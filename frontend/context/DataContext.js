@@ -50,6 +50,19 @@ const promoAndDiscounts = [
     }
 ];
 
+const wallets = [
+    {
+        id: 1,
+        name: 'Personal Wallet',
+        balance: 250
+    },
+    {
+        id: 2,
+        name: 'Business Wallet',
+        balance: 1500
+    }
+];
+
 export const DataProvider = ({ children }) => {
 
     const [activeModal, setActiveModal] = useState("home");
@@ -68,7 +81,8 @@ export const DataProvider = ({ children }) => {
             activeModal,
             setActiveModal,
             paymentList,
-            promoAndDiscounts
+            promoAndDiscounts,
+            wallets,
         }}>
             {children}
         </DataContext.Provider>
