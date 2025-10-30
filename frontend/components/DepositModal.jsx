@@ -15,7 +15,7 @@ const DepositModal = () => {
 
             {/* Form Container */}
             <View style={styles.formContainer}>
-                <Text style={styles.formLabel}>Select Wallet:</Text>
+                <Text style={styles.formLabel}>Select Wallet :</Text>
                 <View style={styles.pickerWrapper}>
                     <Picker
                         selectedValue={"wallet1"}
@@ -31,7 +31,7 @@ const DepositModal = () => {
                 </View>
 
 
-                <Text style={styles.formLabel}>Amount:</Text>
+                <Text style={styles.formLabel}>Amount :</Text>
                 <View style={styles.amountInput}>
                     <TextInput
                         placeholder="Enter amount"
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
         marginBottom: 8,
-        color: accent.dark,
+        color: accent.darker,
     },
 
     amountInput: {

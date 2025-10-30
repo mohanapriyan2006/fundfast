@@ -5,15 +5,18 @@ import { Picker } from '@react-native-picker/picker';
 
 const TransactionHistory = [
     { id: 1, date: '2024-06-01', type: 'TRANSFER', amount: 100, formWallet: 'Wallet 1', toWallet: 'Wallet 2' },
-    { id: 1, date: '2024-06-01', type: 'TRANSFER', amount: 70, formWallet: 'Wallet 2', toWallet: 'Wallet 1' },
-    { id: 1, date: '2024-06-01', type: 'DEPOSIT', amount: 1000, formWallet: 'Wallet 1', toWallet: null },
-    { id: 1, date: '2024-06-01', type: 'TRANSFER', amount: 80, formWallet: 'Wallet 1', toWallet: 'Wallet 2' },
-    { id: 1, date: '2024-06-01', type: 'TRANSFER', amount: 700, formWallet: 'Wallet 2', toWallet: 'Wallet 1' },
+    { id: 2, date: '2024-06-01', type: 'TRANSFER', amount: 70, formWallet: 'Wallet 2', toWallet: 'Wallet 1' },
+    { id: 3, date: '2024-06-01', type: 'DEPOSIT', amount: 1000, formWallet: 'Wallet 1', toWallet: null },
+    { id: 4, date: '2024-06-01', type: 'TRANSFER', amount: 80, formWallet: 'Wallet 1', toWallet: 'Wallet 2' },
+    { id: 5, date: '2024-06-01', type: 'TRANSFER', amount: 700, formWallet: 'Wallet 2', toWallet: 'Wallet 1' },
 ]
 
 const HistoryModal = () => {
 
     const [selectedWallet, setSelectedWallet] = useState("Wallet 1");
+
+    const [sortBy, setSortBy] = useState("Time");
+    const [sortOrder, setSortOrder] = useState("ASC");
 
     return (
         <View style={{ paddingBottom: 20 }}>
@@ -25,7 +28,7 @@ const HistoryModal = () => {
 
             <View style={styles.historyContainer}>
 
-                <View>
+                <View style={styles.historySortContainer}>
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={"wallet1"}
@@ -39,16 +42,32 @@ const HistoryModal = () => {
                             <Picker.Item label="Wallet 2" value="wallet2" />
                         </Picker>
                     </View>
-                    <View>
-                        <TouchableOpacity style={styles.submitButton}>
-                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Fetch History</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                        <TouchableOpacity
+                            style={sortBy === "Time" ? styles.activeBtn : styles.inactiveBtn}
+                            onPress={() => setSortBy("Time")}
+                        >
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', color: sortBy === "Time" ? 'white' : 'black' }}>Time</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.submitButton}>
-                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Fetch History</Text>
+                        <TouchableOpacity
+                            style={sortBy === "Amount" ? styles.activeBtn : styles.inactiveBtn}
+                            onPress={() => setSortBy("Amount")}
+                        >
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', color: sortBy === "Amount" ? 'white' : 'black' }}>Amt</Text>
                         </TouchableOpacity>
-                        <View>
-    
-                        </View>
+                        <TouchableOpacity
+                            style={{ flexDirection: 'row' }}
+                            onPress={() => setSortOrder((p) => p === "DESC" ? "ASC" : "DESC")}
+                        >
+                            <Image
+                                source={require("../assets/images/arrow.png")}
+                                style={[styles.arrowIcon, { tintColor: sortOrder === "DESC" ? primary.mid : accent.dark }, { transform: [{ rotate: '180deg' }] }]}
+                            />
+                            <Image
+                                source={require("../assets/images/arrow.png")}
+                                style={[styles.arrowIcon, { tintColor: sortOrder === "ASC" ? primary.mid : accent.dark }]}
+                            />
+                        </TouchableOpacity>
                     </View>
 
                 </View>
@@ -63,7 +82,7 @@ const HistoryModal = () => {
                                 <Text style={{ color: '#666' }}>{transaction.date}</Text>
                             </View>
                             <View style={{ alignItems: 'flex-end' }}>
-                                <Text style={{ fontWeight: '600' , fontSize: 20, color: (transaction.type === 'DEPOSIT' || transaction.toWallet === selectedWallet) ? 'green' : 'red' }}>
+                                <Text style={{ fontWeight: '600', fontSize: 20, color: (transaction.type === 'DEPOSIT' || transaction.toWallet === selectedWallet) ? 'green' : 'red' }}>
                                     {(transaction.type === 'DEPOSIT' || transaction.toWallet === selectedWallet) ? '+' : '-'}${transaction.amount}
                                 </Text>
                             </View>
@@ -71,40 +90,19 @@ const HistoryModal = () => {
                     ))}
                 </View>
 
+                <View style={{ flexDirection: 'row', gap: 10 , justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
+                    <TouchableOpacity style={styles.activeBtn}>
+                        <Text style={{ color: 'white' }}>Prev</Text>
+                    </TouchableOpacity>
+                    <View>
+                        <Text>1 2 3 ... 10</Text>
+                    </View>
+                    <TouchableOpacity style={styles.activeBtn}>
+                        <Text style={{ color: 'white' }}>Next</Text>
+                    </TouchableOpacity>
+                </View>
+
             </View>
-
-            {/* Form Container */}
-            {/* <View style={styles.formContainer}>
-                <Text style={styles.formLabel}>Select Wallet:</Text>
-                <View style={styles.pickerWrapper}>
-                    <Picker
-                        selectedValue={"wallet1"}
-                        // onValueChange={setFromWallet}
-                        mode="dropdown"
-                        dropdownIconColor="#fff"
-                        style={styles.picker}
-                        itemStyle={styles.pickerItem}
-                    >
-                        <Picker.Item label="Wallet 1" value="wallet1" />
-                        <Picker.Item label="Wallet 2" value="wallet2" />
-                    </Picker>
-                </View>
-
-
-                <Text style={styles.formLabel}>Amount:</Text>
-                <View style={styles.amountInput}>
-                    <TextInput
-                        placeholder="Enter amount"
-                        keyboardType="numeric"
-                        style={{ fontSize: 16, color: 'black' }}
-                    />
-                </View>
-
-                <TouchableOpacity style={styles.submitButton}>
-                    <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>History</Text>
-                </TouchableOpacity>
-            </View> */}
-
 
         </View>
     )
@@ -128,26 +126,32 @@ const styles = StyleSheet.create({
     },
 
     historyContainer: {
-        marginTop: 20,
-        borderBottomWidth: 2,
-        borderBottomColor: '#020202ff',
+        marginTop: 30,
         paddingBottom: 20,
     },
 
+    historySortContainer: {
+        borderBottomWidth: 1,
+        borderBottomColor: accent.dark,
+        paddingHorizontal: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingBottom: 10,
+    },
+
     pickerWrapper: {
-        height: 50,
+        height: 40,
+        width: 150,
         backgroundColor: primary.mid,
         borderRadius: 10,
         overflow: 'hidden',
-        marginBottom: 20,
         justifyContent: 'center',
     },
 
     picker: {
         color: 'white',
         backgroundColor: 'transparent',
-        width: '100%',
-        height: '100%',
     },
 
     pickerItem: {
@@ -155,8 +159,31 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 
+    activeBtn: {
+        marginRight: 2,
+        backgroundColor: primary.mid,
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+        borderRadius: 5,
+    },
+
+    inactiveBtn: {
+        borderWidth: 2,
+        borderColor: primary.mid,
+        backgroundColor: 'transparent',
+        paddingVertical: 1,
+        paddingHorizontal: 8,
+        borderRadius: 5,
+    },
+
+    arrowIcon: {
+        height: 30,
+        width: 20,
+        marginLeft: -5,
+    },
+
     transactionList: {
-        marginTop: 20,
+        marginVertical: 20,
         marginHorizontal: 20,
         gap: 15,
     },

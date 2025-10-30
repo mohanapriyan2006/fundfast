@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { usePathname } from 'expo-router';
+import { useLocalSearchParams, useRouter ,usePathname } from "expo-router";
 
 const DataContext = createContext();
 
@@ -68,12 +68,22 @@ export const DataProvider = ({ children }) => {
     const [activeModal, setActiveModal] = useState("home");
 
     const pathname = usePathname().substring(6);
+    const { modal } = useLocalSearchParams();
+    const router = useRouter();
 
     console.log("Current Pathname:", pathname);
 
     useEffect(() => {
-        setActiveModal("home");
+        if (pathname === '/home' || pathname === '') setActiveModal("home");
     }, [pathname]);
+
+
+    // useEffect(() => {
+    //     if (modal) {
+    //         setActiveModal(String(modal));
+    //         router.setParams({ modal: undefined });
+    //     }
+    // }, [modal]);
 
     return (
         <DataContext.Provider value={{

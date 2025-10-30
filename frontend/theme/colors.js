@@ -12,7 +12,8 @@ const PRIMARY = {
 
 const ACCENT = {
   DEFAULT: '#F5F5F5',
-  dark: '#6f6f6fff',
+  dark: '#b5b5b5ff',
+  darker: '#5d5d5dff',
   white: '#FFFFFF',
 };
 

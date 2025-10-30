@@ -4,13 +4,27 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "../screens/HomeScreen";
 import { Image } from "expo-image";
 import { primary } from "../theme/colors";
+import { useContext } from "react";
+import DataContext from "../context/DataContext";
+import TransferModal from "../components/TransferModel";
+import DepositModal from "../components/DepositModal";
+import HistoryModal from "../components/HistoryModal";
 
 const Tab = createBottomTabNavigator();
 
 export default function RootLayout() {
+
+  const { setActiveModal } = useContext(DataContext);
+
   return (
     <View style={{ flex: 1 }}>
       <Tab.Navigator
+        defaultRouteName="home"
+        screenListeners={{
+          tabPress: e => {
+            setActiveModal("home");
+          }
+        }}
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarShowLabel: false,
@@ -26,7 +40,12 @@ export default function RootLayout() {
               iconName = require("../assets/images/profile-icon.png");
             }
 
-            return <Image source={iconName} style={{ width: size, height: size, tintColor: focused ? primary.dark : '#707070ff' }} />;
+            return (
+              <Image
+                source={iconName}
+                style={{ width: 30, height: 30, tintColor: focused ? primary.dark : '#707070ff' }}
+              />
+            );
           },
           tabBarStyle: {
             position: 'absolute',
@@ -45,12 +64,13 @@ export default function RootLayout() {
         })}
       >
         <Tab.Screen name="home" component={HomeScreen} />
-        <Tab.Screen name="stats" component={HomeScreen} />
-        <Tab.Screen name="notification" component={HomeScreen} />
-        <Tab.Screen name="profile" component={HomeScreen} />
+        <Tab.Screen name="stats" component={TransferModal} />
+        <Tab.Screen name="empty" component={HomeScreen} />
+        <Tab.Screen name="notification" component={DepositModal} />
+        <Tab.Screen name="profile" component={HistoryModal} />
       </Tab.Navigator>
 
-      <TouchableOpacity style={{ position: 'absolute', bottom: 40, left: '50%', marginLeft: -25 , zIndex: 9999 }}>
+      <TouchableOpacity style={{ position: 'absolute', bottom: 40, left: '50%', marginLeft: -25, zIndex: 9999 }}>
         <Image style={{ width: 50, height: 50 }} source={require("../assets/images/qrscan.png")} />
       </TouchableOpacity>
     </View >

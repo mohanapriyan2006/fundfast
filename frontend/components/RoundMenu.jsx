@@ -3,10 +3,17 @@ import React, { useContext } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { primary } from "../theme/colors";
 import DataContext from '../context/DataContext';
+import { useRouter } from 'expo-router';
 
 const RoundMenu = () => {
 
     const { setActiveModal } = useContext(DataContext);
+
+    const router = useRouter();
+
+    const handleClick = (modalName) => {
+        setActiveModal(modalName);
+    }
 
     return (
         <View style={styles.container}>
@@ -19,28 +26,28 @@ const RoundMenu = () => {
 
                 <TouchableOpacity
                     style={[styles.iconTopCenter]}
-                    onPress={() => { setActiveModal("My wallets"); }}
+                    onPress={() => handleClick("My wallets")}
                 >
                     <Image source={require('../assets/images/wallet-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={styles.iconRight}
-                    onPress={() => { setActiveModal("Deposit"); }}
+                    onPress={() => handleClick("Deposit")}
                 >
                     <Image source={require('../assets/images/cash-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={styles.iconBottomCenter}
-                    onPress={() => { setActiveModal("Transfer"); }}
+                    onPress={() => handleClick("Transfer")}
                 >
                     <Image source={require('../assets/images/transfer-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={styles.iconLeft}
-                    onPress={() => { setActiveModal("History"); }}
+                    onPress={() => handleClick("History")}
                 >
                     <Image source={require('../assets/images/history-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
@@ -51,7 +58,7 @@ const RoundMenu = () => {
 
 export default RoundMenu;
 
-const SIZE = 220;
+const SIZE = 210;
 const HALF = SIZE / 2;
 
 const styles = StyleSheet.create({
@@ -65,7 +72,7 @@ const styles = StyleSheet.create({
     },
     outerCircle: {
         borderColor: primary.light,
-        borderWidth: 1,
+        borderWidth: 0.5,
         height: SIZE,
         width: SIZE,
         position: 'relative',
@@ -94,8 +101,8 @@ const styles = StyleSheet.create({
         transform: [{ rotate: '-45deg' }],
     },
     menuIcon: {
-        height: 50,
-        width: 50,
+        height: 40,
+        width: 40,
     },
     iconTopCenter: {
         position: 'absolute',

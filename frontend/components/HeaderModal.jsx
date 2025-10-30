@@ -17,7 +17,7 @@ const HeaderModal = () => {
     return (
         <View style={[styles.headerContainer]}>
 
-            {pathname === '/home' && <View style={styles.headerRow}>
+            {(pathname === '/home' || pathname === '')&& <View style={styles.headerRow}>
                 <View style={styles.headerTextGroup}>
                     <Text style={styles.helloText}>hello !</Text>
                     <Text style={styles.nameText}>Tony stark,</Text>
