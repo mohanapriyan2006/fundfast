@@ -8,6 +8,7 @@ import HomeModal from '../components/HomeModal'
 import MyWalletsModal from '../components/MyWalletsModal'
 import DepositModal from '../components/DepositModal'
 import TransferModal from '../components/TransferModel'
+import HistoryModal from '../components/HistoryModal'
 
 
 const HomeScreen = () => {
@@ -33,6 +34,9 @@ const HomeScreen = () => {
 
                 {/* Transfer Modal */}
                 {activeModal === 'Transfer' && <TransferModal />}
+
+                {/* Transfer Modal */}
+                {activeModal === 'History' && <HistoryModal />}
 
                 <View style={{ height: 100 }}></View>
 
