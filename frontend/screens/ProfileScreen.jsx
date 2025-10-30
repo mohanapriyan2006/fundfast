@@ -42,7 +42,7 @@ const ProfileScreen = () => {
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
             <ScrollView style={{ flex: 1 }}>
                 {/* Header */}
-                <OtherHeader />
+                <OtherHeader title='Profile' />
 
                 {/* Profile Content */}
                 <View style={styles.profileContent}>

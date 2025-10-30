@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 0,
         right: 0,
-        top: 80,
+        top: 95,
         zIndex: 99,
         alignItems: 'center',
         // Shadow
