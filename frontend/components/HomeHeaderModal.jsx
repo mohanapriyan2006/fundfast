@@ -13,7 +13,7 @@ const HomeHeaderModal = () => {
     return (
         <View style={[styles.headerContainer]}>
 
-            {(pathname === '/home' || pathname === '') && <View style={styles.headerRow}>
+            {(pathname.includes('/home') || pathname === '') && <View style={styles.headerRow}>
                 <View style={styles.headerTextGroup}>
                     <Text style={styles.helloText}>hello !</Text>
                     <Text style={styles.nameText}>Tony stark,</Text>

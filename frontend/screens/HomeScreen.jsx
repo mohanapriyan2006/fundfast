@@ -1,6 +1,5 @@
-import { ScrollView, StatusBar, View } from 'react-native'
-import { primary, accent } from '../theme/colors'
-import HeaderModal from '../components/HomeHeaderModal'
+import { ScrollView, View } from 'react-native'
+import { accent } from '../theme/colors'
 import { useContext } from 'react'
 import DataContext from '../context/DataContext'
 import HomeModal from '../components/HomeModal'
@@ -20,7 +19,7 @@ const HomeScreen = () => {
             <ScrollView style={{ flex: 1 }}>
 
                 {/* Header */}
-                {(pathname === '/home' || pathname === '') && <HomeHeaderModal />}
+                {(pathname.includes('/home') || pathname === '') && <HomeHeaderModal />}
 
                 {/* Home Modal */}
                 {activeModal === 'home' && <HomeModal />}

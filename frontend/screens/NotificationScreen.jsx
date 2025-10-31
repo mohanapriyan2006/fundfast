@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
     notificationContent: {
         padding: 20,
         backgroundColor: accent.DEFAULT,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
         top: -30,
     },
 

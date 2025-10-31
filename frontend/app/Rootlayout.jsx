@@ -6,10 +6,10 @@ import { Image } from "expo-image";
 import { primary } from "../theme/colors";
 import { useContext } from "react";
 import DataContext from "../context/DataContext";
-import TransferModal from "../components/TransferModel";
 import HistoryModal from "../components/HistoryModal";
 import ProfileScreen from "../screens/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen";
+import QRScanScreen from "../screens/QRScanScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -65,7 +65,7 @@ export default function RootLayout() {
       >
         <Tab.Screen name="home" component={HomeScreen} />
         <Tab.Screen name="stats" component={HistoryModal} />
-        <Tab.Screen name="empty" component={HomeScreen} />
+        <Tab.Screen name="scan" component={QRScanScreen} />
         <Tab.Screen name="notification" component={NotificationScreen} />
         <Tab.Screen name="profile" component={ProfileScreen} />
       </Tab.Navigator>
