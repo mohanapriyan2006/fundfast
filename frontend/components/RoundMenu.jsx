@@ -3,10 +3,13 @@ import React, { useContext } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { primary } from "../theme/colors";
 import DataContext from '../context/DataContext';
+import { useNavigation } from '@react-navigation/native';
 
 const RoundMenu = () => {
 
     const { setActiveModal } = useContext(DataContext);
+
+    const navigation = useNavigation();
 
     const handleClick = (modalName) => {
         setActiveModal(modalName);
@@ -16,7 +19,7 @@ const RoundMenu = () => {
         <View style={styles.container}>
             <View style={styles.outerCircle}>
                 <View style={styles.innerCircle}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("scan")}>
                         <Image source={require('../assets/images/qrscan.png')} style={styles.centerIcon} />
                     </TouchableOpacity>
                 </View>

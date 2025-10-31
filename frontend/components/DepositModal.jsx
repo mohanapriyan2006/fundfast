@@ -2,8 +2,11 @@ import React from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 
 const DepositModal = () => {
+
+    const navuigation = useNavigation();
 
     return (
         <View style={{ paddingBottom: 140 }}>
@@ -40,7 +43,10 @@ const DepositModal = () => {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.submitButton}>
+                <TouchableOpacity 
+                style={styles.submitButton}
+                onPress={() => navigation.navigate("pin")}
+                >
                     <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Deposit</Text>
                 </TouchableOpacity>
             </View>

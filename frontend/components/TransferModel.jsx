@@ -2,8 +2,11 @@ import React from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 
 const TransferModal = () => {
+
+    const navigation = useNavigation();
 
     return (
         <View style={{ paddingBottom: 140 }}>
@@ -22,8 +25,8 @@ const TransferModal = () => {
                         // onValueChange={setFromWallet}
                         mode="dropdown"
                         dropdownIconColor="#fff"
-                        style={styles.picker}          
-                        itemStyle={styles.pickerItem}   
+                        style={styles.picker}
+                        itemStyle={styles.pickerItem}
                     >
                         <Picker.Item label="Wallet 1" value="wallet1" />
                         <Picker.Item label="Wallet 2" value="wallet2" />
@@ -38,14 +41,14 @@ const TransferModal = () => {
                         style={{ fontSize: 16, color: 'black' }}
                     />
                 </View>
-                 <View style={styles.pickerWrapper}>
+                <View style={styles.pickerWrapper}>
                     <Picker
                         selectedValue={"wallet1"}
                         // onValueChange={setFromWallet}
                         mode="dropdown"
                         dropdownIconColor="#fff"
-                        style={styles.picker}          
-                        itemStyle={styles.pickerItem}   
+                        style={styles.picker}
+                        itemStyle={styles.pickerItem}
                     >
                         <Picker.Item label="Wallet 1" value="wallet1" />
                         <Picker.Item label="Wallet 2" value="wallet2" />
@@ -62,7 +65,10 @@ const TransferModal = () => {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.submitButton}>
+                <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={() => navigation.navigate("pin")}
+                >
                     <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Transfer</Text>
                 </TouchableOpacity>
             </View>

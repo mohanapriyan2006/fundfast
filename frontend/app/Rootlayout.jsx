@@ -10,12 +10,15 @@ import HistoryModal from "../components/HistoryModal";
 import ProfileScreen from "../screens/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import QRScanScreen from "../screens/QRScanScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 export default function RootLayout() {
 
   const { setActiveModal } = useContext(DataContext);
+
+  const navigation = useNavigation();
 
   return (
     <View style={{ flex: 1 }}>
@@ -26,6 +29,10 @@ export default function RootLayout() {
         screenListeners={{
           tabPress: e => {
             setActiveModal("home");
+            if(e.data?.route?.name === "scan"){
+              e.preventDefault();
+              navigation.navigate("scan");
+            }
           }
         }}
         screenOptions={({ route }) => ({
@@ -65,12 +72,15 @@ export default function RootLayout() {
       >
         <Tab.Screen name="home" component={HomeScreen} />
         <Tab.Screen name="stats" component={HistoryModal} />
-        <Tab.Screen name="scan" component={QRScanScreen} />
+        <Tab.Screen name="qr" component={QRScanScreen} />
         <Tab.Screen name="notification" component={NotificationScreen} />
         <Tab.Screen name="profile" component={ProfileScreen} />
       </Tab.Navigator>
 
-      <TouchableOpacity style={{ position: 'absolute', bottom: 40, left: '50%', marginLeft: -25, zIndex: 9999 }}>
+      <TouchableOpacity
+        style={{ position: 'absolute', bottom: 40, left: '50%', marginLeft: -25, zIndex: 9999 }}
+        onPress={() => navigation.navigate("scan")}
+      >
         <Image style={{ width: 50, height: 50 }} source={require("../assets/images/qrscan.png")} />
       </TouchableOpacity>
     </View >

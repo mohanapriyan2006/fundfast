@@ -2,8 +2,12 @@ import { Image } from 'expo-image'
 import React from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
+import { useNavigation } from '@react-navigation/native'
 
 const QRScanScreen = () => {
+
+    const navigation = useNavigation();
+
     return (
         <View style={{ flex: 1, backgroundColor: primary.mid, paddingBottom: 40 }}>
             <ScrollView style={{ flex: 1 }}>
@@ -56,7 +60,10 @@ const QRScanScreen = () => {
                 <View style={styles.qrFooter}>
                     <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>Payment with QR Code</Text>
                     <Text style={{ color: accent.darker, fontSize: 14, fontWeight: '400', marginTop: 5 }}>Hold the code inside the frame, it will be scanned automatically</Text>
-                    <TouchableOpacity style={styles.scanBtn}>
+                    <TouchableOpacity
+                        style={styles.scanBtn}
+                        onPress={() => navigation.navigate("pin")}
+                    >
                         <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Scan</Text>
                     </TouchableOpacity>
                 </View>
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         position: 'absolute',
-        top: 470,
+        top: 500,
     },
 
     scanBtn: {

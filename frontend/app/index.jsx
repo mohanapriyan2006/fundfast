@@ -1,6 +1,7 @@
 // import Home from "../screens/Home";
 
 import { DataProvider } from "../context/DataContext";
+import PINScreen from "../screens/PINScreen";
 import QRScanScreen from "../screens/QRScanScreen";
 import RootLayout from "./Rootlayout";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -13,6 +14,7 @@ export default function Index() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="main" component={RootLayout} />
         <Stack.Screen name="scan" component={QRScanScreen} />
+        <Stack.Screen name="pin" component={PINScreen} />
       </Stack.Navigator>
     </DataProvider>
   );
