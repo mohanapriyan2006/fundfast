@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { primary } from '../theme/colors';
-import DataContext from '../context/DataContext';
+import { primary } from '../../theme/colors';
+import DataContext from '../../context/DataContext';
 import { Image } from 'expo-image';
 
 const MyWalletsModal = () => {
@@ -33,7 +33,7 @@ const MyWalletsModal = () => {
                             </View>
                         </View>
                         <View>
-                            <Image source={require('../assets/images/wallet2.png')} style={{ width: 150, height: 150 }} />
+                            <Image source={require('../../assets/images/wallet2.png')} style={{ width: 150, height: 150 }} />
                         </View>
                     </View>
                 ))}

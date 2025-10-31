@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { accent, primary } from '../theme/colors';
+import { accent, primary } from '../../theme/colors';
 import { Picker } from '@react-native-picker/picker';
 
 const TransactionHistory = [
@@ -60,11 +60,11 @@ const HistoryModal = () => {
                             onPress={() => setSortOrder((p) => p === "DESC" ? "ASC" : "DESC")}
                         >
                             <Image
-                                source={require("../assets/images/arrow.png")}
+                                source={require("../../assets/images/arrow.png")}
                                 style={[styles.arrowIcon, { tintColor: sortOrder === "DESC" ? primary.mid : accent.dark }, { transform: [{ rotate: '180deg' }] }]}
                             />
                             <Image
-                                source={require("../assets/images/arrow.png")}
+                                source={require("../../assets/images/arrow.png")}
                                 style={[styles.arrowIcon, { tintColor: sortOrder === "ASC" ? primary.mid : accent.dark }]}
                             />
                         </TouchableOpacity>

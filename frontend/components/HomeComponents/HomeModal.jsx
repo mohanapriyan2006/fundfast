@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { primary } from '../theme/colors';
+import { primary } from '../../theme/colors';
 import { Image } from 'expo-image';
-import DataContext from '../context/DataContext';
+import DataContext from '../../context/DataContext';
 
 const HomeModal = () => {
 

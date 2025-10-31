@@ -64,7 +64,7 @@ const QRScanScreen = () => {
                 {/* QR Footer */}
                 <View style={styles.qrFooter}>
                     <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>Payment with QR Code</Text>
-                    <Text style={{ color: accent.darker, fontSize: 14, fontWeight: '400', marginTop: 5 }}>Hold the code inside the frame, it will be scanned automatically</Text>
+                    <Text style={{ color: accent.darker, fontSize: 14, fontWeight: '400', marginTop: 5 }}>Hold the code inside the frame, then tap scan to proceed payment.</Text>
                     <TouchableOpacity
                         style={styles.scanBtn}
                         onPress={() => navigation.navigate("pin")}

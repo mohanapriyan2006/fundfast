@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { primary } from '../theme/colors';
-import DataContext from '../context/DataContext';
+import { primary } from '../../theme/colors';
+import DataContext from '../../context/DataContext';
 
 const RoundMenuHeader = () => {
 

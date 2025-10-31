@@ -2,12 +2,12 @@ import { ScrollView, View } from 'react-native'
 import { accent } from '../theme/colors'
 import { useContext } from 'react'
 import DataContext from '../context/DataContext'
-import HomeModal from '../components/HomeModal'
-import MyWalletsModal from '../components/MyWalletsModal'
-import DepositModal from '../components/DepositModal'
-import TransferModal from '../components/TransferModel'
-import HistoryModal from '../components/HistoryModal'
-import HomeHeaderModal from '../components/HomeHeaderModal'
+import HomeModal from '../components/HomeComponents/HomeModal'
+import MyWalletsModal from '../components/HomeComponents/MyWalletsModal'
+import DepositModal from '../components/HomeComponents/DepositModal'
+import TransferModal from '../components/HomeComponents/TransferModel'
+import HistoryModal from '../components/HomeComponents/HistoryModal'
+import HomeHeaderModal from '../components/HomeComponents/HomeHeaderModal'
 
 
 const HomeScreen = () => {
@@ -19,7 +19,7 @@ const HomeScreen = () => {
             <ScrollView style={{ flex: 1 }}>
 
                 {/* Header */}
-                {(pathname.includes('/home') || pathname === '') && <HomeHeaderModal />}
+                {(pathname.includes('/home') || pathname === "/main" || pathname === '') && <HomeHeaderModal />}
 
                 {/* Home Modal */}
                 {activeModal === 'home' && <HomeModal />}

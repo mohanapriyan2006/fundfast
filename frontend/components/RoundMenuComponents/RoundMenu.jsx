@@ -1,8 +1,8 @@
 import { Image } from 'expo-image'
 import React, { useContext } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { primary } from "../theme/colors";
-import DataContext from '../context/DataContext';
+import { primary } from "../../theme/colors";
+import DataContext from '../../context/DataContext';
 import { useNavigation } from '@react-navigation/native';
 
 const RoundMenu = () => {
@@ -20,7 +20,7 @@ const RoundMenu = () => {
             <View style={styles.outerCircle}>
                 <View style={styles.innerCircle}>
                     <TouchableOpacity onPress={() => navigation.navigate("scan")}>
-                        <Image source={require('../assets/images/qrscan.png')} style={styles.centerIcon} />
+                        <Image source={require('../../assets/images/qrscan.png')} style={styles.centerIcon} />
                     </TouchableOpacity>
                 </View>
 
@@ -28,28 +28,28 @@ const RoundMenu = () => {
                     style={[styles.iconTopCenter]}
                     onPress={() => handleClick("My wallets")}
                 >
-                    <Image source={require('../assets/images/wallet-icon.png')} style={styles.menuIcon} />
+                    <Image source={require('../../assets/images/wallet-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={styles.iconRight}
                     onPress={() => handleClick("Deposit")}
                 >
-                    <Image source={require('../assets/images/cash-icon.png')} style={styles.menuIcon} />
+                    <Image source={require('../../assets/images/cash-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={styles.iconBottomCenter}
                     onPress={() => handleClick("Transfer")}
                 >
-                    <Image source={require('../assets/images/transfer-icon.png')} style={styles.menuIcon} />
+                    <Image source={require('../../assets/images/transfer-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                     style={styles.iconLeft}
                     onPress={() => handleClick("History")}
                 >
-                    <Image source={require('../assets/images/history-icon.png')} style={styles.menuIcon} />
+                    <Image source={require('../../assets/images/history-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
             </View>
         </View>

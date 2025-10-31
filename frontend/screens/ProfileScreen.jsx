@@ -2,39 +2,51 @@ import React from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import OtherHeader from '../components/OtherHeader'
+import { navigate } from 'expo-router/build/global-state/routing'
+import { useNavigation } from '@react-navigation/native'
+
+
 
 const ProfileScreen = () => {
+
+    const navigation = useNavigation();
 
     const settings = [
         {
             id: 1,
             label: "Edit Profile",
             icon: require("../assets/images/profile-icon.png"),
+            event: () => { },
         },
         {
             id: 2,
-            label: "Edit Wallets",
+            label: "Manage Wallets",
             icon: require("../assets/images/wallet-icon.png"),
+            event: () => { },
         },
         {
             id: 3,
             label: "Change Password",
             icon: require("../assets/images/password.png"),
+            event: () => { },
         },
         {
             id: 4,
             label: "Change Wallet PIN",
             icon: require("../assets/images/pin.png"),
+            event: () => { },
         },
         {
             id: 5,
             label: "Terms & Conditions",
             icon: require("../assets/images/terms-icon.png"),
+            event: () => { },
         },
         {
             id: 6,
             label: "About",
             icon: require("../assets/images/info-icon.png"),
+            event: () => { },
         },
     ]
 
@@ -81,7 +93,9 @@ const ProfileScreen = () => {
                             borderWidth: 3,
                             borderColor: "#b00000ff",
                             borderRadius: 5,
-                        }}>
+                        }}
+                            onPress={() => navigation.navigate("login")}
+                        >
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                                 <Image source={require("../assets/images/logout-icon.png")} style={{ width: 24, height: 24, tintColor: "#b00000ff" }} />
                                 <Text style={{ fontSize: 16, fontWeight: '500', color: "#b00000ff" }}>Logout</Text>
