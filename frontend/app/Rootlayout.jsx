@@ -60,7 +60,7 @@ export default function RootLayout() {
             left: 0,
             right: 0,
             backgroundColor: '#ffffff',
-            height: 70,
+            height: 90,
             paddingTop: 5,
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
@@ -75,7 +75,7 @@ export default function RootLayout() {
       </Tab.Navigator>
 
       <TouchableOpacity
-        style={{ position: 'absolute', bottom: 40, left: '50%', marginLeft: -25, zIndex: 9999 }}
+        style={{ position: 'absolute', bottom: 60, left: '50%', marginLeft: -25, zIndex: 9999 }}
         onPress={() => navigation.navigate("scan")}
       >
         <Image style={{ width: 50, height: 50 }} source={require("../assets/images/qrscan.png")} />

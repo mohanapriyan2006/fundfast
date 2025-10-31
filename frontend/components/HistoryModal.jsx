@@ -42,7 +42,7 @@ const HistoryModal = () => {
                             <Picker.Item label="Wallet 2" value="wallet2" />
                         </Picker>
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                         <TouchableOpacity
                             style={sortBy === "Time" ? styles.activeBtn : styles.inactiveBtn}
                             onPress={() => setSortBy("Time")}
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     },
 
     pickerWrapper: {
-        height: 40,
+        height: 35,
         width: 150,
         backgroundColor: primary.mid,
         borderRadius: 10,
@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
     },
 
     activeBtn: {
-        marginRight: 2,
         backgroundColor: primary.mid,
         paddingVertical: 4,
         paddingHorizontal: 8,
@@ -177,9 +176,9 @@ const styles = StyleSheet.create({
     },
 
     arrowIcon: {
-        height: 30,
+        height: 25,
         width: 20,
-        marginLeft: -5,
+        marginRight: -10,
     },
 
     transactionList: {
