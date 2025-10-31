@@ -16,7 +16,7 @@ const OtherHeader = ({ title = 'Home' }) => {
             <Text style={{ color: '#fff', fontSize: 24, fontWeight: 'bold', textAlign: 'center', zIndex: 99 }}>{title}</Text>
 
             {/* Coins Images */}
-            <View>
+            <View  style={{pointerEvents: 'none'}}>
                 <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { top: 5, left: 40 }]} />
                 <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: 10, left: 70 }]} />
                 <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { top: 5, right: 120 }]} />

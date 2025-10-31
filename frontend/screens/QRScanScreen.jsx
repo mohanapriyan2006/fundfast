@@ -22,8 +22,34 @@ const QRScanScreen = () => {
                         source={require('../assets/images/wave.png')}
                         style={styles.wave}
                     />
+                    <TouchableOpacity style={styles.qrCodeWrapper}>
+                        <Image source={require('../assets/images/qrcode.png')} style={styles.qrCode} />
+                        <Text style={styles.qrCodeText}>Tap to Scan</Text>
+                    </TouchableOpacity>
 
-                    
+
+                </View>
+
+
+                {/* Coins Images */}
+                <View style={styles.coinsLayer}>
+                    <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { top: 5, left: 40 }]} />
+                    <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: 50, left: 70 }]} />
+                    <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { top: 5, right: 120 }]} />
+                    <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: 40, right: 80 }]} />
+                    <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { top: -10, left: 110 }]} />
+                    <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: 70, left: 140 }]} />
+                    <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { top: -10, right: 40 }]} />
+                    <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: 90, right: 40 }]} />
+                    <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: 60, right: 120 }]} />
+                    <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: 140, right: 20 }]} />
+                    <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: 220, right: 50 }]} />
+                    <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: 270, right: 20 }]} />
+                    <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: 300, right: 60 }]} />
+                    <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: 140, left: 20 }]} />
+                    <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: 220, left: 50 }]} />
+                    <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: 270, left: 20 }]} />
+                    <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { bottom: 300, left: 60 }]} />
                 </View>
 
                 {/* QR Footer */}
@@ -49,6 +75,31 @@ const styles = StyleSheet.create({
         zIndex: 999,
     },
 
+    qrCode: {
+        width: 200,
+        height: 200,
+        alignSelf: 'center',
+        opacity: 0.4,
+    },
+
+    qrCodeWrapper: {
+        padding: 20,
+        alignSelf: 'center',
+        backgroundColor: primary.dark,
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: primary.DEFAULT,
+        position: 'relative',
+    },
+
+    qrCodeText: {
+        color: '#fff',
+        fontSize: 20,
+        fontWeight: 'bold',
+        position: 'absolute',
+        top: "50%",
+        alignSelf: 'center',
+    },
 
     qrFooter: {
         padding: 30,
@@ -75,6 +126,22 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 80,
         left: 0,
+        zIndex: -1,
+    },
+
+    coinsLayer: {
+        position: 'absolute',
+        top: 120,
+        left: 0,
+        right: 0,
+        height: 380,
+        pointerEvents: 'none',
+    },
+
+    coin: {
+        position: 'absolute',
+        width: 24,
+        height: 24,
         zIndex: -1,
     },
 });

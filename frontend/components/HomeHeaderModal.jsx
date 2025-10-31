@@ -31,7 +31,7 @@ const HomeHeaderModal = () => {
             <RoundMenu />
 
             {/* Coins Images */}
-            <View>
+            <View  style={{pointerEvents: 'none'}}>
                 <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { top: 0, left: 0 }]} />
                 <Image source={require('../assets/images/coin2.png')} style={[styles.coin, { bottom: -65, left: 20 }]} />
                 <Image source={require('../assets/images/coin1.png')} style={[styles.coin, { top: 70, left: 0 }]} />
