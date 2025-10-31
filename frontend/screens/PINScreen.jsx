@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Pressable } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+
 const PINScreen = () => {
     const navigation = useNavigation();
     const [pin, setPin] = useState('');
@@ -41,7 +41,7 @@ const PINScreen = () => {
                         </View>
                     ))}
                     <TouchableOpacity style={styles.eyeBtn} onPress={() => setSecure(s => !s)}>
-                        <Ionicons name={secure ? 'eye-off' : 'eye'} size={22} color={primary.dark} />
+                        <Image source={secure ? require('../assets/images/hidden.png') : require('../assets/images/eye.png')} style={{ width: 22, height: 22 }} />
                     </TouchableOpacity>
                 </Pressable>
                 {/* Hidden input (captures the digits) */}
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
     },
     digitBoxActive: {
-        borderColor: primary.DEFAULT,
+        borderColor: primary.dark,
     },
     digitText: {
         fontSize: 26,
