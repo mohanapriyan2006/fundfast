@@ -9,6 +9,7 @@ import DataContext from "../context/DataContext";
 import TransferModal from "../components/TransferModel";
 import HistoryModal from "../components/HistoryModal";
 import ProfileScreen from "../screens/ProfileScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -63,9 +64,9 @@ export default function RootLayout() {
         })}
       >
         <Tab.Screen name="home" component={HomeScreen} />
-        <Tab.Screen name="stats" component={TransferModal} />
+        <Tab.Screen name="stats" component={HistoryModal} />
         <Tab.Screen name="empty" component={HomeScreen} />
-        <Tab.Screen name="notification" component={HistoryModal} />
+        <Tab.Screen name="notification" component={NotificationScreen} />
         <Tab.Screen name="profile" component={ProfileScreen} />
       </Tab.Navigator>
 
