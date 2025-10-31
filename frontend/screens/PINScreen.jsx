@@ -33,17 +33,16 @@ const PINScreen = () => {
 
                 {/* PIN input */}
                 <Pressable style={styles.pinRow} onPress={() => inputRef.current?.focus()}>
-                    {Array.from({ length: 4 }).map((_, i) => (
+                    {[0, 1, 2, 3].map((i) => (
                         <View key={i} style={[styles.digitBox, pin.length === i && styles.digitBoxActive]}>
-                            <Text style={styles.digitText}>
-                                {pin[i] ? (secure ? '•' : pin[i]) : ' '}
-                            </Text>
+                            <Text style={styles.digitText}>{pin[i] ? (secure ? '•' : pin[i]) : ''}</Text>
                         </View>
                     ))}
-                    <TouchableOpacity style={styles.eyeBtn} onPress={() => setSecure(s => !s)}>
-                        <Image source={secure ? require('../assets/images/hidden.png') : require('../assets/images/eye.png')} style={{ width: 22, height: 22 }} />
-                    </TouchableOpacity>
+                    <Pressable style={styles.eyeBtn} onPress={() => setSecure(s => !s)}>
+                        <Image source={secure ? require('../assets/images/hidden.png') : require('../assets/images/eye.png')} style={{ width: 22, height: 22, tintColor: accent.darker }} />
+                    </Pressable>
                 </Pressable>
+
                 {/* Hidden input (captures the digits) */}
                 <TextInput
                     ref={inputRef}
@@ -108,7 +107,7 @@ const styles = StyleSheet.create({
         width: 44,
         alignItems: 'center',
         borderBottomWidth: 2,
-        borderColor: '#cbd5e1',
+        borderColor: accent.darker,
         paddingVertical: 6,
     },
     digitBoxActive: {
