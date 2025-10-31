@@ -9,7 +9,7 @@ const QRScanScreen = () => {
     const navigation = useNavigation();
 
     return (
-        <View style={{ flex: 1, backgroundColor: primary.mid, paddingBottom: 40 }}>
+        <View style={{ flex: 1, backgroundColor: primary.mid }}>
             <ScrollView style={{ flex: 1 }}>
                 {/* Header */}
                 <View style={{ height: 150, alignItems: 'center', justifyContent: 'center' }}>
@@ -24,13 +24,18 @@ const QRScanScreen = () => {
                     {/* wave image */}
                     <Image
                         source={require('../assets/images/wave.png')}
-                        style={styles.wave}
+                        style={[styles.wave, { top: 80, left: 0 }]}
                     />
                     <TouchableOpacity style={styles.qrCodeWrapper}>
                         <Image source={require('../assets/images/qrcode.png')} style={styles.qrCode} />
                         <Text style={styles.qrCodeText}>Tap to Scan</Text>
                     </TouchableOpacity>
 
+                    {/* wave image */}
+                    <Image
+                        source={require('../assets/images/wave.png')}
+                        style={[styles.wave, { top: 280, left: -20 }]}
+                    />
 
                 </View>
 
@@ -97,6 +102,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: primary.DEFAULT,
         position: 'relative',
+        zIndex: 9999,
     },
 
     qrCodeText: {
@@ -114,7 +120,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         position: 'absolute',
-        top: 500,
+        top: 600,
     },
 
     scanBtn: {
@@ -131,8 +137,6 @@ const styles = StyleSheet.create({
         height: 160,
         width: '120%',
         position: 'absolute',
-        top: 80,
-        left: 0,
         zIndex: -1,
     },
 

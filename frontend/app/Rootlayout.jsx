@@ -6,11 +6,11 @@ import { Image } from "expo-image";
 import { primary } from "../theme/colors";
 import { useContext } from "react";
 import DataContext from "../context/DataContext";
-import HistoryModal from "../components/HistoryModal";
 import ProfileScreen from "../screens/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import QRScanScreen from "../screens/QRScanScreen";
 import { useNavigation } from "@react-navigation/native";
+import StatsScreen from "../screens/StatsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,15 +29,12 @@ export default function RootLayout() {
         screenListeners={{
           tabPress: e => {
             setActiveModal("home");
-            if(e.data?.route?.name === "scan"){
-              e.preventDefault();
-              navigation.navigate("scan");
-            }
           }
         }}
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarShowLabel: false,
+          tabBarButton: route.name === 'qr' ? () => null : undefined,
           tabBarIcon: ({ focused, size }) => {
             let iconName;
             if (route.name === 'home') {
@@ -71,7 +68,7 @@ export default function RootLayout() {
         })}
       >
         <Tab.Screen name="home" component={HomeScreen} />
-        <Tab.Screen name="stats" component={HistoryModal} />
+        <Tab.Screen name="stats" component={StatsScreen} />
         <Tab.Screen name="qr" component={QRScanScreen} />
         <Tab.Screen name="notification" component={NotificationScreen} />
         <Tab.Screen name="profile" component={ProfileScreen} />
