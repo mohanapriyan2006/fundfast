@@ -5,11 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const RegisterScreen = () => {
 
-    const [showPassword, setShowPassword] = useState(true);
-    const [showCPassword, setShowCPassword] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showCPassword, setShowCPassword] = useState(false);
 
-    const [showPIN, setShowPIN] = useState(true);
-    const [showCPIN, setShowCPIN] = useState(true);
+    const [showPIN, setShowPIN] = useState(false);
+    const [showCPIN, setShowCPIN] = useState(false);
 
     const navigation = useNavigation();
 
@@ -42,14 +42,14 @@ const RegisterScreen = () => {
 
                     {/* Password */}
                     <TextInput placeholder='Password' placeholderTextColor={"#6e6e6eff"} secureTextEntry={!showPassword} style={styles.input} />
-                    <Pressable onPress={() => setShowPassword(!showPassword)}>
-                        <Image source={showPassword ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark, position: 'absolute', right: 12, top: -38 }} />
+                    <Pressable onPress={() => setShowPassword(!showPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 20, top: 275 }}>
+                        <Image source={showPassword ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />
                     </Pressable>
 
                     {/* Confirm Password */}
                     <TextInput placeholder='Confirm Password' placeholderTextColor={"#6e6e6eff"} secureTextEntry={!showCPassword} style={styles.input} />
-                    <Pressable onPress={() => setShowCPassword(!showCPassword)}>
-                        <Image source={showCPassword ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark, position: 'absolute', right: 12, top: -38 }} />
+                    <Pressable onPress={() => setShowCPassword(!showCPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 20, top: 340 }}>
+                        <Image source={showCPassword ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />
                     </Pressable>
 
                     {/* Wallet PIN */}
@@ -57,14 +57,14 @@ const RegisterScreen = () => {
                     <View style={{ flexDirection: 'row', gap: 4 }}>
                         {/* PIN */}
                         <TextInput placeholder='4-digit PIN' placeholderTextColor={"#6e6e6eff"} secureTextEntry={!showPIN} style={styles.pinInput} />
-                        <Pressable onPress={() => setShowPIN(!showPIN)}>
-                            <Image source={showPIN ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark, position: 'absolute', right: 12, top: 25 }} />
+                        <Pressable onPress={() => setShowPIN(!showPIN)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 145, bottom: 2 }}>
+                            <Image source={showPIN ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />
                         </Pressable>
 
                         {/* Confirm PIN */}
                         <TextInput placeholder='Confirm PIN' placeholderTextColor={"#6e6e6eff"} secureTextEntry={!showCPIN} style={styles.pinInput} />
-                        <Pressable onPress={() => setShowCPIN(!showCPIN)}>
-                            <Image source={showCPIN ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark, position: 'absolute', right: 12, top: 25 }} />
+                        <Pressable onPress={() => setShowCPIN(!showCPIN)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 5, bottom: 2 }}>
+                            <Image source={showCPIN ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />
                         </Pressable>
 
                     </View>

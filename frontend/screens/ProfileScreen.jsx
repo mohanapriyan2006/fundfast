@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import OtherHeader from '../components/OtherHeader'
-import { navigate } from 'expo-router/build/global-state/routing'
 import { useNavigation } from '@react-navigation/native'
+import ConfirmDeleteModal from '../components/ProfileComponents/ConfirmDeleteModal'
+import ConfirmModal from '../components/ConfirmModal'
 
 
 
@@ -11,42 +12,45 @@ const ProfileScreen = () => {
 
     const navigation = useNavigation();
 
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+
     const settings = [
         {
             id: 1,
             label: "Edit Profile",
             icon: require("../assets/images/profile-icon.png"),
-            event: () => { },
+            event: () => { navigation.navigate("edit-profile"); },
         },
         {
             id: 2,
             label: "Manage Wallets",
             icon: require("../assets/images/wallet-icon.png"),
-            event: () => { },
+            event: () => { navigation.navigate("manage-wallet"); },
         },
         {
             id: 3,
             label: "Change Password",
             icon: require("../assets/images/password.png"),
-            event: () => { },
+            event: () => { navigation.navigate("change-password"); },
         },
         {
             id: 4,
             label: "Change Wallet PIN",
             icon: require("../assets/images/pin.png"),
-            event: () => { },
+            event: () => { navigation.navigate("change-pin"); },
         },
         {
             id: 5,
             label: "Terms & Conditions",
             icon: require("../assets/images/terms-icon.png"),
-            event: () => { },
+            event: () => { navigation.navigate("terms-conditions"); },
         },
         {
             id: 6,
             label: "About",
             icon: require("../assets/images/info-icon.png"),
-            event: () => { },
+            event: () => { navigation.navigate("about"); },
         },
     ]
 
@@ -74,7 +78,11 @@ const ProfileScreen = () => {
                     {/* Settings */}
                     <View style={{ marginVertical: 30, gap: 15 }}>
                         {settings.map((setting) => (
-                            <TouchableOpacity key={setting.id} style={styles.settingItem}>
+                            <TouchableOpacity
+                                key={setting.id}
+                                style={styles.settingItem}
+                                onPress={setting.event}
+                            >
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                                     <Image source={setting.icon} style={{ width: 24, height: 24, tintColor: primary.mid }} />
                                     <Text style={{ fontSize: 16, fontWeight: '500', color: "black" }}>{setting.label}</Text>
@@ -94,7 +102,7 @@ const ProfileScreen = () => {
                             borderColor: "#b00000ff",
                             borderRadius: 5,
                         }}
-                            onPress={() => navigation.navigate("login")}
+                            onPress={() => setShowConfirmModal(true)}
                         >
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                                 <Image source={require("../assets/images/logout-icon.png")} style={{ width: 24, height: 24, tintColor: "#b00000ff" }} />
@@ -113,7 +121,9 @@ const ProfileScreen = () => {
                             borderWidth: 3,
                             borderColor: "#ff0000ff",
                             borderRadius: 5,
-                        }}>
+                        }}
+                            onPress={() => setShowDeleteModal(true)}
+                        >
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                                 <Image source={require("../assets/images/trash.png")} style={{ width: 24, height: 24, tintColor: "#ff0000ff" }} />
                                 <Text style={{ fontSize: 16, fontWeight: '500', color: "#ff0000ff" }}>Delete Account</Text>
@@ -125,6 +135,11 @@ const ProfileScreen = () => {
                 </View>
 
             </ScrollView >
+
+            {showConfirmModal && <ConfirmModal title="Logout" onConfirm={() => navigation.navigate("login")} onCancel={() => setShowConfirmModal(false)} />}
+
+            {showDeleteModal && <ConfirmDeleteModal item="Your Account" onConfirm={() => { }} onCancel={() => setShowDeleteModal(false)} />}
+
         </View >
     )
 }
@@ -142,7 +157,7 @@ const styles = StyleSheet.create({
     },
 
     profileImageWrapper: {
-        backgroundColor: primary.mid,
+        backgroundColor: primary.DEFAULT,
         borderRadius: '50%',
         height: 90,
         width: 90,

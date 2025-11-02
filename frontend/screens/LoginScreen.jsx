@@ -27,8 +27,8 @@ const LoginScreen = () => {
                     <Text style={{ fontSize: 18, color: primary.dark, fontWeight: 'semi-bold', textAlign: 'center', marginTop: 20, textDecorationLine: 'underline' }}>LOGIN</Text>
                     <TextInput placeholder='Username' placeholderTextColor={"#6e6e6eff"} style={styles.input} />
                     <TextInput placeholder='Password' placeholderTextColor={"#6e6e6eff"} secureTextEntry={!showPassword} style={styles.input} />
-                    <Pressable onPress={() => setShowPassword(!showPassword)}>
-                        <Image source={showPassword ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark, position: 'absolute', right: 12, top: -38 }} />
+                    <Pressable onPress={() => setShowPassword(!showPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 20, bottom: 95 }}>
+                        <Image source={showPassword ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />
                     </Pressable>
                     <TouchableOpacity onPress={handleLogin} style={styles.button}>
                         <Text style={styles.buttonText}>Login</Text>
