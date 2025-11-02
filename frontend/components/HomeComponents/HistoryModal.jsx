@@ -90,7 +90,7 @@ const HistoryModal = () => {
                     ))}
                 </View>
 
-                <View style={{ flexDirection: 'row', gap: 10 , justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
+                <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
                     <TouchableOpacity style={styles.activeBtn}>
                         <Text style={{ color: 'white' }}>Prev</Text>
                     </TouchableOpacity>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     headingContainer: {
         display: 'flex',
         alignItems: 'center',
-        marginTop: 140,
+        marginTop: 80,
     },
 
     headingUnderLine: {

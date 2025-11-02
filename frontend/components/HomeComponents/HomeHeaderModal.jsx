@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { StyleSheet, Text, View } from 'react-native';
+import React, { act, useContext, useEffect, useRef, useState } from 'react'
+import { StyleSheet, Text, View, Animated } from 'react-native';
 import RoundMenuHeader from '../RoundMenuComponents/RoundMenuHeader';
 import RoundMenu from '../RoundMenuComponents/RoundMenu';
 import { Image } from 'expo-image';
@@ -8,12 +8,62 @@ import DataContext from '../../context/DataContext';
 
 const HomeHeaderModal = () => {
 
-    const { pathname, activeModal } = useContext(DataContext);
+    const { activeModal } = useContext(DataContext);
+
+    // Animation for sliding up
+    const slideUpAnim = useRef(new Animated.Value(0)).current;
+    const waveAnim = useRef(new Animated.Value(0)).current;
+
+    const [toggleWave, setToggleWave] = useState(false);
+
+    useEffect(() => {
+        if (activeModal !== 'home') {
+            // Slide up 
+            Animated.timing(slideUpAnim, {
+                toValue: -60,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        } else {
+            // to original position
+            Animated.timing(slideUpAnim, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+        }
+    }, [activeModal, slideUpAnim]);
+
+    useEffect(() => {
+        // Wave animation
+        if (!toggleWave) {
+            Animated.timing(waveAnim, {
+                toValue: -35,
+                duration: 1000,
+                useNativeDriver: true,
+            }).start();
+        } else {
+            Animated.timing(waveAnim, {
+                toValue: 0,
+                duration: 1000,
+                useNativeDriver: true,
+            }).start();
+        }
+        setToggleWave(!toggleWave);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeModal, waveAnim]);
 
     return (
-        <View style={[styles.headerContainer]}>
+        <Animated.View
+            style={[
+                styles.headerContainer,
+                {
+                    transform: [{ translateY: slideUpAnim }],
+                }
+            ]}
+        >
 
-            {(pathname.includes('/home') || pathname === "/main" || pathname === '') && <View style={styles.headerRow}>
+            <View style={[styles.headerRow, { opacity: activeModal === 'home' ? 1 : 0, }]}>
                 <View style={styles.headerTextGroup}>
                     <Text style={styles.helloText}>hello !</Text>
                     <Text style={styles.nameText}>Tony stark,</Text>
@@ -24,7 +74,7 @@ const HomeHeaderModal = () => {
                         style={styles.walletImage}
                     />
                 </View>
-            </View>}
+            </View>
 
             {/* Round menu */}
             {activeModal !== 'home' && <RoundMenuHeader />}
@@ -43,12 +93,12 @@ const HomeHeaderModal = () => {
             </View>
 
             {/* wave image */}
-            <Image
+            <Animated.Image
                 source={require('../../assets/images/wave.png')}
-                style={styles.wave}
+                style={[styles.wave, { transform: [{ translateX: waveAnim }] }]}
             />
 
-        </View>
+        </Animated.View>
     )
 }
 

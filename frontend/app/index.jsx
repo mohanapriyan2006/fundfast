@@ -23,7 +23,7 @@ export default function Index() {
 
   return (
     <DataProvider>
-      <Stack.Navigator initialRouteName="login" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="main" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="main" component={RootLayout} />
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="register" component={RegisterScreen} />

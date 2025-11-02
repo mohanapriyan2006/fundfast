@@ -87,6 +87,7 @@ const LoginScreen = () => {
                             style={[styles.input, errors.password && styles.inputError]}
                             onChangeText={(value) => handleOnChange('password', value)}
                             value={formData.password}
+                            maxLength={8}
                         />
                         <Pressable onPress={() => setShowPassword(!showPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 0, bottom: 3 }}>
                             <Image source={showPassword ? require('../assets/images/eye.png') : require('../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />

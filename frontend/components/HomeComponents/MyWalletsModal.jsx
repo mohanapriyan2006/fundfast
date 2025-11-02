@@ -13,7 +13,7 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
     return (
         <View style={{ paddingBottom: 50 }}>
             {/* My Wallets Modal Content */}
-            <View style={[styles.headingContainer, { marginTop: 140 }]}>
+            <View style={[styles.headingContainer, { marginTop: 80}]}>
                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>My Wallets</Text>
                 <View style={[styles.headingUnderLine, { width: 80 }]}></View>
             </View>
@@ -45,7 +45,7 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
             {showAddWallet ? <View>
                 <View style={[styles.headingContainer, { marginBottom: 20 }]}>
                     <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Add a new wallet</Text>
-                    <View style={[styles.headingUnderLine , {width: 130}]}></View>
+                    <View style={[styles.headingUnderLine, { width: 130 }]}></View>
                 </View>
                 <TextInput
                     placeholder="Enter wallet's name"

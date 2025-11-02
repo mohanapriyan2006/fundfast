@@ -1,3 +1,4 @@
+
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors';
 import { Picker } from '@react-native-picker/picker';
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     headingContainer: {
         display: 'flex',
         alignItems: 'center',
-        marginTop: 140,
+        marginTop: 80,
     },
 
     headingUnderLine: {

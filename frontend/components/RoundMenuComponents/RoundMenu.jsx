@@ -1,22 +1,48 @@
 import { Image } from 'expo-image'
-import React, { useContext } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useContext, useEffect, useRef } from 'react'
+import { Animated, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { primary } from "../../theme/colors";
 import DataContext from '../../context/DataContext';
 import { useNavigation } from '@react-navigation/native';
 
 const RoundMenu = () => {
 
-    const { setActiveModal } = useContext(DataContext);
+    const { activeModal, setActiveModal } = useContext(DataContext);
 
     const navigation = useNavigation();
+
+    const rotateAnim = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        rotateAnim.setValue(5);
+    }, [rotateAnim]);
+
+    useEffect(() => {
+        const getRotateValue = () => {
+            switch (activeModal) {
+                case 'home': return 0;
+                case 'My wallets': return 1;
+                case 'Deposit': return 2;
+                case 'Transfer': return 3;
+                case 'History': return 4;
+                default: return 5;
+            }
+        };
+
+        Animated.timing(rotateAnim, {
+            toValue: getRotateValue(),
+            duration: 1000,
+            useNativeDriver: true,
+        }).start();
+
+    }, [activeModal, rotateAnim]);
 
     const handleClick = (modalName) => {
         setActiveModal(modalName);
     }
 
     return (
-        <View style={styles.container}>
+        <Animated.View style={[styles.container, { transform: [{ rotate: rotateAnim.interpolate({ inputRange: [0, 1, 2, 3, 4, 5], outputRange: ['0deg', '-45deg', '-135deg', '-225deg', '-315deg', '-360deg'] }) }] }]}>
             <View style={styles.outerCircle}>
                 <View style={styles.innerCircle}>
                     <TouchableOpacity onPress={() => navigation.navigate("scan")}>
@@ -52,7 +78,7 @@ const RoundMenu = () => {
                     <Image source={require('../../assets/images/history-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
             </View>
-        </View>
+        </Animated.View>
     )
 }
 
@@ -67,10 +93,10 @@ const styles = StyleSheet.create({
         top: 140,
         left: '50%',
         marginLeft: -HALF * 0.8,
-        transform: [{ rotate: '45deg' }],
         zIndex: 99,
     },
     outerCircle: {
+        transform: [{ rotate: '45deg' }],
         borderColor: primary.light,
         borderWidth: 0.5,
         height: SIZE,

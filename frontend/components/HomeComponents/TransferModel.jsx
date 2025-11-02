@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     headingContainer: {
         display: 'flex',
         alignItems: 'center',
-        marginTop: 140,
+        marginTop: 80,
     },
 
     headingUnderLine: {

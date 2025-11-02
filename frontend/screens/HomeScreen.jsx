@@ -1,6 +1,6 @@
-import { ScrollView, View } from 'react-native'
+import { ScrollView, View, Animated } from 'react-native'
 import { accent } from '../theme/colors'
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect, useRef } from 'react'
 import DataContext from '../context/DataContext'
 import HomeModal from '../components/HomeComponents/HomeModal'
 import MyWalletsModal from '../components/HomeComponents/MyWalletsModal'
