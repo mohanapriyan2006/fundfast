@@ -1,6 +1,6 @@
 import { ScrollView, View } from 'react-native'
 import { accent } from '../theme/colors'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import DataContext from '../context/DataContext'
 import HomeModal from '../components/HomeComponents/HomeModal'
 import MyWalletsModal from '../components/HomeComponents/MyWalletsModal'
@@ -8,11 +8,24 @@ import DepositModal from '../components/HomeComponents/DepositModal'
 import TransferModal from '../components/HomeComponents/TransferModel'
 import HistoryModal from '../components/HomeComponents/HistoryModal'
 import HomeHeaderModal from '../components/HomeComponents/HomeHeaderModal'
+import ConfirmModal from '../components/ConfirmModal'
+import { useNavigation } from '@react-navigation/native'
 
 
 const HomeScreen = () => {
 
     const { pathname, activeModal } = useContext(DataContext);
+
+    const navigation = useNavigation();
+
+    const [showConfirmModal, setShowConfirmModal] = useState(
+        {
+            wallet: false,
+            deposit: false,
+            transfer: false,
+        }
+    );
+
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT }}>
@@ -25,13 +38,13 @@ const HomeScreen = () => {
                 {activeModal === 'home' && <HomeModal />}
 
                 {/* My Wallets Modal */}
-                {activeModal === 'My wallets' && <MyWalletsModal />}
+                {activeModal === 'My wallets' && <MyWalletsModal setShowConfirmModal={setShowConfirmModal} />}
 
                 {/* Deposit Modal */}
-                {activeModal === 'Deposit' && <DepositModal />}
+                {activeModal === 'Deposit' && <DepositModal setShowConfirmModal={setShowConfirmModal} />}
 
                 {/* Transfer Modal */}
-                {activeModal === 'Transfer' && <TransferModal />}
+                {activeModal === 'Transfer' && <TransferModal setShowConfirmModal={setShowConfirmModal} />}
 
                 {/* Transfer Modal */}
                 {activeModal === 'History' && <HistoryModal />}
@@ -39,6 +52,13 @@ const HomeScreen = () => {
                 <View style={{ height: 100 }}></View>
 
             </ScrollView>
+
+            {showConfirmModal.wallet && <ConfirmModal title='Add Wallet' onConfirm={() => { setShowConfirmModal(p => ({ ...p, wallet: false })); }} onCancel={() => setShowConfirmModal(p => ({ ...p, wallet: false }))} />}
+
+            {showConfirmModal.deposit && <ConfirmModal title='Deposit' onConfirm={() => { setShowConfirmModal(p => ({ ...p, deposit: false })); navigation.navigate("pin"); }} onCancel={() => setShowConfirmModal(p => ({ ...p, deposit: false }))} />}
+
+            {showConfirmModal.transfer && <ConfirmModal title='Transfer' onConfirm={() => { setShowConfirmModal(p => ({ ...p, transfer: false })); navigation.navigate("pin"); }} onCancel={() => setShowConfirmModal(p => ({ ...p, transfer: false }))} />}
+
         </View>
     )
 }

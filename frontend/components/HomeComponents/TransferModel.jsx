@@ -1,12 +1,8 @@
-import React from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors';
 import { Picker } from '@react-native-picker/picker';
-import { useNavigation } from '@react-navigation/native';
 
-const TransferModal = () => {
-
-    const navigation = useNavigation();
+const TransferModal = ({ setShowConfirmModal }) => {
 
     return (
         <View style={{ paddingBottom: 140 }}>
@@ -67,7 +63,7 @@ const TransferModal = () => {
 
                 <TouchableOpacity
                     style={styles.submitButton}
-                    onPress={() => navigation.navigate("pin")}
+                    onPress={() => { if (setShowConfirmModal) setShowConfirmModal(p => ({ ...p, transfer: true })); }}
                 >
                     <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Transfer</Text>
                 </TouchableOpacity>

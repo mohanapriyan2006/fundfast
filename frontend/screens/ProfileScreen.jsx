@@ -119,16 +119,16 @@ const ProfileScreen = () => {
                             marginHorizontal: 10,
                             backgroundColor: accent.DEFAULT,
                             borderWidth: 3,
-                            borderColor: "#ff0000ff",
+                            borderColor: "#dd0000ff",
                             borderRadius: 5,
                         }}
                             onPress={() => setShowDeleteModal(true)}
                         >
                             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                                <Image source={require("../assets/images/trash.png")} style={{ width: 24, height: 24, tintColor: "#ff0000ff" }} />
-                                <Text style={{ fontSize: 16, fontWeight: '500', color: "#ff0000ff" }}>Delete Account</Text>
+                                <Image source={require("../assets/images/trash.png")} style={{ width: 24, height: 24, tintColor: "#dd0000ff" }} />
+                                <Text style={{ fontSize: 16, fontWeight: '500', color: "#dd0000ff" }}>Delete Account</Text>
                             </View>
-                            <Image source={require("../assets/images/right-arrow.png")} style={{ width: 20, height: 20, tintColor: '#ff0000ff' }} />
+                            <Image source={require("../assets/images/right-arrow.png")} style={{ width: 20, height: 20, tintColor: '#dd0000ff' }} />
                         </TouchableOpacity>
 
                     </View>

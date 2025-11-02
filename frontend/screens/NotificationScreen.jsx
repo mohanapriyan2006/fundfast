@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import OtherHeader from '../components/OtherHeader'
+import ConfirmModal from '../components/ConfirmModal'
 
 const NotificationScreen = () => {
+
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     const notifications = [
         {
@@ -84,7 +87,7 @@ const NotificationScreen = () => {
                 <View style={styles.notificationContent}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                         <Text style={{ fontSize: 16, fontWeight: '500', color: accent.darker }}>NOTIFICATIONS</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => setShowConfirmModal(true)}>
                             <Text style={{ fontSize: 14, fontWeight: '500', color: primary.dark }}>Clear All</Text>
                         </TouchableOpacity>
                     </View>
@@ -108,6 +111,9 @@ const NotificationScreen = () => {
                 </View>
 
             </ScrollView >
+
+            {showConfirmModal && <ConfirmModal title="Clear All Notifications" onConfirm={() => setShowConfirmModal(false)} onCancel={() => setShowConfirmModal(false)} />}
+
         </View >
     )
 }

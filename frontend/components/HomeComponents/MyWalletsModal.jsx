@@ -1,19 +1,21 @@
-import React, { useContext } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { primary } from '../../theme/colors';
+import { useContext, useState } from 'react'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { accent, primary } from '../../theme/colors';
 import DataContext from '../../context/DataContext';
 import { Image } from 'expo-image';
 
-const MyWalletsModal = () => {
+const MyWalletsModal = ({ setShowConfirmModal }) => {
 
     const { wallets } = useContext(DataContext);
 
+    const [showAddWallet, setShowAddWallet] = useState(false);
+
     return (
-        <View>
+        <View style={{ paddingBottom: 50 }}>
             {/* My Wallets Modal Content */}
-            <View style={styles.headingContainer}>
+            <View style={[styles.headingContainer, { marginTop: 140 }]}>
                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>My Wallets</Text>
-                <View style={styles.headingUnderLine}></View>
+                <View style={[styles.headingUnderLine, { width: 80 }]}></View>
             </View>
 
             {/* Wallets List */}
@@ -38,6 +40,48 @@ const MyWalletsModal = () => {
                     </View>
                 ))}
             </View>
+
+
+            {showAddWallet ? <View>
+                <View style={[styles.headingContainer, { marginBottom: 20 }]}>
+                    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Add a new wallet</Text>
+                    <View style={[styles.headingUnderLine , {width: 130}]}></View>
+                </View>
+                <TextInput
+                    placeholder="Enter wallet's name"
+                    style={styles.inputBox}
+                />
+
+                <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10 }}>
+
+                    <TouchableOpacity
+                        style={{ backgroundColor: accent.dark, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
+                        onPress={() => setShowAddWallet(false)}
+                    >
+                        <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{ backgroundColor: primary.DEFAULT, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
+                        onPress={() => { setShowConfirmModal(p => ({ ...p, wallet: true })); }}
+                    >
+                        <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Add</Text>
+                    </TouchableOpacity>
+
+                </View>
+
+            </View>
+                :
+                <TouchableOpacity
+                    style={[{ backgroundColor: primary.DEFAULT, marginHorizontal: 20 }, styles.btn]}
+                    onPress={() => setShowAddWallet(true)}
+                >
+                    <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}> + Add New Wallet</Text>
+                </TouchableOpacity>
+
+            }
+
+
         </View>
     )
 }
@@ -49,11 +93,9 @@ const styles = StyleSheet.create({
     headingContainer: {
         display: 'flex',
         alignItems: 'center',
-        marginTop: 140,
     },
 
     headingUnderLine: {
-        width: 80,
         height: 2,
         backgroundColor: primary.DEFAULT,
         marginTop: 2,
@@ -63,7 +105,7 @@ const styles = StyleSheet.create({
         gap: 4,
         marginTop: 10,
         paddingHorizontal: 16,
-        paddingVertical: 16,
+        paddingVertical: 10,
     },
 
     walletContainer: {
@@ -100,6 +142,25 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         borderRadius: 5,
     },
+
+    btn: {
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 10,
+    },
+
+    inputBox: {
+        height: 50,
+        backgroundColor: '#FFFFFF',
+        borderColor: primary.dark,
+        borderWidth: 2,
+        borderRadius: 8,
+        marginBottom: 20,
+        marginHorizontal: 30,
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+    },
+
 
 
 })

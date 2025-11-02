@@ -13,14 +13,16 @@ const ConfirmDeleteModal = ({ item = "Your Account", onConfirm, onCancel }) => {
                 <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: "#860000ff" }}>Confirm Delete</Text>
                 <Text style={{ fontSize: 16, fontWeight: '500', color: accent.darker, marginTop: 20, marginHorizontal: 10 }}>Enter your password to delete {item}?</Text>
                 <View style={styles.formContainer}>
-                    <TextInput
-                        placeholder="Enter your password"
-                        style={styles.inputBox}
-                        secureTextEntry={!showPassword}
-                    />
-                    <Pressable onPress={() => setShowPassword(!showPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 20, bottom: 93 }}>
-                        <Image source={showPassword ? require('../../assets/images/eye.png') : require('../../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />
-                    </Pressable>
+                    <View style={{ position: 'relative' }}>
+                        <TextInput
+                            placeholder="Enter your password"
+                            style={styles.inputBox}
+                            secureTextEntry={!showPassword}
+                        />
+                        <Pressable onPress={() => setShowPassword(!showPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 0, top: 3 }}>
+                            <Image source={showPassword ? require('../../assets/images/eye.png') : require('../../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />
+                        </Pressable>
+                    </View>
                     <Text style={{ marginTop: 6, marginBottom: 10, textAlign: 'center' }}>Username: johndoe</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 
