@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 5,
         left: '50%',
-        marginLeft: -25,
+        marginLeft: -20,
         zIndex: 999,
     },
     iconRight: {

@@ -6,14 +6,14 @@ import { Image } from 'expo-image';
 
 const MyWalletsModal = ({ setShowConfirmModal }) => {
 
-    const { wallets } = useContext(DataContext);
+    const { wallets, setActiveModal } = useContext(DataContext);
 
     const [showAddWallet, setShowAddWallet] = useState(false);
 
     return (
         <View style={{ paddingBottom: 50 }}>
             {/* My Wallets Modal Content */}
-            <View style={[styles.headingContainer, { marginTop: 80}]}>
+            <View style={[styles.headingContainer, { marginTop: 80 }]}>
                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>My Wallets</Text>
                 <View style={[styles.headingUnderLine, { width: 80 }]}></View>
             </View>
@@ -26,10 +26,16 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
                             <Text style={{ fontSize: 20, fontWeight: '600', color: 'white' }}>{wallet.name}</Text>
                             <Text style={{ fontSize: 16, color: 'white' }}>Balance: ${wallet.balance}</Text>
                             <View style={styles.walletActionBtns}>
-                                <TouchableOpacity style={styles.walletDepositBtn}>
+                                <TouchableOpacity
+                                    style={styles.walletDepositBtn}
+                                    onPress={() => { setActiveModal('Deposit'); }}
+                                >
                                     <Text style={{ fontSize: 14, fontWeight: 'semibold', color: 'white' }}>Deposit</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.walletTransferBtn}>
+                                <TouchableOpacity
+                                    style={styles.walletTransferBtn}
+                                    onPress={() => setActiveModal("Transfer")}
+                                >
                                     <Text style={{ fontSize: 14, fontWeight: 'semibold', color: 'white' }}>Transfer</Text>
                                 </TouchableOpacity>
                             </View>

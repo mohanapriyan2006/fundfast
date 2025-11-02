@@ -1,12 +1,39 @@
 import { Image } from 'expo-image'
-import React from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { Animated, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import { useNavigation } from '@react-navigation/native'
+import QRScanner from '../components/QRScanner'
 
 const QRScanScreen = () => {
 
     const navigation = useNavigation();
+
+    const [qrData, setQrData] = useState(null);
+    const [isScanning, setIsScanning] = useState(false);
+
+    const waveAnim = useRef(new Animated.Value(0)).current;
+
+    const [toggleWave, setToggleWave] = useState(false);
+
+    useEffect(() => {
+        // Wave animation
+        if (!toggleWave) {
+            Animated.timing(waveAnim, {
+                toValue: -35,
+                duration: 1000,
+                useNativeDriver: true,
+            }).start();
+        } else {
+            Animated.timing(waveAnim, {
+                toValue: 0,
+                duration: 1000,
+                useNativeDriver: true,
+            }).start();
+        }
+        setToggleWave(!toggleWave);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [waveAnim]);
 
     return (
         <View style={{ flex: 1, backgroundColor: primary.mid }}>
@@ -22,19 +49,29 @@ const QRScanScreen = () => {
                 {/* QR Scanner */}
                 <View>
                     {/* wave image */}
-                    <Image
+                    <Animated.Image
                         source={require('../assets/images/wave.png')}
-                        style={[styles.wave, { top: 80, left: 0 }]}
+                        style={[styles.wave, { top: 80, left: 0, transform: [{ translateX: waveAnim }] }]}
                     />
-                    <TouchableOpacity style={styles.qrCodeWrapper}>
-                        <Image source={require('../assets/images/qrcode.png')} style={styles.qrCode} />
-                        <Text style={styles.qrCodeText}>Tap to Scan</Text>
+
+                    <TouchableOpacity
+                        style={styles.qrCodeWrapper}
+                        disabled={isScanning}
+                        onPress={() => setIsScanning(true)}
+                    >
+                        {isScanning ? <QRScanner setQrData={setQrData} />
+                            :
+                            <View>
+                                <Image source={require('../assets/images/qrcode.png')} style={styles.qrCode} />
+                                <Text style={styles.qrCodeText}>Tap to Scan</Text>
+                            </View>
+                        }
                     </TouchableOpacity>
 
                     {/* wave image */}
-                    <Image
+                    <Animated.Image
                         source={require('../assets/images/wave.png')}
-                        style={[styles.wave, { top: 280, left: -20 }]}
+                        style={[styles.wave, { top: 280, left: -20, transform: [{ translateX: waveAnim }] }]}
                     />
 
                 </View>
@@ -66,8 +103,9 @@ const QRScanScreen = () => {
                     <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>Payment with QR Code</Text>
                     <Text style={{ color: accent.darker, fontSize: 14, fontWeight: '400', marginTop: 5 }}>Hold the code inside the frame, then tap scan to proceed payment.</Text>
                     <TouchableOpacity
-                        style={styles.scanBtn}
-                        onPress={() => navigation.navigate("pin")}
+                        style={[styles.scanBtn , { backgroundColor: qrData ? primary.DEFAULT : accent.dark }]}
+                        onPress={() => { if (qrData) navigation.navigate("pin"); }}
+                        disabled={!qrData}
                     >
                         <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Scan</Text>
                     </TouchableOpacity>
@@ -126,7 +164,6 @@ const styles = StyleSheet.create({
     scanBtn: {
         marginTop: 20,
         marginBottom: 40,
-        backgroundColor: primary.DEFAULT,
         paddingVertical: 10,
         marginHorizontal: 80,
         borderRadius: 10,

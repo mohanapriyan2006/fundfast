@@ -33,7 +33,7 @@ export default function RootLayout() {
         }}
         screenOptions={({ route }) => ({
           headerShown: false,
-          tabBarShowLabel: false,
+          // tabBarShowLabel: false,
           tabBarButton: route.name === 'qr' ? () => null : undefined,
           tabBarIcon: ({ focused, size }) => {
             let iconName;
@@ -54,6 +54,7 @@ export default function RootLayout() {
               />
             );
           },
+          tabBarActiveTintColor: primary.dark,
           tabBarStyle: {
             position: 'absolute',
             bottom: 0,
@@ -65,6 +66,7 @@ export default function RootLayout() {
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
           },
+  
         })}
       >
         <Tab.Screen name="home" component={HomeScreen} />

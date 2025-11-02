@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan QR codes."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +22,12 @@
         "monochromeImage": "./assets/images/logo.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "android": {
+        "permissions": [
+          "CAMERA"
+        ]
+      }
     },
     "web": {
       "output": "static",
@@ -37,6 +45,12 @@
           "dark": {
             "backgroundColor": "#000000"
           }
+        }
+      ],
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera for QR scanning."
         }
       ]
     ],

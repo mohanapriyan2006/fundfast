@@ -21,14 +21,14 @@ const HomeHeaderModal = () => {
             // Slide up 
             Animated.timing(slideUpAnim, {
                 toValue: -60,
-                duration: 300,
+                duration: 800,
                 useNativeDriver: true,
             }).start();
         } else {
             // to original position
             Animated.timing(slideUpAnim, {
                 toValue: 0,
-                duration: 300,
+                duration: 800,
                 useNativeDriver: true,
             }).start();
         }
@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
         backgroundColor: primary.mid,
         padding: 16,
         paddingTop: 30,
+        zIndex: 9999
     },
 
     headerRow: {
