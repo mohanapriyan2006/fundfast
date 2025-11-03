@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import OtherHeader from '../components/OtherHeader'
 import { useNavigation } from '@react-navigation/native'
 import ConfirmDeleteModal from '../components/ProfileComponents/ConfirmDeleteModal'
 import ConfirmModal from '../components/ConfirmModal'
+import AuthContext from '../context/AuthContext'
 
 
 
 const ProfileScreen = () => {
 
     const navigation = useNavigation();
+
+    const { userDetails, logout } = useContext(AuthContext);
 
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -136,7 +139,7 @@ const ProfileScreen = () => {
 
             </ScrollView >
 
-            {showConfirmModal && <ConfirmModal title="Logout" onConfirm={() => navigation.navigate("login")} onCancel={() => setShowConfirmModal(false)} />}
+            {showConfirmModal && <ConfirmModal title="Logout" onConfirm={() => { logout(); navigation.navigate("login"); }} onCancel={() => setShowConfirmModal(false)} />}
 
             {showDeleteModal && <ConfirmDeleteModal item="Your Account" onConfirm={() => { }} onCancel={() => setShowDeleteModal(false)} />}
 

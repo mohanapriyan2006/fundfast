@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getItem } from '../context/LocalStorage';
 
 const API_BASE_URL = 'http://10.142.53.50:8080/api';
 
@@ -10,8 +11,11 @@ export const api = axios.create({
 });
 
 axios.interceptors.request.use(
-    (config) => {
-        // Add any request interceptors here
+    async (config) => {
+        const token = await getItem('token');
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${JSON.parse(token)}`;
+        }
         return config;
     },
     (error) => {
@@ -153,3 +157,38 @@ export const createUser = async (data) => {
         throw error;
     }
 };
+
+
+// AUTH API functions
+
+// Login user
+export const loginUser = async (data) => {
+    try {
+        const response = await api.post("/auth/login", data);
+        return response.data;
+    } catch (error) {
+        const message =
+            error.response?.data?.message ??
+            (typeof error.response?.data === 'string' ? error.response.data : undefined) ??
+            error.response?.statusText ??
+            error.message ??
+            'Login failed';
+        throw new Error(message);
+    }
+}
+
+// Register user
+export const registerUser = async (data) => {
+    try {
+        const response = await api.post("/auth/register", data);
+        return response.data;
+    } catch (error) {
+        const message =
+            error.response?.data?.message ??
+            (typeof error.response?.data === 'string' ? error.response.data : undefined) ??
+            error.response?.statusText ??
+            error.message ??
+            'Registration failed';
+        throw new Error(message);
+    }
+}

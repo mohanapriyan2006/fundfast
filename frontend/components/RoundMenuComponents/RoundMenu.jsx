@@ -51,28 +51,28 @@ const RoundMenu = () => {
                 </View>
 
                 <TouchableOpacity
-                    style={[styles.iconTopCenter]}
+                    style={[styles.iconTopCenter, { padding: activeModal === 'My wallets' ? 5 : 0, borderRadius: 50, backgroundColor: activeModal === 'My wallets' ? primary.dark : 'transparent' }]}
                     onPress={() => handleClick("My wallets")}
                 >
                     <Image source={require('../../assets/images/wallet-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={styles.iconRight}
+                    style={[styles.iconRight, { padding: activeModal === 'Deposit' ? 5 : 0, borderRadius: 50, backgroundColor: activeModal === 'Deposit' ? primary.mid : 'transparent' }]}
                     onPress={() => handleClick("Deposit")}
                 >
                     <Image source={require('../../assets/images/cash-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={styles.iconBottomCenter}
+                    style={[styles.iconBottomCenter, { padding: activeModal === 'Transfer' ? 5 : 0, borderRadius: 50, backgroundColor: activeModal === 'Transfer' ? primary.mid : 'transparent' }]}
                     onPress={() => handleClick("Transfer")}
                 >
                     <Image source={require('../../assets/images/transfer-icon.png')} style={styles.menuIcon} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={styles.iconLeft}
+                    style={[styles.iconLeft, { padding: activeModal === 'History' ? 5 : 0, borderRadius: 50, backgroundColor: activeModal === 'History' ? primary.mid : 'transparent' }]}
                     onPress={() => handleClick("History")}
                 >
                     <Image source={require('../../assets/images/history-icon.png')} style={styles.menuIcon} />

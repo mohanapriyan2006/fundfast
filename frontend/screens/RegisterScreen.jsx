@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import { useNavigation } from '@react-navigation/native'
 import * as Yup from 'yup';
+import AuthContext from '../context/AuthContext';
 
 const RegisterScreen = () => {
+
+    const { register } = useContext(AuthContext);
 
     const [showPassword, setShowPassword] = useState(false);
     const [showCPassword, setShowCPassword] = useState(false);
@@ -70,6 +73,8 @@ const RegisterScreen = () => {
             await validationSchema.validate(formData, { abortEarly: false });
             setErrors({});
 
+            await register(formData);
+
             console.log('Registration successful!', formData);
             navigation.navigate('login');
 
@@ -80,7 +85,10 @@ const RegisterScreen = () => {
                     validationErrors[error.path] = error.message;
                 });
                 setErrors(validationErrors);
+                return;
             }
+            setErrors({ ...errors, general: err.message || "Registration failed. Please check your details and try again." });
+            console.log('Registration failed:', err);
         }
     };
 
@@ -203,6 +211,8 @@ const RegisterScreen = () => {
                     </View>
                     {errors.pin && <Text style={styles.errorText}>{errors.pin}</Text>}
                     {errors.confirmPin && <Text style={styles.errorText}>{errors.confirmPin}</Text>}
+
+                    {errors.general && <Text style={styles.errorText}>{errors.general}</Text>}
 
                     <TouchableOpacity onPress={handleRegister} style={styles.button}>
                         <Text style={styles.buttonText}>Register</Text>

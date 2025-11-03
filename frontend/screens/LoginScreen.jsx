@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
+import AuthContext from '../context/AuthContext';
 
 const LoginScreen = () => {
+
+    const { login } = useContext(AuthContext);
 
     const [showPassword, setShowPassword] = useState(true);
 
@@ -44,6 +47,8 @@ const LoginScreen = () => {
             await validationSchema.validate(formData, { abortEarly: false });
             setErrors({});
 
+            await login(formData);
+
             console.log('Login successful!', formData);
             navigation.navigate('main');
 
@@ -54,7 +59,10 @@ const LoginScreen = () => {
                     validationErrors[error.path] = error.message;
                 });
                 setErrors(validationErrors);
+                return;
             }
+            setErrors({ ...errors, general: err.message || "Invalid username or password" });
+            console.log('Login failed:', err);
         }
     };
 
@@ -95,11 +103,13 @@ const LoginScreen = () => {
                     </View>
                     {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
+                    {errors.general && <Text style={styles.errorText}>{errors.general}</Text>}
 
                     <TouchableOpacity onPress={handleLogin} style={styles.button}>
                         <Text style={styles.buttonText}>Login</Text>
                     </TouchableOpacity>
                 </View>
+
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 4, marginTop: 20, marginBottom: 100 }}>
                     <Text>{`Don't have an account?`}</Text>
