@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,10 +36,12 @@ public class Wallet {
 
     private Double balance;
 
+    @JsonIgnore
     @Schema(hidden = true)
     @OneToMany(mappedBy = "fromWallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Transaction> sentTransactions = new ArrayList<>();
 
+    @JsonIgnore
     @Schema(hidden = true)
     @OneToMany(mappedBy = "toWallet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Transaction> receivedTransactions = new ArrayList<>();

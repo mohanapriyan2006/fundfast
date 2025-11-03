@@ -73,9 +73,9 @@ public class WalletController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/{id}/deposit")
-    public ResponseEntity<?> deposit(@PathVariable Long id, @RequestParam Double amt) {
+    public ResponseEntity<?> deposit(@PathVariable Long id, @RequestParam Double amount) {
         try {
-            Wallet updatedWallet = walletService.deposit(id, amt);
+            Wallet updatedWallet = walletService.deposit(id, amount);
             return ResponseEntity.ok(updatedWallet);
         } catch (Exception e) {
             if (e instanceof IllegalArgumentException)

@@ -1,0 +1,155 @@
+import axios from 'axios';
+
+const API_BASE_URL = 'http://10.142.53.50:8080/api';
+
+export const api = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
+axios.interceptors.request.use(
+    (config) => {
+        // Add any request interceptors here
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Test the health endpoint
+export const testHealth = async () => {
+    try {
+        const response = await api.get('/health');
+        return response.data;
+    } catch (error) {
+        console.log('API fetch error:', error);
+        throw error;
+    }
+};
+
+// Generic GET All API functions for [wallet , transaction , user ]
+export const fetchAllData = async (endpoint) => {
+    try {
+        const response = await api.get(`/${endpoint}/all`);
+        return response.data;
+    } catch (error) {
+        console.log(`API fetch error at ${endpoint}:`, error);
+        throw error;
+    }
+}
+
+// Generic GET by ID API functions for [wallet , transaction , user ]
+export const fetchDataById = async (endpoint, id) => {
+    try {
+        const response = await api.get(`/${endpoint}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(`API fetch error at ${endpoint} with ID ${id}:`, error);
+        throw error;
+    }
+};
+
+// Generic PUT API functions for [wallet , user ]
+export const updateData = async (endpoint, id, data) => {
+    try {
+        const response = await api.put(`/${endpoint}/${id}`, data);
+        return response.data;
+    } catch (error) {
+        console.log(`API update error at ${endpoint} with ID ${id}:`, error);
+        throw error;
+    }
+};
+
+// Generic DELETE API functions for [wallet , transaction , user ]
+export const deleteData = async (endpoint, id) => {
+    try {
+        const response = await api.delete(`/${endpoint}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(`API delete error at ${endpoint} with ID ${id}:`, error);
+        throw error;
+    }
+}
+
+// POST API (CREATE new wallet) functions for [ wallet ]
+export const createWalletByUserId = async (data, userId) => {
+    try {
+        const response = await api.post(`/wallet/${userId}`, data);
+        return response.data;
+    } catch (error) {
+        console.log(`API create error at wallet:`, error);
+        throw error;
+    }
+}
+
+// GET by userID API functions for [ wallet ]
+export const getWalletByUserId = async (userId) => {
+    try {
+        const response = await api.get(`/api/wallet/ownerId/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.log(`API fetch error at wallet:`, error);
+        throw error;
+    }
+};
+
+// POST API (DEPOSIT amt to wallet) functions for [ wallet ]
+export const depositToWallet = async (amt, id) => {
+    try {
+        const response = await api.post(`/wallet/${id}/deposit?amount=${amt}`);
+        return response.data;
+    } catch (error) {
+        console.log(`API create error at deposit:`, error);
+        throw error;
+    }
+}
+
+// POST API (TRANSFER amt one wallet to another) functions for [ Wallet -> Transaction ]
+export const transferToWallet = async (amt, fromId, toId) => {
+    try {
+        const response = await api.post(`/wallet/${fromId}/transfer/${toId}?amount=${amt}`);
+        return response.data;
+    } catch (error) {
+        console.log(`API create error at transfer:`, error);
+        throw error;
+    }
+};
+
+
+// GET ALL by PAGINATION & SORTING API functions for [ Transactions ]
+export const fetchTransactionsPaginated = async (page, size, sortBy, sortDir) => {
+    try {
+        const response = await api.get(`/transaction/all?pageNo=${page}&pageSize=${size}&sortBy=${sortBy}&sortDir=${sortDir}`);
+        return response.data;
+    } catch (error) {
+        console.log(`API fetch error at transactions paginated:`, error);
+        throw error;
+    }
+};
+
+
+// GET by Wallet by PAGINATION & SORTING API functions for [ Transactions ]
+export const fetchTransactionsByWalletIdPaginated = async (walletId, page, size, sortBy, sortDir) => {
+    try {
+        const response = await api.get(`/transaction/walletId/${walletId}?pageNo=${page}&pageSize=${size}&sortBy=${sortBy}&sortDir=${sortDir}`);
+        return response.data;
+    } catch (error) {
+        console.log(`API fetch error at transactions paginated:`, error);
+        throw error;
+    }
+};
+
+
+// POST API functions for [ user ]
+export const createUser = async (data) => {
+    try {
+        const response = await api.post(`/user`, data);
+        return response.data;
+    } catch (error) {
+        console.log(`API create error at user:`, error);
+        throw error;
+    }
+};
