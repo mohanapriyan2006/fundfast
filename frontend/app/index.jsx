@@ -1,5 +1,6 @@
 // import Home from "../screens/Home";
 
+import EnterMoneyModal from "../components/EnterMoneyModal";
 import About from "../components/ProfileComponents/About";
 import ChangePassOrPIN from "../components/ProfileComponents/ChangePassOrPIN";
 import EditProfile from "../components/ProfileComponents/EditProfile";
@@ -35,6 +36,7 @@ export default function Index() {
         <Stack.Screen name="change-pin" component={ChangePinComponent} />
         <Stack.Screen name="terms-conditions" component={TermsAndConditions} />
         <Stack.Screen name="about" component={About} />
+        <Stack.Screen name="enter-money" component={EnterMoneyModal} />
       </Stack.Navigator>
     </DataProvider>
   );

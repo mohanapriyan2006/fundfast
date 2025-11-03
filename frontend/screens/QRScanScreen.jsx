@@ -103,9 +103,9 @@ const QRScanScreen = () => {
                     <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>Payment with QR Code</Text>
                     <Text style={{ color: accent.darker, fontSize: 14, fontWeight: '400', marginTop: 5 }}>Hold the code inside the frame, then tap scan to proceed payment.</Text>
                     <TouchableOpacity
-                        style={[styles.scanBtn , { backgroundColor: qrData ? primary.DEFAULT : accent.dark }]}
-                        onPress={() => { if (qrData) navigation.navigate("pin"); }}
-                        disabled={!qrData}
+                        style={[styles.scanBtn, { backgroundColor: qrData ? primary.DEFAULT : accent.dark }]}
+                        onPress={() => { if (qrData || true) navigation.navigate("enter-money"); }}
+                        // disabled={!qrData}
                     >
                         <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Scan</Text>
                     </TouchableOpacity>

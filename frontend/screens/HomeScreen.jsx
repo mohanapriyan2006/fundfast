@@ -32,7 +32,7 @@ const HomeScreen = () => {
             <ScrollView style={{ flex: 1 }}>
 
                 {/* Header */}
-                {(pathname.includes('/home') || pathname === "/main" || pathname === '') && <HomeHeaderModal />}
+                {(pathname.includes('/Home') || pathname === "/main" || pathname === '') && <HomeHeaderModal />}
 
                 {/* Home Modal */}
                 {activeModal === 'home' && <HomeModal />}

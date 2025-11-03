@@ -3,10 +3,13 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import { primary } from '../../theme/colors';
 import { Image } from 'expo-image';
 import DataContext from '../../context/DataContext';
+import { useNavigation } from '@react-navigation/native';
 
 const HomeModal = () => {
 
     const { paymentList, promoAndDiscounts } = useContext(DataContext);
+
+    const navigation = useNavigation();
 
     return (
         <View>
@@ -15,7 +18,11 @@ const HomeModal = () => {
                 <Text style={styles.sectionTitle}>Payment List</Text>
                 <View style={styles.paymentRow}>
                     {paymentList.map((item) => (
-                        <TouchableOpacity key={item.id} style={styles.paymentItem}>
+                        <TouchableOpacity
+                            key={item.id}
+                            style={styles.paymentItem}
+                            onPress={() => navigation.navigate('enter-money', { item: item.name })}
+                        >
                             <View style={styles.paymentIconWrap}>
                                 <Image source={item.logo} style={styles.paymentIcon} />
                             </View>

@@ -34,16 +34,16 @@ export default function RootLayout() {
         screenOptions={({ route }) => ({
           headerShown: false,
           // tabBarShowLabel: false,
-          tabBarButton: route.name === 'qr' ? () => null : undefined,
+          tabBarButton: route.name === 'Qr' ? () => null : undefined,
           tabBarIcon: ({ focused, size }) => {
             let iconName;
-            if (route.name === 'home') {
+            if (route.name === 'Home') {
               iconName = require("../assets/images/home-icon.png");
-            } else if (route.name === 'stats') {
+            } else if (route.name === 'Stats') {
               iconName = require("../assets/images/stats-icon.png");
-            } else if (route.name === 'notification') {
+            } else if (route.name === 'Notification') {
               iconName = require("../assets/images/notification-icon.png");
-            } else if (route.name === 'profile') {
+            } else if (route.name === 'Profile') {
               iconName = require("../assets/images/profile-icon.png");
             }
 
@@ -66,14 +66,14 @@ export default function RootLayout() {
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
           },
-  
+
         })}
       >
-        <Tab.Screen name="home" component={HomeScreen} />
-        <Tab.Screen name="stats" component={StatsScreen} />
-        <Tab.Screen name="qr" component={QRScanScreen} />
-        <Tab.Screen name="notification" component={NotificationScreen} />
-        <Tab.Screen name="profile" component={ProfileScreen} />
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Stats" component={StatsScreen} />
+        <Tab.Screen name="Qr" component={QRScanScreen} />
+        <Tab.Screen name="Notification" component={NotificationScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
 
       <TouchableOpacity
