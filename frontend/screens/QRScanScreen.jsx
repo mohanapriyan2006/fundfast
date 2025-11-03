@@ -14,24 +14,23 @@ const QRScanScreen = () => {
 
     const waveAnim = useRef(new Animated.Value(0)).current;
 
-    const [toggleWave, setToggleWave] = useState(false);
 
     useEffect(() => {
         // Wave animation
-        if (!toggleWave) {
-            Animated.timing(waveAnim, {
-                toValue: -35,
-                duration: 1000,
-                useNativeDriver: true,
-            }).start();
-        } else {
-            Animated.timing(waveAnim, {
-                toValue: 0,
-                duration: 1000,
-                useNativeDriver: true,
-            }).start();
-        }
-        setToggleWave(!toggleWave);
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(waveAnim, {
+                    toValue: -50,
+                    duration: 2000,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(waveAnim, {
+                    toValue: 0,
+                    duration: 2000,
+                    useNativeDriver: true,
+                }),
+            ])
+        ).start();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [waveAnim]);
 
@@ -105,7 +104,7 @@ const QRScanScreen = () => {
                     <TouchableOpacity
                         style={[styles.scanBtn, { backgroundColor: qrData ? primary.DEFAULT : accent.dark }]}
                         onPress={() => { if (qrData || true) navigation.navigate("enter-money"); }}
-                        // disabled={!qrData}
+                    // disabled={!qrData}
                     >
                         <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Scan</Text>
                     </TouchableOpacity>
