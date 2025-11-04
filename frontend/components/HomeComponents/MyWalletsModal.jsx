@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors';
 import DataContext from '../../context/DataContext';
@@ -6,9 +6,18 @@ import { Image } from 'expo-image';
 
 const MyWalletsModal = ({ setShowConfirmModal }) => {
 
-    const { wallets, setActiveModal } = useContext(DataContext);
+    const { myWallets: wallets,
+        setActiveModal,
+        addWalletState,
+        setAddWalletState,
+        fetchAllWallets } = useContext(DataContext);
 
     const [showAddWallet, setShowAddWallet] = useState(false);
+
+    useEffect(() => {
+        fetchAllWallets();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <View style={{ paddingBottom: 50 }}>
@@ -23,7 +32,7 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
                 {wallets.map((wallet) => (
                     <View key={wallet.id} style={styles.walletContainer}>
                         <View>
-                            <Text style={{ fontSize: 20, fontWeight: '600', color: 'white' }}>{wallet.name}</Text>
+                            <Text style={{ fontSize: 20, fontWeight: '600', color: 'white' }}>{wallet.walletName}</Text>
                             <Text style={{ fontSize: 16, color: 'white' }}>Balance: ${wallet.balance}</Text>
                             <View style={styles.walletActionBtns}>
                                 <TouchableOpacity
@@ -56,7 +65,11 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
                 <TextInput
                     placeholder="Enter wallet's name"
                     style={styles.inputBox}
+                    onChangeText={(v) => setAddWalletState({ ...addWalletState, name: v })}
+                    value={addWalletState.name}
                 />
+
+                {addWalletState.error && <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>{addWalletState.error}</Text>}
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10 }}>
 

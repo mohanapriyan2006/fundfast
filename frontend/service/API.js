@@ -2,6 +2,7 @@ import axios from 'axios';
 import { getItem } from '../context/LocalStorage';
 
 const API_BASE_URL = 'http://10.142.53.50:8080/api';
+// const API_BASE_URL = 'http://172.19.86.114:8080/api';
 
 export const api = axios.create({
     baseURL: API_BASE_URL,
@@ -10,18 +11,44 @@ export const api = axios.create({
     },
 });
 
-axios.interceptors.request.use(
-    async (config) => {
-        const token = await getItem('token');
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${JSON.parse(token)}`;
+
+let currentToken = null;
+export const setAuthToken = (token) => {
+    currentToken = token || null;
+    if (currentToken) {
+        api.defaults.headers.common.Authorization = `Bearer ${currentToken}`;
+    } else {
+        delete api.defaults.headers.common.Authorization;
+    }
+};
+
+
+api.interceptors.request.use((config) => {
+    if (currentToken && !config.headers.Authorization) {
+        config.headers.Authorization = `Bearer ${currentToken}`;
+    }
+    return config;
+});
+
+
+api.interceptors.response.use(
+    (res) => res,
+    (err) => {
+        const s = err?.response?.status;
+        if (s === 401 || s === 403) {
+            console.log('Auth error', s, 'Authorization header present:', !!api.defaults.headers.common.Authorization);
         }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
+        return Promise.reject(err);
     }
 );
+
+
+(async () => {
+    try {
+        const t = await getItem('token');
+        if (t) setAuthToken(t);
+    } catch { }
+})();
 
 // Test the health endpoint
 export const testHealth = async () => {
@@ -38,6 +65,7 @@ export const testHealth = async () => {
 export const fetchAllData = async (endpoint) => {
     try {
         const response = await api.get(`/${endpoint}/all`);
+        console.log('API fetchAllData response:', response);
         return response.data;
     } catch (error) {
         console.log(`API fetch error at ${endpoint}:`, error);
@@ -92,7 +120,7 @@ export const createWalletByUserId = async (data, userId) => {
 // GET by userID API functions for [ wallet ]
 export const getWalletByUserId = async (userId) => {
     try {
-        const response = await api.get(`/api/wallet/ownerId/${userId}`);
+        const response = await api.get(`/wallet/ownerId/${userId}`);
         return response.data;
     } catch (error) {
         console.log(`API fetch error at wallet:`, error);
@@ -127,7 +155,7 @@ export const transferToWallet = async (amt, fromId, toId) => {
 export const fetchTransactionsPaginated = async (page, size, sortBy, sortDir) => {
     try {
         const response = await api.get(`/transaction/all?pageNo=${page}&pageSize=${size}&sortBy=${sortBy}&sortDir=${sortDir}`);
-        return response.data;
+        return response;
     } catch (error) {
         console.log(`API fetch error at transactions paginated:`, error);
         throw error;

@@ -2,10 +2,17 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors';
 import { Picker } from '@react-native-picker/picker';
+import { useContext } from 'react';
+import DataContext from '../../context/DataContext';
 
 
 const DepositModal = ({ setShowConfirmModal }) => {
 
+    const { myWallets, depositWalletState, setDepositWalletState } = useContext(DataContext);
+
+    const handleWalletChange = (walletId) => {
+        setDepositWalletState((prevState) => ({ ...prevState, id: walletId }));
+    };
 
     return (
         <View style={{ paddingBottom: 140 }}>
@@ -20,15 +27,20 @@ const DepositModal = ({ setShowConfirmModal }) => {
                 <Text style={styles.formLabel}>Select Wallet :</Text>
                 <View style={styles.pickerWrapper}>
                     <Picker
-                        selectedValue={"wallet1"}
-                        // onValueChange={setFromWallet}
+                        selectedValue={depositWalletState.id}
+                        onValueChange={handleWalletChange}
                         mode="dropdown"
                         dropdownIconColor="#fff"
                         style={styles.picker}
                         itemStyle={styles.pickerItem}
                     >
-                        <Picker.Item label="Wallet 1" value="wallet1" />
-                        <Picker.Item label="Wallet 2" value="wallet2" />
+                        {myWallets.map((wallet) => (
+                            <Picker.Item
+                                key={wallet.id}
+                                label={wallet.walletName}
+                                value={wallet.id}
+                            />
+                        ))}
                     </Picker>
                 </View>
 
@@ -39,6 +51,8 @@ const DepositModal = ({ setShowConfirmModal }) => {
                         placeholder="Enter amount"
                         keyboardType="numeric"
                         style={{ fontSize: 16, color: 'black' }}
+                        value={depositWalletState.amount}
+                        onChangeText={(text) => setDepositWalletState((prevState) => ({ ...prevState, amount: text }))}
                     />
                 </View>
 

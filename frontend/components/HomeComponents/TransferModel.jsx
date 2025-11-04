@@ -1,8 +1,12 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors';
 import { Picker } from '@react-native-picker/picker';
+import { useContext } from 'react';
+import DataContext from '../../context/DataContext';
 
 const TransferModal = ({ setShowConfirmModal }) => {
+
+    const { transferState, setTransferState, myWallets } = useContext(DataContext);
 
     return (
         <View style={{ paddingBottom: 140 }}>
@@ -17,15 +21,16 @@ const TransferModal = ({ setShowConfirmModal }) => {
                 <Text style={styles.formLabel}>Select Your Wallet:</Text>
                 <View style={styles.pickerWrapper}>
                     <Picker
-                        selectedValue={"wallet1"}
-                        // onValueChange={setFromWallet}
+                        selectedValue={transferState.from}
+                        onValueChange={(v) => setTransferState({ ...transferState, from: v })}
                         mode="dropdown"
                         dropdownIconColor="#fff"
                         style={styles.picker}
                         itemStyle={styles.pickerItem}
                     >
-                        <Picker.Item label="Wallet 1" value="wallet1" />
-                        <Picker.Item label="Wallet 2" value="wallet2" />
+                        {myWallets.map(wallet => (
+                            <Picker.Item key={wallet.id} label={wallet.walletName} value={wallet.id} />
+                        ))}
                     </Picker>
                 </View>
 
@@ -58,6 +63,8 @@ const TransferModal = ({ setShowConfirmModal }) => {
                         placeholder="Enter amount"
                         keyboardType="numeric"
                         style={{ fontSize: 16, color: 'black' }}
+                        value={transferState.amount}
+                        onChangeText={(v) => setTransferState({ ...transferState, amount: v })}
                     />
                 </View>
 

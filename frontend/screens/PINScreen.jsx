@@ -1,11 +1,17 @@
 import { Image } from 'expo-image'
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Pressable } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import { useNavigation } from '@react-navigation/native'
+import DataContext from '../context/DataContext'
 
 const PINScreen = () => {
     const navigation = useNavigation();
+
+    const type = navigation.getState().routes[navigation.getState().index].params?.type || 'payment';
+
+    const { handleDepositWallet , handleTransferWallet } = useContext(DataContext);
+
     const [pin, setPin] = useState('');
     const [secure, setSecure] = useState(true);
     const inputRef = useRef(null);
@@ -14,6 +20,21 @@ const PINScreen = () => {
         const digits = val.replace(/[^0-9]/g, '').slice(0, 4);
         setPin(digits);
     };
+
+    const handlePINSubmit = async () => {
+        // Handle PIN submission logic here
+        if (type === 'deposit') {
+            await handleDepositWallet();
+            navigation.navigate("Home", { screen: "DepositConfirmation" });
+        } else if (type === 'transfer') {
+            await handleTransferWallet();
+            navigation.navigate("Home", { screen: "TransferConfirmation" });
+        } else {
+            navigation.navigate("Home", { screen: "PaymentConfirmation" });
+        }
+    };
+
+
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
             <ScrollView style={{ flex: 1 }}>
@@ -57,15 +78,17 @@ const PINScreen = () => {
                 <TouchableOpacity
                     style={[styles.confirmBtn, pin.length !== 4 && { opacity: 0.5 }]}
                     disabled={pin.length !== 4}
-                    onPress={() => console.log('PIN:', pin)}
+                    onPress={handlePINSubmit}
                 >
                     <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Confirm</Text>
                 </TouchableOpacity>
             </ScrollView>
         </View>
     )
-}
+};
+
 export default PINScreen;
+
 const styles = StyleSheet.create({
     backIcon: {
         position: 'absolute',

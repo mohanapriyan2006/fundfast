@@ -1,22 +1,25 @@
-import React, { useState } from 'react'
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors';
 import { Picker } from '@react-native-picker/picker';
+import DataContext from '../../context/DataContext';
 
-const TransactionHistory = [
-    { id: 1, date: '2024-06-01', type: 'TRANSFER', amount: 100, formWallet: 'Wallet 1', toWallet: 'Wallet 2' },
-    { id: 2, date: '2024-06-01', type: 'TRANSFER', amount: 70, formWallet: 'Wallet 2', toWallet: 'Wallet 1' },
-    { id: 3, date: '2024-06-01', type: 'DEPOSIT', amount: 1000, formWallet: 'Wallet 1', toWallet: null },
-    { id: 4, date: '2024-06-01', type: 'TRANSFER', amount: 80, formWallet: 'Wallet 1', toWallet: 'Wallet 2' },
-    { id: 5, date: '2024-06-01', type: 'TRANSFER', amount: 700, formWallet: 'Wallet 2', toWallet: 'Wallet 1' },
-]
 
 const HistoryModal = () => {
 
-    const [selectedWallet, setSelectedWallet] = useState("Wallet 1");
+    const { transactions, myWallets, fetchAllTransactionsByWallet } = useContext(DataContext);
+
+    const [selectedWallet, setSelectedWallet] = useState(myWallets[0]?.id || 1);
+
+    const [pageNo, setPageNo] = useState(0);
 
     const [sortBy, setSortBy] = useState("Time");
     const [sortOrder, setSortOrder] = useState("ASC");
+
+    useEffect(() => {
+        fetchAllTransactionsByWallet(selectedWallet, pageNo, sortBy, sortOrder);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedWallet, sortBy, sortOrder, pageNo]);
 
     return (
         <View style={{ paddingBottom: 20 }}>
@@ -31,29 +34,30 @@ const HistoryModal = () => {
                 <View style={styles.historySortContainer}>
                     <View style={styles.pickerWrapper}>
                         <Picker
-                            selectedValue={"wallet1"}
-                            // onValueChange={setFromWallet}
+                            selectedValue={selectedWallet}
+                            onValueChange={(v) => { setSelectedWallet(v); }}
                             mode="dropdown"
                             dropdownIconColor="#fff"
                             style={styles.picker}
                             itemStyle={styles.pickerItem}
                         >
-                            <Picker.Item label="Wallet 1" value="wallet1" />
-                            <Picker.Item label="Wallet 2" value="wallet2" />
+                            {myWallets.map((wallet) => (
+                                <Picker.Item key={wallet.id} label={wallet.walletName} value={wallet.id} />
+                            ))}
                         </Picker>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                         <TouchableOpacity
-                            style={sortBy === "Time" ? styles.activeBtn : styles.inactiveBtn}
-                            onPress={() => setSortBy("Time")}
+                            style={sortBy === "time" ? styles.activeBtn : styles.inactiveBtn}
+                            onPress={() => setSortBy("time")}
                         >
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', color: sortBy === "Time" ? 'white' : 'black' }}>Time</Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', color: sortBy === "time" ? 'white' : 'black' }}>Time</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={sortBy === "Amount" ? styles.activeBtn : styles.inactiveBtn}
-                            onPress={() => setSortBy("Amount")}
+                            style={sortBy === "amount" ? styles.activeBtn : styles.inactiveBtn}
+                            onPress={() => setSortBy("amount")}
                         >
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', color: sortBy === "Amount" ? 'white' : 'black' }}>Amt</Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', color: sortBy === "amount" ? 'white' : 'black' }}>Amt</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{ flexDirection: 'row' }}
@@ -73,17 +77,20 @@ const HistoryModal = () => {
                 </View>
 
                 <View style={styles.transactionList}>
-                    {TransactionHistory.map((transaction) => (
+                    {transactions.map((transaction) => (
                         <View key={transaction.id} style={styles.transactionItem}>
                             <View style={styles.transactionDetails}>
-                                <Text style={{ fontWeight: '600' }}>
-                                    {transaction.type === 'TRANSFER' ? `from ${transaction.formWallet} to ${transaction.toWallet}` : 'Deposit'}
+                                <Text style={{ fontSize: 16, fontWeight: '600', color: primary.dark }}>
+                                    {transaction.type === 'TRANSFER' ? `${transaction.fromWallet.walletName} to ${transaction.toWallet.walletName}` : 'Deposit'}
                                 </Text>
-                                <Text style={{ color: '#666' }}>{transaction.date}</Text>
+                                <Text style={{ color: 'black' }}>
+                                    {transaction.type === 'TRANSFER' ? `${transaction.fromWallet?.owner?.name} to ${transaction.toWallet?.owner?.name}` : `${transaction.toWallet?.owner?.name}`}
+                                </Text>
+                                <Text style={{ color: '#666' }}>{new Date(transaction.timestamp).toLocaleString()}</Text>
                             </View>
                             <View style={{ alignItems: 'flex-end' }}>
-                                <Text style={{ fontWeight: '600', fontSize: 20, color: (transaction.type === 'DEPOSIT' || transaction.toWallet === selectedWallet) ? 'green' : 'red' }}>
-                                    {(transaction.type === 'DEPOSIT' || transaction.toWallet === selectedWallet) ? '+' : '-'}${transaction.amount}
+                                <Text style={{ fontWeight: '600', fontSize: 20, color: (transaction.type === 'DEPOSIT' || transaction.toWallet.id === selectedWallet) ? 'green' : 'red' }}>
+                                    {(transaction.type === 'DEPOSIT' || transaction.toWallet.id === selectedWallet) ? '+' : '-'}${transaction.amount}
                                 </Text>
                             </View>
                         </View>
@@ -91,13 +98,19 @@ const HistoryModal = () => {
                 </View>
 
                 <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
-                    <TouchableOpacity style={styles.activeBtn}>
+                    <TouchableOpacity
+                        style={styles.activeBtn}
+                        onPress={() => setPageNo((p) => Math.max(p - 1, 0))}
+                    >
                         <Text style={{ color: 'white' }}>Prev</Text>
                     </TouchableOpacity>
                     <View>
                         <Text>1 2 3 ... 10</Text>
                     </View>
-                    <TouchableOpacity style={styles.activeBtn}>
+                    <TouchableOpacity
+                        style={styles.activeBtn}
+                        onPress={() => setPageNo((p) => p + 1)}
+                    >
                         <Text style={{ color: 'white' }}>Next</Text>
                     </TouchableOpacity>
                 </View>

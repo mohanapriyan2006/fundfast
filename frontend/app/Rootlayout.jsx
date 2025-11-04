@@ -1,5 +1,5 @@
 
-import { StatusBar, TouchableOpacity, View } from "react-native";
+import { StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "../screens/HomeScreen";
 import { Image } from "expo-image";
@@ -16,9 +16,20 @@ const Tab = createBottomTabNavigator();
 
 export default function RootLayout() {
 
-  const { setActiveModal } = useContext(DataContext);
+  const { setActiveModal, isAPIConnected } = useContext(DataContext);
 
   const navigation = useNavigation();
+
+  const APINotConnect = () => {
+    return (
+      <View style={{position: 'absolute', top: 50, left: 0, right: 0, zIndex: 10000 }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffe6e6ff' , borderRadius: 10, elevation: 4, padding: 20 , marginHorizontal: 20}}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginBottom: 10, color: 'red' }}>Connection Error</Text>
+          <Text style={{ fontSize: 14, textAlign: 'center' }}>Unable to connect to the server. Please check your internet connection or try again later.</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -82,6 +93,9 @@ export default function RootLayout() {
       >
         <Image style={{ width: 50, height: 50 }} source={require("../assets/images/qrscan.png")} />
       </TouchableOpacity>
+
+      {!isAPIConnected && <APINotConnect />}
+
     </View >
   );
 }
