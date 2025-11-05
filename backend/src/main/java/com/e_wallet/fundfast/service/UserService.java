@@ -66,14 +66,28 @@ public class UserService {
     }
 
     public User updateUser(Long id, User user) {
-        if (userRepository.existsById(id)) {
-            user.setId(id);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setPIN(passwordEncoder.encode(user.getPIN()));
-            return userRepository.save(user);
-        } else {
-            return null;
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+        if (user.getUsername() != null && !user.getUsername().isEmpty()) {
+            if (!user.getUsername().equals(existingUser.getUsername())
+                    && userRepository.existsByUsername(user.getUsername())) {
+                throw new IllegalArgumentException("Username already exist !");
+            }
+            existingUser.setUsername(user.getUsername());
         }
+        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+            existingUser.setEmail(user.getEmail());
+        }
+        if (user.getName() != null && !user.getName().isEmpty()) {
+            existingUser.setName(user.getName());
+        }
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        if (user.getPIN() != null && !user.getPIN().isEmpty()) {
+            existingUser.setPIN(passwordEncoder.encode(user.getPIN()));
+        }
+        return userRepository.save(existingUser);
     }
 
 }

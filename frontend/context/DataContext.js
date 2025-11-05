@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "expo-router";
-import { createWalletByUserId, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, testHealth, transferToWallet } from "../service/API";
+import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, loginUser, testHealth, transferToWallet, updateData, verifyPin } from "../service/API";
 import AuthContext from "./AuthContext";
 
 const DataContext = createContext();
@@ -143,7 +143,27 @@ export const DataProvider = ({ children }) => {
         setActiveModal("home");
     }, [pathname]);
 
-    const { userId } = useContext(AuthContext);
+    const { userId, userDetails, deleteAccount, saveAuth } = useContext(AuthContext);
+
+    const [confirmationScreen, setConfirmationScreen] = useState('Home');
+
+    // const [isAPIConnected, setIsAPIConnected] = useState(true);
+
+    // const fetchTestHealth = async () => {
+    //     try {
+    //         const res = await testHealth();
+    //         setIsAPIConnected(true);
+    //         return res;
+    //     } catch (error) {
+    //         setIsAPIConnected(false);
+    //         console.log("Error fetching test health:", error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchTestHealth();
+    // });
+
 
 
     // --------------------------------------------
@@ -174,7 +194,7 @@ export const DataProvider = ({ children }) => {
 
     const handleAddWallet = async () => {
         try {
-            await createWalletByUserId({ name: addWalletState.name }, userId || 1);
+            await createWalletByUserId({ walletName: addWalletState.name, balance: 0 }, userId || 1);
             setAddWalletState({ name: '', error: '' });
             fetchAllWallets();
         } catch (error) {
@@ -198,7 +218,7 @@ export const DataProvider = ({ children }) => {
         }
     };
 
-    // Deposit to Wallet
+    // Transfer between Wallets
     const [transferState, setTransferState] = useState({ from: 0, to: 0, amount: '', error: '' });
 
 
@@ -219,11 +239,11 @@ export const DataProvider = ({ children }) => {
 
     const [transactions, setTransactions] = useState(sampleTransactionHistory);
 
-    const fetchAllTransactionsByWallet = async (walletId, pageNo = 0, sortBy = 'time', sortDir = 'desc' , pageSize = 3) => {
+    const fetchAllTransactionsByWallet = async (walletId, pageNo = 0, sortBy = 'time', sortDir = 'desc', pageSize = 3) => {
         try {
             const res = await fetchTransactionsByWalletIdPaginated(walletId, pageNo, pageSize, sortBy, sortDir);
             setTransactions(res);
-            console.log("Fetched transactions:", res);
+            // console.log("Fetched transactions:", res);
         } catch (error) {
             console.log("Error fetching transactions by wallet:", error);
         }
@@ -234,29 +254,134 @@ export const DataProvider = ({ children }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userId]);
 
-    const [isAPIConnected, setIsAPIConnected] = useState(false);
 
-    const fetchTestHealth = async () => {
+    // --------------------------------------------
+    //  Profile Settings functions
+    // --------------------------------------------
+
+    const [passwordVerified, setPasswordVerified] = useState(false);
+
+    const verifyPassword = async (password) => {
         try {
-            const res = await testHealth();
-            setIsAPIConnected(true);
-            return res;
+            // console.log("Verifying password for user:", userDetails?.username , " Password: ", password);
+            await loginUser({ username: userDetails?.username, password: password });
+            setPasswordVerified(true);
         } catch (error) {
-            setIsAPIConnected(false);
-            console.log("Error fetching test health:", error);
+            setPasswordVerified(false);
+            console.log("Error verifying password:", error);
+            throw error;
         }
     };
 
-    useEffect(() => {
-        fetchTestHealth();
+    const [editProfileState, setEditProfileState] = useState({
+        name: userDetails?.name || '',
+        username: userDetails?.username || '',
+        email: userDetails?.email || '',
+        error: ''
     });
+
+    // Update User Profile
+    const updateUserProfile = async () => {
+        try {
+            const { name, username, email } = editProfileState;
+            const res = await updateData("user", userId, { name, username, email });
+            saveAuth({ user: res });
+            setEditProfileState({ ...editProfileState, error: '' });
+            // console.log("User profile updated:", res);
+        } catch (e) {
+            setEditProfileState({ ...editProfileState, error: e || "Failed to update profile. Please try again." });
+            console.log("Error updating user profile:", e);
+            throw e;
+        }
+    }
+
+    const [resertPassOrPinState, setResetPassOrPinState] = useState({
+        current: '',
+        new: '',
+        confirm: '',
+        error: ''
+    })
+
+    // Reset Password
+    const resetPassword = async () => {
+        try {
+            await verifyPassword(resertPassOrPinState.current);
+            const res = await updateData("user", userId, { password: resertPassOrPinState.new });
+            console.log("Password updated:", res);
+        } catch (e) {
+            setResetPassOrPinState({ ...resertPassOrPinState, error: e || "Failed to update password. Please try again." });
+            console.log("Error updating password:", e);
+        }
+    }
+
+    // Reset PIN
+    const resetPin = async () => {
+        try {
+            const isValid = await verifyPin({ username: userDetails?.username, pin: resertPassOrPinState.current });
+            if (!isValid) {
+                setResetPassOrPinState({ ...resertPassOrPinState, error: "Current PIN is incorrect." });
+                return;
+            }
+            const res = await updateData("user", userId, { pin: resertPassOrPinState.new });
+            console.log("PIN updated:", res);
+        } catch (e) {
+            setResetPassOrPinState({ ...resertPassOrPinState, error: e || "Failed to update PIN. Please try again." });
+            console.log("Error updating PIN:", e);
+        }
+    }
+
+    // --------------------------------------------
+    // manage Wallet functions
+    // --------------------------------------------
+
+    // update wallet
+    const [updateWalletState, setUpdateWalletState] = useState({
+        name: '',
+        error: ''
+    });
+
+    const updateWallet = async (walletId, name = updateWalletState.name) => {
+        try {
+            // console.log("walletId : ",walletId," name: ",name)
+            await updateData("wallet", walletId, { walletName: name });
+            await fetchAllWallets();
+            // console.log("Wallet updated:", res);
+        } catch (err) {
+            setUpdateWalletState({ ...updateWalletState, error: err || "Failed to update wallet. Please try again." });
+            // console.log("Error updating wallet:", err);
+            throw err;
+        }
+    }
+
+    // delete wallet
+    const deleteWallet = async (walletId) => {
+        try {
+            await deleteData("wallet", walletId);
+            await fetchAllWallets();
+            // console.log("Wallet deleted:", res);
+        } catch (err) {
+            console.log("Error deleting wallet:", err);
+            throw err;
+        }
+    }
+
+    // Delete User Account
+    const deleteUserAccount = async () => {
+        try {
+            await deleteAccount();
+        } catch (err) {
+            console.log("Error deleting user account:", err);
+        }
+    }
+
 
     return (
         <DataContext.Provider value={{
-            isAPIConnected,
             pathname,
             activeModal,
             setActiveModal,
+            confirmationScreen,
+            setConfirmationScreen,
             paymentList,
             promoAndDiscounts,
             myWallets,
@@ -271,7 +396,22 @@ export const DataProvider = ({ children }) => {
             setTransferState,
             handleTransferWallet,
             transactions,
-            fetchAllTransactionsByWallet
+            fetchAllTransactionsByWallet,
+            passwordVerified,
+            setPasswordVerified,
+            verifyPassword,
+            editProfileState,
+            setEditProfileState,
+            updateUserProfile,
+            resertPassOrPinState,
+            setResetPassOrPinState,
+            resetPassword,
+            resetPin,
+            updateWalletState,
+            setUpdateWalletState,
+            updateWallet,
+            deleteWallet,
+            deleteUserAccount
         }}>
             {children}
         </DataContext.Provider>

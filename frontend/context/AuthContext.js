@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import { loginUser, registerUser } from "../service/API";
+import { deleteData, loginUser, registerUser, verifyPin, setAuthToken } from "../service/API";
 import { deleteItem, getItem, setItem } from "./LocalStorage";
-import { setAuthToken } from '../service/API';
 
 const AuthContext = createContext();
 
@@ -55,6 +54,12 @@ export const AuthProvider = ({ children }) => {
         saveAuth(response);
     }
 
+    // enter pin
+    const isValidPin = async (pin) => {
+        const response = await verifyPin({  username: userDetails?.username ,pin });
+        return response.valid;
+    }
+
     // Logout
     const logout = async () => {
         setUserDetails(null);
@@ -64,17 +69,30 @@ export const AuthProvider = ({ children }) => {
         await deleteItem('token');
     };
 
+    // Delete Account
+    const deleteAccount = async () => {
+        setUserDetails(null);
+        setToken(null);
+        setAuthToken(null);
+        await deleteItem('userDetails');
+        await deleteItem('token');
+        await deleteData(`user/${userDetails.id}`);
+    }
+
     return (
         <AuthContext.Provider
             value={{
                 userDetails,
                 userId: userDetails?.id,
+                username: userDetails?.username,
                 token,
                 saveAuth,
                 loading,
                 login,
                 register,
-                logout
+                isValidPin,
+                logout,
+                deleteAccount,
             }}>
             {children}
         </AuthContext.Provider>

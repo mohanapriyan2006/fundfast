@@ -42,4 +42,12 @@ public class AuthService {
         return userRepository.save(user);
     }
 
+    public boolean verifyPIN(String username, String pin) {
+        Optional<User> existingUser = userRepository.findByUsername(username);
+        if (existingUser.isEmpty()) {
+            throw new IllegalArgumentException("User not found !");
+        }
+        return passwordEncoder.matches(pin, existingUser.get().getPIN());
+    }
+
 }

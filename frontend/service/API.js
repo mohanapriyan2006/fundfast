@@ -65,7 +65,7 @@ export const testHealth = async () => {
 export const fetchAllData = async (endpoint) => {
     try {
         const response = await api.get(`/${endpoint}/all`);
-        console.log('API fetchAllData response:', response);
+        // console.log('API fetchAllData response:', response);
         return response.data;
     } catch (error) {
         console.log(`API fetch error at ${endpoint}:`, error);
@@ -90,8 +90,13 @@ export const updateData = async (endpoint, id, data) => {
         const response = await api.put(`/${endpoint}/${id}`, data);
         return response.data;
     } catch (error) {
-        console.log(`API update error at ${endpoint} with ID ${id}:`, error);
-        throw error;
+        const message =
+            error.response?.data?.message ??
+            (typeof error.response?.data === 'string' ? error.response.data : undefined) ??
+            error.response?.statusText ??
+            error.message ??
+            'Update failed';
+        throw new Error(message);
     }
 };
 
@@ -209,6 +214,22 @@ export const loginUser = async (data) => {
 export const registerUser = async (data) => {
     try {
         const response = await api.post("/auth/register", data);
+        return response.data;
+    } catch (error) {
+        const message =
+            error.response?.data?.message ??
+            (typeof error.response?.data === 'string' ? error.response.data : undefined) ??
+            error.response?.statusText ??
+            error.message ??
+            'Registration failed';
+        throw new Error(message);
+    }
+}
+
+// verify PIN user
+export const verifyPin = async (data) => {
+    try {
+        const response = await api.post("/auth/pin", data);
         return response.data;
     } catch (error) {
         const message =

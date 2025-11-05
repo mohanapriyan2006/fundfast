@@ -1,16 +1,39 @@
-import React, { useState } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors'
 import OtherHeader from '../OtherHeader'
 import { useNavigation } from '@react-navigation/native'
 import { TextInput } from 'react-native-gesture-handler'
-
-
+import { useContext, useEffect } from 'react'
+import DataContext from '../../context/DataContext'
+import AuthContext from '../../context/AuthContext'
 
 
 const EditProfile = () => {
 
     const navigation = useNavigation();
+
+    const { editProfileState, setEditProfileState, updateUserProfile } = useContext(DataContext);
+
+    const { userDetails } = useContext(AuthContext);
+
+    useEffect(() => {
+        setEditProfileState({
+            name: userDetails?.name || '',
+            username: userDetails?.username || '',
+            email: userDetails?.email || '',
+            error: ''
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userDetails]);
+
+    const handleUpdateProfile = async () => {
+        try {
+            await updateUserProfile();
+            navigation.goBack();
+        } catch (e) {
+            console.log("Error updating profile:", e);
+        }
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
@@ -32,31 +55,42 @@ const EditProfile = () => {
                             <TextInput
                                 placeholder="Enter your name"
                                 style={styles.inputBox}
+                                value={editProfileState.name}
+                                onChangeText={(text) => setEditProfileState({ ...editProfileState, name: text })}
                             />
                             {/* Username */}
                             <Text style={styles.formLabel}>Username :</Text>
                             <TextInput
                                 placeholder="Enter username"
                                 style={styles.inputBox}
+                                value={editProfileState.username}
+                                onChangeText={(text) => setEditProfileState({ ...editProfileState, username: text })}
                             />
                             {/* Email */}
                             <Text style={styles.formLabel}>Email :</Text>
                             <TextInput
                                 placeholder="Enter email"
                                 style={styles.inputBox}
+                                value={editProfileState.email}
+                                onChangeText={(text) => setEditProfileState({ ...editProfileState, email: text })}
                             />
+
+                            {/* Error Message */}
+                            {editProfileState.error &&
+                                <Text style={{ color: 'red', marginBottom: 10 }}>{editProfileState.error.toString()}</Text>}
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 
                                 <TouchableOpacity
                                     style={{ backgroundColor: accent.dark, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
+                                    onPress={() => navigation.goBack()}
                                 >
                                     <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Cancel</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
                                     style={{ backgroundColor: primary.DEFAULT, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
-                                    onPress={() => { /* Handle adding a new wallet */ }}
+                                    onPress={() => handleUpdateProfile()}
                                 >
                                     <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Update</Text>
                                 </TouchableOpacity>

@@ -13,7 +13,7 @@ const HistoryModal = () => {
 
     const [pageNo, setPageNo] = useState(0);
 
-    const [sortBy, setSortBy] = useState("Time");
+    const [sortBy, setSortBy] = useState("time");
     const [sortOrder, setSortOrder] = useState("ASC");
 
     useEffect(() => {
@@ -65,11 +65,11 @@ const HistoryModal = () => {
                         >
                             <Image
                                 source={require("../../assets/images/arrow.png")}
-                                style={[styles.arrowIcon, { tintColor: sortOrder === "DESC" ? primary.mid : accent.dark }, { transform: [{ rotate: '180deg' }] }]}
+                                style={[styles.arrowIcon, { tintColor: sortOrder === "ASC" ? primary.mid : accent.dark }, { transform: [{ rotate: '180deg' }] }]}
                             />
                             <Image
                                 source={require("../../assets/images/arrow.png")}
-                                style={[styles.arrowIcon, { tintColor: sortOrder === "ASC" ? primary.mid : accent.dark }]}
+                                style={[styles.arrowIcon, { tintColor: sortOrder === "DESC" ? primary.mid : accent.dark }]}
                             />
                         </TouchableOpacity>
                     </View>

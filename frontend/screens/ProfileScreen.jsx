@@ -72,9 +72,9 @@ const ProfileScreen = () => {
                         </View>
 
                         <View style={{ flexDirection: 'column', gap: 2 }}>
-                            <Text style={{ fontSize: 24, fontWeight: 'semibold', color: "black" }}>John Doe</Text>
-                            <Text style={{ fontSize: 16, fontWeight: '400', color: "black" }}>username: johndoe</Text>
-                            <Text style={{ fontSize: 16, color: accent.darker }}>johndoe@example.com</Text>
+                            <Text style={{ fontSize: 24, fontWeight: 'semibold', color: "black" }}>{userDetails?.name || "John Doe"}</Text>
+                            <Text style={{ fontSize: 16, fontWeight: '400', color: "black" }}>username: {userDetails?.username || "johndoe"}</Text>
+                            <Text style={{ fontSize: 16, color: accent.darker }}>{userDetails?.email || "johndoe@example.com"}</Text>
                         </View>
                     </View>
 

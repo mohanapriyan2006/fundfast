@@ -60,4 +60,19 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
+    @PostMapping("/pin")
+    public ResponseEntity<?> verifyPIN(@RequestBody Map<String, String> pinRequest) {
+        String username = pinRequest.get("username");
+        String pin = pinRequest.get("pin");
+
+        try {
+            boolean isValid = authService.verifyPIN(username, pin);
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("valid", isValid);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
 }

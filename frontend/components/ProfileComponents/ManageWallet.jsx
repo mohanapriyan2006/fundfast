@@ -1,25 +1,49 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors'
 import OtherHeader from '../OtherHeader'
-import { useNavigation } from '@react-navigation/native'
 import { TextInput } from 'react-native-gesture-handler'
 import { Picker } from '@react-native-picker/picker'
 import ConfirmDeleteModal from './ConfirmDeleteModal'
+import DataContext from '../../context/DataContext'
+import { useNavigation } from '@react-navigation/native'
 
 
 
 const ManageWallet = () => {
 
-    const navigation = useNavigation();
+    const { myWallets, updateWalletState, setUpdateWalletState, updateWallet, deleteWallet } = useContext(DataContext);
 
-    const [walletName, setWalletName] = useState("");
+    const navigation = useNavigation();
 
     const [isEditing, setIsEditing] = useState(false);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-    const [selectedWallet, setSelectedWallet] = useState("wallet1");
+    const [selectedWallet, setSelectedWallet] = useState(myWallets[0] || { id: 1, walletName: "wallet1" });
+
+    useEffect(() => {
+        setUpdateWalletState({ name: selectedWallet.walletName });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedWallet]);
+
+    const handleUpdateWallet = async () => {
+        try {
+            await updateWallet(selectedWallet.id);
+            navigation.goBack();
+        } catch (err) {
+            console.log("Error updating wallet:", err);
+        }
+    }
+
+    const handleDeleteWallet = async () => {
+        try {
+            await deleteWallet(selectedWallet.id);
+            navigation.goBack();
+        } catch (err) {
+            console.log("Error deleting wallet:", err);
+        }
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
@@ -45,8 +69,9 @@ const ManageWallet = () => {
                                 style={styles.picker}
                                 itemStyle={styles.pickerItem}
                             >
-                                <Picker.Item label="Wallet 1" value="wallet1" />
-                                <Picker.Item label="Wallet 2" value="wallet2" />
+                                {myWallets.map((w, ind) => (
+                                    <Picker.Item key={ind} value={w} label={w.walletName} />
+                                ))}
                             </Picker>
                         </View>
 
@@ -74,10 +99,13 @@ const ManageWallet = () => {
                         {isEditing && <View>
                             <TextInput
                                 placeholder="Enter wallet's name"
-                                value={walletName}
-                                // onValueChange={(value) => setWalletName(prev => prev + value)}
+                                value={updateWalletState?.name}
+                                onChangeText={(v) => setUpdateWalletState({ ...updateWalletState, name: v })}
                                 style={styles.inputBox}
                             />
+
+                            {updateWalletState?.error &&
+                                <Text style={{ color: 'red', marginBottom: 10 }}>{updateWalletState.error.toString()}</Text>}
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 
@@ -90,7 +118,7 @@ const ManageWallet = () => {
 
                                 <TouchableOpacity
                                     style={{ backgroundColor: primary.DEFAULT, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
-                                    onPress={() => { /* Handle adding a new wallet */ }}
+                                    onPress={handleUpdateWallet}
                                 >
                                     <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Update</Text>
                                 </TouchableOpacity>
@@ -106,7 +134,7 @@ const ManageWallet = () => {
 
             </ScrollView >
 
-            {showDeleteModal && <ConfirmDeleteModal item={selectedWallet} onConfirm={() => { /* Handle delete confirmation */ }} onCancel={() => setShowDeleteModal(false)} />}
+            {showDeleteModal && <ConfirmDeleteModal item={selectedWallet?.walletName + " wallet"} onConfirm={handleDeleteWallet} onCancel={() => setShowDeleteModal(false)} />}
 
         </View >
     )

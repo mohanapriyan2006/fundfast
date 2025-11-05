@@ -57,11 +57,11 @@ public class WalletService {
     }
 
     public Wallet updateWallet(Long id, Wallet wallet) throws Exception {
-        if (walletRepository.existsById(id)) {
-            return walletRepository.save(wallet);
-        } else {
-            throw new IllegalArgumentException("Wallet not found!");
-        }
+        Wallet existingWallet = walletRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Wallet not found!"));
+
+        if (wallet.getWalletName() != null) existingWallet.setWalletName(wallet.getWalletName());
+        return walletRepository.save(existingWallet);
     }
 
     public Wallet deposit(Long id, Double amount) throws Exception {

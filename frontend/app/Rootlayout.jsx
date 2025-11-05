@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 
 export default function RootLayout() {
 
-  const { setActiveModal, isAPIConnected } = useContext(DataContext);
+  const { setActiveModal } = useContext(DataContext);
 
   const navigation = useNavigation();
 
@@ -94,7 +94,7 @@ export default function RootLayout() {
         <Image style={{ width: 50, height: 50 }} source={require("../assets/images/qrscan.png")} />
       </TouchableOpacity>
 
-      {!isAPIConnected && <APINotConnect />}
+      {/* {!isAPIConnected && <APINotConnect />} */}
 
     </View >
   );

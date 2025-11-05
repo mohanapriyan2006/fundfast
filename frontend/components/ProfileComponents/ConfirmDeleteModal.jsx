@@ -1,11 +1,28 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors'
 import { TextInput } from 'react-native-gesture-handler'
+import DataContext from '../../context/DataContext'
 
 const ConfirmDeleteModal = ({ item = "Your Account", onConfirm, onCancel }) => {
 
+    const { verifyPassword } = useContext(DataContext);
+
     const [showPassword, setShowPassword] = useState(false);
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+
+    const handlePasswordSubmit = async () => {
+        try {
+            await verifyPassword(password);
+            onConfirm();
+            setError("");
+        } catch (err) {
+            setError(err.toString());
+            console.log("Error verifying password:", err);
+        }
+    }
 
     return (
         <View style={styles.modal}>
@@ -17,6 +34,8 @@ const ConfirmDeleteModal = ({ item = "Your Account", onConfirm, onCancel }) => {
                         <TextInput
                             placeholder="Enter your password"
                             style={styles.inputBox}
+                            value={password}
+                            onChangeText={setPassword}
                             secureTextEntry={!showPassword}
                         />
                         <Pressable onPress={() => setShowPassword(!showPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 0, top: 3 }}>
@@ -24,6 +43,9 @@ const ConfirmDeleteModal = ({ item = "Your Account", onConfirm, onCancel }) => {
                         </Pressable>
                     </View>
                     <Text style={{ marginTop: 6, marginBottom: 10, textAlign: 'center' }}>Username: johndoe</Text>
+
+                    {error && <Text style={{ color: 'red', marginBottom: 10, textAlign: 'center' }}>{error}</Text>}
+
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 
                         <TouchableOpacity
@@ -35,7 +57,7 @@ const ConfirmDeleteModal = ({ item = "Your Account", onConfirm, onCancel }) => {
 
                         <TouchableOpacity
                             style={[styles.btn, { backgroundColor: '#dd0000ff', }]}
-                            onPress={() => { /* Handle adding a new wallet */ }}
+                            onPress={handlePasswordSubmit}
                         >
                             <Image style={{ height: 20, width: 20, tintColor: 'white' }} source={require("../../assets/images/trash.png")} />
                             <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Delete</Text>

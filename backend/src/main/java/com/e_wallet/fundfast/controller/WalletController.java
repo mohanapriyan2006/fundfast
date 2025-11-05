@@ -67,7 +67,7 @@ public class WalletController {
         try {
             return ResponseEntity.ok(walletService.updateWallet(id, wallet));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Wallet not found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage().toString());
         }
     }
 

@@ -4,15 +4,19 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Pressa
 import { accent, primary } from '../theme/colors'
 import { useNavigation } from '@react-navigation/native'
 import DataContext from '../context/DataContext'
+import AuthContext from '../context/AuthContext'
 
 const PINScreen = () => {
     const navigation = useNavigation();
 
     const type = navigation.getState().routes[navigation.getState().index].params?.type || 'payment';
 
-    const { handleDepositWallet , handleTransferWallet } = useContext(DataContext);
+    const { handleDepositWallet, handleTransferWallet, setConfirmationScreen } = useContext(DataContext);
+
+    const { isValidPin } = useContext(AuthContext)
 
     const [pin, setPin] = useState('');
+    const [error, setError] = useState('');
     const [secure, setSecure] = useState(true);
     const inputRef = useRef(null);
 
@@ -22,15 +26,28 @@ const PINScreen = () => {
     };
 
     const handlePINSubmit = async () => {
-        // Handle PIN submission logic here
-        if (type === 'deposit') {
-            await handleDepositWallet();
-            navigation.navigate("Home", { screen: "DepositConfirmation" });
-        } else if (type === 'transfer') {
-            await handleTransferWallet();
-            navigation.navigate("Home", { screen: "TransferConfirmation" });
-        } else {
-            navigation.navigate("Home", { screen: "PaymentConfirmation" });
+        try {
+            const isValid = await isValidPin(pin);
+            if (!isValid) {
+                setError('Invalid PIN. Please try again.');
+                setPin('');
+                return;
+            }
+
+            if (type === 'deposit') {
+                await handleDepositWallet();
+                setConfirmationScreen('DepositConfirmation');
+            } else if (type === 'transfer') {
+                await handleTransferWallet();
+                setConfirmationScreen('TransferConfirmation');
+            } else {
+                setConfirmationScreen('PaymentConfirmation');
+            }
+            navigation.navigate("main");
+
+        } catch (error) {
+            setError( error || 'Error verifying PIN. Please try again.');
+            console.log('Error verifying PIN: ' + error.message);
         }
     };
 
@@ -63,6 +80,8 @@ const PINScreen = () => {
                         <Image source={secure ? require('../assets/images/hidden.png') : require('../assets/images/eye.png')} style={{ width: 22, height: 22, tintColor: accent.darker }} />
                     </Pressable>
                 </Pressable>
+
+                {error ? <Text style={{ color: 'red', textAlign: 'center', marginTop: 20 }}>{error.toString()}</Text> : null}
 
                 {/* Hidden input (captures the digits) */}
                 <TextInput

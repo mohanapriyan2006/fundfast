@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
 
-const ErrorModal = ({ type = "info" , title = "Logout", msg = "Unable to process request", onConfirm, onCancel }) => {
+const InfoModal = ({ type = "info", title = "Logout", msg = "Unable to process request", onConfirm, onCancel }) => {
 
     return (
         <View style={styles.modal}>
@@ -22,7 +22,7 @@ const ErrorModal = ({ type = "info" , title = "Logout", msg = "Unable to process
     )
 }
 
-export default ErrorModal;
+export default InfoModal;
 
 
 const styles = StyleSheet.create({

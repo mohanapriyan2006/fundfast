@@ -69,15 +69,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody @Valid User user, BindingResult br) {
-        if (br.hasErrors()) {
-            Map<String, String> fieldErrors = br.getFieldErrors().stream()
-                    .collect(
-                            java.util.stream.Collectors.toMap(
-                                    error -> error.getField(),
-                                    error -> error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(fieldErrors);
-        }
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
         try {
             return ResponseEntity.ok().body(userService.updateUser(id, user));
         } catch (Exception e) {
