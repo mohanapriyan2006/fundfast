@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "expo-router";
-import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, loginUser, testHealth, transferToWallet, updateData, verifyPin } from "../service/API";
+import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, getWalletByUsername, loginUser, testHealth, transferToWallet, updateData, verifyPin } from "../service/API";
 import AuthContext from "./AuthContext";
 
 const DataContext = createContext();
@@ -236,6 +236,16 @@ export const DataProvider = ({ children }) => {
         }
     };
 
+    // Fetch wallet by username
+    const fetchWalletByUsername = async (username) => {
+        try {
+            const res = await getWalletByUsername(username);
+            return res;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     // --------------------------------------------
     // Transaction data
     // --------------------------------------------
@@ -390,6 +400,7 @@ export const DataProvider = ({ children }) => {
             handleDepositWallet,
             transferState,
             setTransferState,
+            fetchWalletByUsername,
             handleTransferWallet,
             transactions,
             fetchAllTransactionsByWallet,

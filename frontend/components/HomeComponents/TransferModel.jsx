@@ -6,9 +6,26 @@ import DataContext from '../../context/DataContext';
 
 const TransferModal = ({ setShowConfirmModal }) => {
 
-    const { transferState, setTransferState, myWallets } = useContext(DataContext);
+    const { transferState, setTransferState, myWallets, fetchWalletByUsername } = useContext(DataContext);
 
-    const [toWallets , setToWallets] = useState([]);
+    const [toWallets, setToWallets] = useState([]);
+    const [username, setUsername] = useState("");
+    const [error, setError] = useState("");
+
+    const handleRecipientUsernameSubmit = async () => {
+        if (!username) {
+            setError("Please enter a username.");
+            return;
+        }
+        try {
+            const wallets = await fetchWalletByUsername(username);
+            setToWallets(wallets.length > 0 ? wallets : []);
+            setError("");
+        } catch (error) {
+            setError(error.toString() || "Failed to fetch recipient wallet.");
+            // console.log("Error fetching recipient wallet:", error);
+        }
+    };
 
     return (
         <View style={{ paddingBottom: 140 }}>
@@ -41,10 +58,19 @@ const TransferModal = ({ setShowConfirmModal }) => {
                 <Text style={styles.formLabel}>Select Recipient Wallet:</Text>
                 <View style={styles.amountInput}>
                     <TextInput
-                        placeholder="Enter recipient username"
+                        placeholder="Search Wallet by username"
                         style={{ fontSize: 16, color: 'black' }}
+                        value={username}
+                        onChangeText={(v) => setUsername(v)}
+                        onSubmitEditing={handleRecipientUsernameSubmit}
                     />
+                    <TouchableOpacity onPress={handleRecipientUsernameSubmit} style={{ position: 'absolute', right: 10, top: 12 }}>
+                        <Text style={{ color: primary.DEFAULT, fontWeight: 'bold' }}>Fetch</Text>
+                    </TouchableOpacity>
                 </View>
+
+                {error && <Text style={{ color: 'red', marginBottom: 10 }}>{error}</Text>}
+
                 <View style={styles.pickerWrapper}>
                     <Picker
                         selectedValue={transferState.to}
@@ -55,9 +81,9 @@ const TransferModal = ({ setShowConfirmModal }) => {
                         itemStyle={styles.pickerItem}
                     >
                         <Picker.Item label="Select Wallet" value={0} />
-                        {myWallets.map(wallet => (
+                        {toWallets.length > 0 ? toWallets.map(wallet => (
                             <Picker.Item key={wallet.id} label={wallet.walletName} value={wallet.id} />
-                        ))}
+                        )) : <Picker.Item label="No Wallets Found" value={0} />}
                     </Picker>
                 </View>
 

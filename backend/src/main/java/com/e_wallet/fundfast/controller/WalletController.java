@@ -62,6 +62,17 @@ public class WalletController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/username/{username}")
+    public ResponseEntity<?> getWalletByUsername(@PathVariable String username) {
+        try {
+            List<Wallet> wallets = walletService.getWalletByUsername(username);
+            return ResponseEntity.ok(wallets);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateWallet(@PathVariable Long id, @RequestBody Wallet wallet) {
         try {

@@ -110,4 +110,13 @@ public class WalletService {
         return transactionRepository.save(transaction);
     }
 
+    public List<Wallet> getWalletByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user != null) {
+            return walletRepository.findByOwnerId(user.getId());
+        } else {
+            throw new IllegalArgumentException("User not found with username: " + username);
+        }
+    }
+
 }

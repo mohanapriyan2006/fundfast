@@ -133,13 +133,29 @@ export const getWalletByUserId = async (userId) => {
     }
 };
 
+// GET by username API functions for [ wallet ]
+export const getWalletByUsername = async (username) => {
+    try {
+        const response = await api.get(`/wallet/username/${username}`);
+        return response.data;
+    } catch (error) {
+       const message =
+            error.response?.data?.message ??
+            (typeof error.response?.data === 'string' ? error.response.data : undefined) ??
+            error.response?.statusText ??
+            error.message ??
+            'Fetch wallet by username failed';
+        throw new Error(message);
+    }
+};
+
 // POST API (DEPOSIT amt to wallet) functions for [ wallet ]
 export const depositToWallet = async (amt, id) => {
     try {
         const response = await api.post(`/wallet/${id}/deposit?amount=${amt}`);
         return response.data;
     } catch (error) {
-          const message =
+        const message =
             error.response?.data?.message ??
             (typeof error.response?.data === 'string' ? error.response.data : undefined) ??
             error.response?.statusText ??

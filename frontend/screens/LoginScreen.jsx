@@ -49,7 +49,7 @@ const LoginScreen = () => {
 
             await login(formData);
 
-            console.log('Login successful!', formData);
+            // console.log('Login successful!', formData);
             navigation.navigate('main');
 
         } catch (err) {

@@ -75,7 +75,7 @@ const RegisterScreen = () => {
 
             await register(formData);
 
-            console.log('Registration successful!', formData);
+            // console.log('Registration successful!', formData);
             navigation.navigate('login');
 
         } catch (err) {
