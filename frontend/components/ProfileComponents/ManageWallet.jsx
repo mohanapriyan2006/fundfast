@@ -57,78 +57,84 @@ const ManageWallet = () => {
                     </Text>
 
                     {/* Form Container */}
-                    <View style={styles.formContainer}>
+                    {myWallets.length > 0 ?
+                        <View style={styles.formContainer}>
 
-                        <Text style={styles.formLabel}>Select Wallet:</Text>
-                        <View style={styles.pickerWrapper}>
-                            <Picker
-                                selectedValue={selectedWallet}
-                                onValueChange={(itemValue) => setSelectedWallet(itemValue)}
-                                mode="dropdown"
-                                dropdownIconColor="#fff"
-                                style={styles.picker}
-                                itemStyle={styles.pickerItem}
-                            >
-                                {myWallets.map((w, ind) => (
-                                    <Picker.Item key={ind} value={w} label={w.walletName} />
-                                ))}
-                            </Picker>
-                        </View>
-
-
-                        {!isEditing && <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-
-                            <TouchableOpacity
-                                style={[styles.btn, { backgroundColor: '#009dffff', }]}
-                                onPress={() => setIsEditing(true)}
-                            >
-                                <Image style={{ height: 24, width: 24, tintColor: 'white' }} source={require("../../assets/images/edit.png")} />
-                                <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Edit</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={[styles.btn, { backgroundColor: '#dd0000ff', }]}
-                                onPress={() => setShowDeleteModal(true)}
-                            >
-                                <Image style={{ height: 20, width: 20, tintColor: 'white' }} source={require("../../assets/images/trash.png")} />
-                                <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Delete</Text>
-                            </TouchableOpacity>
-
-                        </View>}
-
-                        {isEditing && <View>
-                            <TextInput
-                                placeholder="Enter wallet's name"
-                                value={updateWalletState?.name}
-                                onChangeText={(v) => setUpdateWalletState({ ...updateWalletState, name: v })}
-                                style={styles.inputBox}
-                            />
-
-                            {updateWalletState?.error &&
-                                <Text style={{ color: 'red', marginBottom: 10 }}>{updateWalletState.error.toString()}</Text>}
-
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-
-                                <TouchableOpacity
-                                    style={{ backgroundColor: accent.dark, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
-                                    onPress={() => setIsEditing(false)}
+                            <Text style={styles.formLabel}>Select Wallet:</Text>
+                            <View style={styles.pickerWrapper}>
+                                <Picker
+                                    selectedValue={selectedWallet}
+                                    onValueChange={(itemValue) => setSelectedWallet(itemValue)}
+                                    mode="dropdown"
+                                    dropdownIconColor="#fff"
+                                    style={styles.picker}
+                                    itemStyle={styles.pickerItem}
                                 >
-                                    <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Cancel</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    style={{ backgroundColor: primary.DEFAULT, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
-                                    onPress={handleUpdateWallet}
-                                >
-                                    <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Update</Text>
-                                </TouchableOpacity>
-
+                                    {myWallets.map((w, ind) => (
+                                        <Picker.Item key={ind} value={w} label={w.walletName} />
+                                    ))}
+                                </Picker>
                             </View>
 
-                        </View>}
+
+                            {!isEditing && <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+
+                                <TouchableOpacity
+                                    style={[styles.btn, { backgroundColor: '#009dffff', }]}
+                                    onPress={() => setIsEditing(true)}
+                                >
+                                    <Image style={{ height: 24, width: 24, tintColor: 'white' }} source={require("../../assets/images/edit.png")} />
+                                    <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Edit</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={[styles.btn, { backgroundColor: '#dd0000ff', }]}
+                                    onPress={() => setShowDeleteModal(true)}
+                                >
+                                    <Image style={{ height: 20, width: 20, tintColor: 'white' }} source={require("../../assets/images/trash.png")} />
+                                    <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Delete</Text>
+                                </TouchableOpacity>
+
+                            </View>}
+
+                            {isEditing && <View>
+                                <TextInput
+                                    placeholder="Enter wallet's name"
+                                    value={updateWalletState?.name}
+                                    onChangeText={(v) => setUpdateWalletState({ ...updateWalletState, name: v })}
+                                    style={styles.inputBox}
+                                />
+
+                                {updateWalletState?.error &&
+                                    <Text style={{ color: 'red', marginBottom: 10 }}>{updateWalletState.error.toString()}</Text>}
+
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+
+                                    <TouchableOpacity
+                                        style={{ backgroundColor: accent.dark, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
+                                        onPress={() => setIsEditing(false)}
+                                    >
+                                        <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Cancel</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={{ backgroundColor: primary.DEFAULT, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
+                                        onPress={handleUpdateWallet}
+                                    >
+                                        <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Update</Text>
+                                    </TouchableOpacity>
+
+                                </View>
+
+                            </View>}
 
 
-                    </View>
+                        </View>
+                        :
+                        <Text style={{ color: accent.darker, fontSize: 16, marginVertical: 20, textAlign: 'center' }}>
+                            You have no wallets to manage. Please create a wallet first.
+                        </Text>
+                    }
 
                 </View>
 

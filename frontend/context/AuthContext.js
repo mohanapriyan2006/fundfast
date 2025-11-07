@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
 
     // enter pin
     const isValidPin = async (pin) => {
-        const response = await verifyPin({  username: userDetails?.username ,pin });
+        const response = await verifyPin({ username: userDetails?.username, pin });
         return response.valid;
     }
 
@@ -71,12 +71,17 @@ export const AuthProvider = ({ children }) => {
 
     // Delete Account
     const deleteAccount = async () => {
-        setUserDetails(null);
-        setToken(null);
-        setAuthToken(null);
-        await deleteItem('userDetails');
-        await deleteItem('token');
-        await deleteData(`user/${userDetails.id}`);
+        try {
+            console.log("Deleting account for user ID:", userDetails.id);
+            await deleteData("user" , userDetails.id);
+            setUserDetails(null);
+            setToken(null);
+            setAuthToken(null);
+            await deleteItem('userDetails');
+            await deleteItem('token');
+        } catch (err) {
+            throw err;
+        }
     }
 
     return (
@@ -85,6 +90,7 @@ export const AuthProvider = ({ children }) => {
                 userDetails,
                 userId: userDetails?.id,
                 username: userDetails?.username,
+                name: userDetails?.name,
                 token,
                 saveAuth,
                 loading,

@@ -3,10 +3,13 @@ import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'reac
 import { accent, primary } from '../../theme/colors'
 import { TextInput } from 'react-native-gesture-handler'
 import DataContext from '../../context/DataContext'
+import AuthContext from '../../context/AuthContext'
 
 const ConfirmDeleteModal = ({ item = "Your Account", onConfirm, onCancel }) => {
 
     const { verifyPassword } = useContext(DataContext);
+    const { username } = useContext(AuthContext);
+
 
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState("");
@@ -42,7 +45,7 @@ const ConfirmDeleteModal = ({ item = "Your Account", onConfirm, onCancel }) => {
                             <Image source={showPassword ? require('../../assets/images/eye.png') : require('../../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />
                         </Pressable>
                     </View>
-                    <Text style={{ marginTop: 6, marginBottom: 10, textAlign: 'center' }}>Username: johndoe</Text>
+                    <Text style={{ marginTop: 6, marginBottom: 10, textAlign: 'center' }}>Username: {username || "johndoe"}</Text>
 
                     {error && <Text style={{ color: 'red', marginBottom: 10, textAlign: 'center' }}>{error}</Text>}
 

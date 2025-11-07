@@ -6,12 +6,13 @@ const InfoModal = ({ type = "info", title = "Logout", msg = "Unable to process r
     return (
         <View style={styles.modal}>
             <View style={styles.modalContent}>
-                <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: primary.dark }}>{type === "error" ? "Error !" : "Info"}</Text>
+                <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold' , textDecorationLine: 'underline', color: type === "info" ? primary.dark : '#b00000ff' }}>{type === "error" ? "Error !" : "Info"}</Text>
 
-                <Text style={{ fontSize: 16, fontWeight: '500', color: accent.darker, marginTop: 20, marginHorizontal: 10 }}>{title}, Message: {msg}.</Text>
+                <Text style={{ fontSize: 18, fontWeight: '500', color: type === "info" ? primary.dark : '#b00000ff', marginTop: 10, textAlign: 'center' }}>{title}</Text>
+                <Text style={{ fontSize: 14, fontWeight: '500', color: accent.darker, marginTop: 10 , textAlign: 'center' }}>{msg}.</Text>
 
                 <TouchableOpacity
-                    style={[{ backgroundColor: primary.DEFAULT }, styles.btn]}
+                    style={[{ backgroundColor: type === "info" ? primary.DEFAULT : accent.darker }, styles.btn]}
                     onPress={onConfirm}
                 >
                     <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>OK</Text>
@@ -48,10 +49,11 @@ const styles = StyleSheet.create({
 
     btn: {
         alignItems: 'center',
-        padding: 10,
-        width: '40%',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         borderRadius: 10,
-        marginTop: 20,
+        marginTop: 10,
+        alignSelf: 'center',
     },
 
 });

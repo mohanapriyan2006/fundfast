@@ -1,14 +1,18 @@
-import React, { act, useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, View, Animated } from 'react-native';
 import RoundMenuHeader from '../RoundMenuComponents/RoundMenuHeader';
 import RoundMenu from '../RoundMenuComponents/RoundMenu';
 import { Image } from 'expo-image';
 import { primary } from '../../theme/colors';
 import DataContext from '../../context/DataContext';
+import AuthContext from '../../context/AuthContext';
 
 const HomeHeaderModal = () => {
 
     const { activeModal } = useContext(DataContext);
+
+    const { name } = useContext(AuthContext);
+
 
     // Animation for sliding up
     const slideUpAnim = useRef(new Animated.Value(0)).current;
@@ -66,7 +70,7 @@ const HomeHeaderModal = () => {
             <View style={[styles.headerRow, { opacity: activeModal === 'home' ? 1 : 0, }]}>
                 <View style={styles.headerTextGroup}>
                     <Text style={styles.helloText}>hello !</Text>
-                    <Text style={styles.nameText}>Tony stark,</Text>
+                    <Text style={styles.nameText}>{name?.substring(0, 10) || "Tony stark"},</Text>
                 </View>
                 <View style={styles.walletImageWrap}>
                     <Image

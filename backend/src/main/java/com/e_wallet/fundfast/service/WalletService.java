@@ -60,7 +60,8 @@ public class WalletService {
         Wallet existingWallet = walletRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Wallet not found!"));
 
-        if (wallet.getWalletName() != null) existingWallet.setWalletName(wallet.getWalletName());
+        if (wallet.getWalletName() != null)
+            existingWallet.setWalletName(wallet.getWalletName());
         return walletRepository.save(existingWallet);
     }
 
@@ -86,6 +87,8 @@ public class WalletService {
     public Transaction transfer(Long fromWalletId, Long toWalletId, Double amount) throws Exception {
         Wallet fromWallet = walletRepository.findById(fromWalletId).orElse(null);
         Wallet toWallet = walletRepository.findById(toWalletId).orElse(null);
+        if (fromWalletId.equals(toWalletId))
+            throw new Exception("Cannot transfer to the same wallet!");
         if (amount == null || amount <= 0)
             throw new Exception("Transfer amount must be positive!");
         if (fromWallet == null || toWallet == null)

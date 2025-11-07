@@ -9,7 +9,7 @@ const HistoryModal = () => {
 
     const { transactions, myWallets, fetchAllTransactionsByWallet } = useContext(DataContext);
 
-    const [selectedWallet, setSelectedWallet] = useState(myWallets[0]?.id || 1);
+    const [selectedWallet, setSelectedWallet] = useState(myWallets[0]?.id || 0);
 
     const [pageNo, setPageNo] = useState(0);
 
@@ -77,7 +77,7 @@ const HistoryModal = () => {
                 </View>
 
                 <View style={styles.transactionList}>
-                    {transactions.map((transaction) => (
+                    {transactions.length > 0 ? transactions.map((transaction) => (
                         <View key={transaction.id} style={styles.transactionItem}>
                             <View style={styles.transactionDetails}>
                                 <Text style={{ fontSize: 16, fontWeight: '600', color: primary.dark }}>
@@ -94,7 +94,8 @@ const HistoryModal = () => {
                                 </Text>
                             </View>
                         </View>
-                    ))}
+                    ))
+                : <Text style={{ textAlign: 'center' , fontSize: 20, color: accent.darker }}>No transactions found.</Text>}
                 </View>
 
                 <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>

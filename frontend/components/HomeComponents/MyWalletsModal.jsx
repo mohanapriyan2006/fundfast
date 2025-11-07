@@ -29,7 +29,7 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
 
             {/* Wallets List */}
             <View style={styles.walletsList}>
-                {wallets.map((wallet) => (
+                {wallets.length > 0 ? wallets.map((wallet) => (
                     <View key={wallet.id} style={styles.walletContainer}>
                         <View>
                             <Text style={{ fontSize: 20, fontWeight: '600', color: 'white' }}>{wallet.walletName}</Text>
@@ -53,7 +53,8 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
                             <Image source={require('../../assets/images/wallet2.png')} style={{ width: 150, height: 150 }} />
                         </View>
                     </View>
-                ))}
+                ))
+                    : <Text style={{ textAlign: 'center', fontSize: 20, marginVertical: 40, color: accent.darker }}>No wallets found. Please add a new wallet.</Text>}
             </View>
 
 

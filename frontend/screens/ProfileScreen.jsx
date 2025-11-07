@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import ConfirmDeleteModal from '../components/ProfileComponents/ConfirmDeleteModal'
 import ConfirmModal from '../components/ConfirmModal'
 import AuthContext from '../context/AuthContext'
+import InfoModal from '../components/InfoModal'
 
 
 
@@ -13,10 +14,12 @@ const ProfileScreen = () => {
 
     const navigation = useNavigation();
 
-    const { userDetails, logout } = useContext(AuthContext);
+    const { userDetails, logout, deleteAccount } = useContext(AuthContext);
 
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+    const [error, setError] = useState("")
 
     const settings = [
         {
@@ -56,6 +59,16 @@ const ProfileScreen = () => {
             event: () => { navigation.navigate("about"); },
         },
     ]
+
+    const handleDeleteAccount = async () => {
+        try {
+            await deleteAccount();
+            navigation.navigate("login");
+        } catch (err) {
+            setError(err.toString() || "Failed to delete account. Please try again.");
+            console.error("Error deleting account:", err);
+        }
+    };
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
@@ -141,7 +154,9 @@ const ProfileScreen = () => {
 
             {showConfirmModal && <ConfirmModal title="Logout" onConfirm={() => { logout(); navigation.navigate("login"); }} onCancel={() => setShowConfirmModal(false)} />}
 
-            {showDeleteModal && <ConfirmDeleteModal item="Your Account" onConfirm={() => { }} onCancel={() => setShowDeleteModal(false)} />}
+            {showDeleteModal && <ConfirmDeleteModal item="Your Account" onConfirm={handleDeleteAccount} onCancel={() => setShowDeleteModal(false)} />}
+
+            {error && <InfoModal type="error" title="Delete Account" msg={error} onConfirm={() => setError("")} />}
 
         </View >
     )

@@ -5,6 +5,7 @@ import { accent, primary } from '../theme/colors'
 import { useNavigation } from '@react-navigation/native'
 import DataContext from '../context/DataContext'
 import AuthContext from '../context/AuthContext'
+import InfoModal from '../components/InfoModal'
 
 const PINScreen = () => {
     const navigation = useNavigation();
@@ -46,7 +47,7 @@ const PINScreen = () => {
             navigation.navigate("main");
 
         } catch (error) {
-            setError( error || 'Error verifying PIN. Please try again.');
+            setError(error.toString() || 'Error verifying PIN. Please try again.');
             console.log('Error verifying PIN: ' + error.message);
         }
     };
@@ -102,6 +103,10 @@ const PINScreen = () => {
                     <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Confirm</Text>
                 </TouchableOpacity>
             </ScrollView>
+
+            {/* Error Modal */}
+            {error.length > 0 && <InfoModal type="error" title="Payment Failed" msg={error} onConfirm={() => setError('')} />}
+
         </View>
     )
 };

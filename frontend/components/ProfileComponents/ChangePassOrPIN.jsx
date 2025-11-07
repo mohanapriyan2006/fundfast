@@ -1,12 +1,18 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors'
 import OtherHeader from '../OtherHeader'
 import { useNavigation } from '@react-navigation/native'
 import { TextInput } from 'react-native-gesture-handler'
+import DataContext from '../../context/DataContext'
 
 
 const ChangePassOrPIN = ({ isPin = false }) => {
+
+    const { resetPassOrPinState,
+        setResetPassOrPinState,
+        resetPassword,
+        resetPin, } = useContext(DataContext)
 
     const navigation = useNavigation();
 
@@ -14,83 +20,91 @@ const ChangePassOrPIN = ({ isPin = false }) => {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showCPassword, setShowCPassword] = useState(false);
 
-    const [formData, setFormData] = useState({
-        current: '',
-        new: '',
-        confirm: '',
-    });
-
-    const [error, setError] = useState('');
+    useEffect(() => {
+        setResetPassOrPinState({ current: '', new: '', confirm: '', error: '' });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const handleOnChange = (field, value) => {
-        setFormData({ ...formData, [field]: value });
-        if (error) {
-            setError('');
+        setResetPassOrPinState({ ...resetPassOrPinState, [field]: value });
+        if (resetPassOrPinState.error) {
+            setResetPassOrPinState({ ...resetPassOrPinState, error: '' });
         }
     };
 
     const validateFormForPassword = () => {
-        const { current: currentPass, new: newPass, confirm: confirmPass } = formData;
+        const { current: currentPass, new: newPass, confirm: confirmPass } = resetPassOrPinState;
 
         if (!currentPass || !newPass || !confirmPass) {
-            setError('All fields are required.');
+            setResetPassOrPinState({ ...resetPassOrPinState, error: 'All fields are required.' });
             return false;
         }
 
         if (newPass.length < 6 || newPass.length > 8) {
-            setError('New Password must be 6-8 characters long.');
+            setResetPassOrPinState({ ...resetPassOrPinState, error: 'New Password must be 6-8 characters long.' });
             return false;
         }
 
         if (newPass.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,8}$/) === null) {
-            setError('New Password must contain at least one uppercase letter, one lowercase letter, and one number.');
+            setResetPassOrPinState({ ...resetPassOrPinState, error: 'New Password must contain at least one uppercase letter, one lowercase letter, and one number.' });
             return false;
         }
 
         if (newPass !== confirmPass) {
-            setError('New Password and Confirm Password fields do not match.');
+            // console.log("Mismatch:", newPass, confirmPass);
+            setResetPassOrPinState({ ...resetPassOrPinState, error: 'New Password and Confirm Password fields do not match.' });
             return false;
         }
 
-        setError('');
+        setResetPassOrPinState({ ...resetPassOrPinState, error: '' });
         return true;
     }
 
     const validateFormForPIN = () => {
-        const { current: currentPin, new: newPin, confirm: confirmPin } = formData;
+        const { current: currentPin, new: newPin, confirm: confirmPin } = resetPassOrPinState;
 
         if (!currentPin || !newPin || !confirmPin) {
-            setError('All fields are required.');
+            setResetPassOrPinState({ ...resetPassOrPinState, error: 'All fields are required.' });
             return false;
         }
 
         if (newPin.length !== 4) {
-            setError('New PIN must be 4 Digits.');
+            setResetPassOrPinState({ ...resetPassOrPinState, error: 'New PIN must be 4 Digits.' });
             return false;
         }
 
         if (newPin.match(/^[0-9]{4}$/) === null) {
-            setError('New PIN must contain only digits.');
+            setResetPassOrPinState({ ...resetPassOrPinState, error: 'New PIN must contain only digits.' });
             return false;
         }
 
         if (newPin !== confirmPin) {
-            setError('New PIN and Confirm PIN fields do not match.');
+            setResetPassOrPinState({ ...resetPassOrPinState, error: 'New PIN and Confirm PIN fields do not match.' });
             return false;
         }
 
-        setError('');
+        setResetPassOrPinState({ ...resetPassOrPinState, error: '' });
         return true;
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (isPin) {
             if (validateFormForPIN()) {
-                // Proceed with changing password or PIN
+                try {
+                    await resetPin();
+                    navigation.goBack();
+                } catch (error) {
+                    console.log("Error updating PIN:", error);
+                }
             }
         } else {
             if (validateFormForPassword()) {
-                // Proceed with changing password or PIN
+                try {
+                    await resetPassword();
+                    navigation.goBack();
+                } catch (error) {
+                    console.log("Error updating password:", error);
+                }
             }
         }
     }
@@ -159,7 +173,7 @@ const ChangePassOrPIN = ({ isPin = false }) => {
                                 </Pressable>
                             </View>
 
-                            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                            {resetPassOrPinState.error ? <Text style={styles.errorText}>{resetPassOrPinState.error}</Text> : null}
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 

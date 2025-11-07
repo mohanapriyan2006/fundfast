@@ -34,6 +34,7 @@ const DepositModal = ({ setShowConfirmModal }) => {
                         style={styles.picker}
                         itemStyle={styles.pickerItem}
                     >
+                        <Picker.Item label="Select Wallet" value={0} />
                         {myWallets.map((wallet) => (
                             <Picker.Item
                                 key={wallet.id}

@@ -143,7 +143,7 @@ export const DataProvider = ({ children }) => {
         setActiveModal("home");
     }, [pathname]);
 
-    const { userId, userDetails, deleteAccount, saveAuth } = useContext(AuthContext);
+    const { userId, userDetails, saveAuth } = useContext(AuthContext);
 
     const [confirmationScreen, setConfirmationScreen] = useState('Home');
 
@@ -213,8 +213,9 @@ export const DataProvider = ({ children }) => {
             setDepositWalletState({ amount: '', error: '' });
             fetchAllWallets();
         } catch (error) {
-            console.log("Error Depositing wallet:", error);
-            setDepositWalletState({ ...depositWalletState, error: "Failed to deposit amount. Please try again." });
+            // console.log("Error Depositing wallet:", error);
+            setDepositWalletState({ ...depositWalletState, error: error.toString() || "Failed to deposit amount. Please try again." });
+            throw error;
         }
     };
 
@@ -224,12 +225,14 @@ export const DataProvider = ({ children }) => {
 
     const handleTransferWallet = async () => {
         try {
+            console.log("Transferring amount:", transferState.amount, " from wallet ID:", transferState.from, " to wallet ID:", transferState.to);
             await transferToWallet(transferState.amount, transferState.from, transferState.to);
             setTransferState({ from: 0, to: 0, amount: '', error: '' });
             fetchAllWallets();
         } catch (error) {
-            console.log("Error Transferring to wallet:", error);
+            // console.log("Error Transferring to wallet:", error);
             setTransferState({ ...transferState, error: "Failed to transfer amount. Please try again." });
+            throw error;
         }
     };
 
@@ -250,7 +253,7 @@ export const DataProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        fetchAllTransactionsByWallet(myWallets[0]?.id || 1);
+        fetchAllTransactionsByWallet(myWallets[0]?.id || 0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userId]);
 
@@ -259,15 +262,12 @@ export const DataProvider = ({ children }) => {
     //  Profile Settings functions
     // --------------------------------------------
 
-    const [passwordVerified, setPasswordVerified] = useState(false);
 
     const verifyPassword = async (password) => {
         try {
             // console.log("Verifying password for user:", userDetails?.username , " Password: ", password);
             await loginUser({ username: userDetails?.username, password: password });
-            setPasswordVerified(true);
         } catch (error) {
-            setPasswordVerified(false);
             console.log("Error verifying password:", error);
             throw error;
         }
@@ -289,44 +289,9 @@ export const DataProvider = ({ children }) => {
             setEditProfileState({ ...editProfileState, error: '' });
             // console.log("User profile updated:", res);
         } catch (e) {
-            setEditProfileState({ ...editProfileState, error: e || "Failed to update profile. Please try again." });
+            setEditProfileState({ ...editProfileState, error: e.toString() || "Failed to update profile. Please try again." });
             console.log("Error updating user profile:", e);
             throw e;
-        }
-    }
-
-    const [resertPassOrPinState, setResetPassOrPinState] = useState({
-        current: '',
-        new: '',
-        confirm: '',
-        error: ''
-    })
-
-    // Reset Password
-    const resetPassword = async () => {
-        try {
-            await verifyPassword(resertPassOrPinState.current);
-            const res = await updateData("user", userId, { password: resertPassOrPinState.new });
-            console.log("Password updated:", res);
-        } catch (e) {
-            setResetPassOrPinState({ ...resertPassOrPinState, error: e || "Failed to update password. Please try again." });
-            console.log("Error updating password:", e);
-        }
-    }
-
-    // Reset PIN
-    const resetPin = async () => {
-        try {
-            const isValid = await verifyPin({ username: userDetails?.username, pin: resertPassOrPinState.current });
-            if (!isValid) {
-                setResetPassOrPinState({ ...resertPassOrPinState, error: "Current PIN is incorrect." });
-                return;
-            }
-            const res = await updateData("user", userId, { pin: resertPassOrPinState.new });
-            console.log("PIN updated:", res);
-        } catch (e) {
-            setResetPassOrPinState({ ...resertPassOrPinState, error: e || "Failed to update PIN. Please try again." });
-            console.log("Error updating PIN:", e);
         }
     }
 
@@ -347,7 +312,7 @@ export const DataProvider = ({ children }) => {
             await fetchAllWallets();
             // console.log("Wallet updated:", res);
         } catch (err) {
-            setUpdateWalletState({ ...updateWalletState, error: err || "Failed to update wallet. Please try again." });
+            setUpdateWalletState({ ...updateWalletState, error: err.toString() || "Failed to update wallet. Please try again." });
             // console.log("Error updating wallet:", err);
             throw err;
         }
@@ -365,15 +330,46 @@ export const DataProvider = ({ children }) => {
         }
     }
 
-    // Delete User Account
-    const deleteUserAccount = async () => {
+
+    // -----------------------------------------------------
+    // Profile Settings - Reset Password / PIN
+    // -----------------------------------------------------
+    const [resetPassOrPinState, setResetPassOrPinState] = useState({
+        current: '',
+        new: '',
+        confirm: '',
+        error: ''
+    })
+
+    // Reset Password
+    const resetPassword = async () => {
         try {
-            await deleteAccount();
-        } catch (err) {
-            console.log("Error deleting user account:", err);
+            await verifyPassword(resetPassOrPinState.current);
+            await updateData("user", userId, { password: resetPassOrPinState.new });
+            setResetPassOrPinState({ current: '', new: '', confirm: '', error: '' });
+            // console.log("Password updated:", res);
+        } catch (e) {
+            setResetPassOrPinState({ ...resetPassOrPinState, error: e.toString() || "Failed to update password. Please try again." });
+            throw e;
         }
     }
 
+    // Reset PIN
+    const resetPin = async () => {
+        try {
+            const isValid = await verifyPin({ username: userDetails?.username, pin: resetPassOrPinState.current });
+            if (!isValid.valid) {
+                setResetPassOrPinState({ ...resetPassOrPinState, error: "Current PIN is incorrect." });
+                throw new Error("Current PIN is incorrect.");
+            }
+            await updateData("user", userId, { pin: resetPassOrPinState.new });
+            setResetPassOrPinState({ current: '', new: '', confirm: '', error: '' });
+            // console.log("PIN updated:", res);
+        } catch (e) {
+            setResetPassOrPinState({ ...resetPassOrPinState, error: e.toString() || "Failed to update PIN. Please try again." });
+            throw e;
+        }
+    }
 
     return (
         <DataContext.Provider value={{
@@ -397,13 +393,11 @@ export const DataProvider = ({ children }) => {
             handleTransferWallet,
             transactions,
             fetchAllTransactionsByWallet,
-            passwordVerified,
-            setPasswordVerified,
             verifyPassword,
             editProfileState,
             setEditProfileState,
             updateUserProfile,
-            resertPassOrPinState,
+            resetPassOrPinState,
             setResetPassOrPinState,
             resetPassword,
             resetPin,
@@ -411,7 +405,6 @@ export const DataProvider = ({ children }) => {
             setUpdateWalletState,
             updateWallet,
             deleteWallet,
-            deleteUserAccount
         }}>
             {children}
         </DataContext.Provider>

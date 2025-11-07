@@ -3,10 +3,14 @@ import { accent, primary } from '../theme/colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { Picker } from '@react-native-picker/picker'
+import { useContext, useState } from 'react'
+import DataContext from '../context/DataContext'
 
 const EnterMoneyModal = () => {
 
     const navigation = useNavigation();
+
+    const { myWallets } = useContext(DataContext);
 
     const item = navigation.getState()?.routes[navigation.getState().index]?.params?.item || null;
 
@@ -25,6 +29,18 @@ const EnterMoneyModal = () => {
         }
     }
 
+    const [amount , setAmount] = useState('');
+    const [error , setError] = useState('');
+
+    const handleSubmit = () => {
+        if(!amount || isNaN(amount) || Number(amount) <= 0){
+            setError('Please enter a valid amount.');
+            return;
+        }
+        setError('');
+        navigation.navigate("pin" , { type: 'payment' });
+    }
+
     return (
         <View style={styles.modal}>
             <View style={styles.modalContent}>
@@ -41,15 +57,16 @@ const EnterMoneyModal = () => {
                         <Text style={styles.formLabel}>Select Wallet :</Text>
                         <View style={styles.pickerWrapper}>
                             <Picker
-                                selectedValue={"wallet1"}
-                                // onValueChange={setFromWallet}
+                                selectedValue={0}
                                 mode="dropdown"
                                 dropdownIconColor="#fff"
                                 style={styles.picker}
                                 itemStyle={styles.pickerItem}
                             >
-                                <Picker.Item label="Wallet 1" value="wallet1" />
-                                <Picker.Item label="Wallet 2" value="wallet2" />
+                                <Picker.Item label="Select Wallet" value={0} />
+                                {myWallets.map((wallet, index) => (
+                                    <Picker.Item key={index} label={wallet.walletName} value={wallet.id} />
+                                ))}
                             </Picker>
                         </View>
                     </View>
@@ -59,7 +76,11 @@ const EnterMoneyModal = () => {
                         style={styles.inputBox}
                         keyboardType="numeric"
                         maxLength={8}
+                        value={amount}
+                        onChangeText={setAmount}
                     />
+
+                    {error.length > 0 && <Text style={{ color: 'red', marginTop: 5 }}>{error}</Text>}
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
 
@@ -72,7 +93,7 @@ const EnterMoneyModal = () => {
 
                         <TouchableOpacity
                             style={[styles.btn, { backgroundColor: primary.DEFAULT, }]}
-                            onPress={() => navigation.navigate("pin")}
+                            onPress={handleSubmit}
                         >
                             <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Pay</Text>
                         </TouchableOpacity>

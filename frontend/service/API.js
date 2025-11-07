@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { getItem } from '../context/LocalStorage';
 
-const API_BASE_URL = 'http://10.142.53.50:8080/api';
-// const API_BASE_URL = 'http://172.19.86.114:8080/api';
+// const API_BASE_URL = 'http://10.142.53.50:8080/api';
+const API_BASE_URL = 'http://172.19.86.114:8080/api';
 
 export const api = axios.create({
     baseURL: API_BASE_URL,
@@ -139,8 +139,13 @@ export const depositToWallet = async (amt, id) => {
         const response = await api.post(`/wallet/${id}/deposit?amount=${amt}`);
         return response.data;
     } catch (error) {
-        console.log(`API create error at deposit:`, error);
-        throw error;
+          const message =
+            error.response?.data?.message ??
+            (typeof error.response?.data === 'string' ? error.response.data : undefined) ??
+            error.response?.statusText ??
+            error.message ??
+            'Deposit failed';
+        throw new Error(message);
     }
 }
 
@@ -150,8 +155,13 @@ export const transferToWallet = async (amt, fromId, toId) => {
         const response = await api.post(`/wallet/${fromId}/transfer/${toId}?amount=${amt}`);
         return response.data;
     } catch (error) {
-        console.log(`API create error at transfer:`, error);
-        throw error;
+        const message =
+            error.response?.data?.message ??
+            (typeof error.response?.data === 'string' ? error.response.data : undefined) ??
+            error.response?.statusText ??
+            error.message ??
+            'Transfer failed';
+        throw new Error(message);
     }
 };
 

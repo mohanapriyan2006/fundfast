@@ -22,6 +22,7 @@ const HomeScreen = () => {
         transferWalletState,
         confirmationScreen, } = useContext(DataContext);
 
+
     const navigation = useNavigation();
 
     const [showConfirmModal, setShowConfirmModal] = useState(
@@ -35,33 +36,36 @@ const HomeScreen = () => {
 
     const [infoTitle, setInfoTitle] = useState('');
     const [infoMessage, setInfoMessage] = useState('');
-    const [isInfoError, setIsInfoError] = useState(false);
+    // const [isInfoError, setIsInfoError] = useState(false);
+
+    // useEffect(() => {
+    //     if (confirmationScreen === "Home") return;
+    //     if (confirmationScreen === 'DepositConfirmation' && depositWalletState?.error) {
+    //         setInfoTitle('Deposit Failed');
+    //         setInfoMessage(depositWalletState.error || 'There was an error processing your deposit. Please try again.');
+    //         setIsInfoError(true);
+    //     } else if (confirmationScreen === 'TransferConfirmation' && transferWalletState?.error) {
+    //         setInfoTitle('Transfer Failed');
+    //         setInfoMessage(transferWalletState?.error || 'There was an error processing your transfer. Please try again.');
+    //         setIsInfoError(true);
+    //     }
+    //     setShowConfirmModal(p => ({ ...p, info: true }));
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [confirmationScreen]);
 
     useEffect(() => {
         if (confirmationScreen === "Home") return;
-        if (confirmationScreen === 'DepositConfirmation' && depositWalletState.error) {
-            setInfoTitle('Deposit Failed');
-            setInfoMessage(depositWalletState.error || 'There was an error processing your deposit. Please try again.');
-            setIsInfoError(true);
-        } else if (confirmationScreen === 'TransferConfirmation' && transferWalletState.error) {
-            setInfoTitle('Transfer Failed');
-            setInfoMessage(transferWalletState.error || 'There was an error processing your transfer. Please try again.');
-            setIsInfoError(true);
-        }
-        setShowConfirmModal(p => ({ ...p, info: true }));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [confirmationScreen]);
-
-    useEffect(() => {
-        if (confirmationScreen === "Home") return;
-        if (confirmationScreen === 'DepositConfirmation' && !depositWalletState.error) {
+        if (confirmationScreen === 'DepositConfirmation' && !depositWalletState?.error) {
             setInfoTitle('Deposit Successful');
             setInfoMessage('Your deposit was successful.');
-            setIsInfoError(false);
-        } else if (confirmationScreen === 'TransferConfirmation' && !transferWalletState.error) {
+            // setIsInfoError(false);
+        } else if (confirmationScreen === 'TransferConfirmation' && !transferWalletState?.error) {
             setInfoTitle('Transfer Successful');
             setInfoMessage('Your transfer was successful.');
-            setIsInfoError(false);
+            // setIsInfoError(false);
+        }else{
+            setInfoTitle('Payment Successful');
+            setInfoMessage('Your payment was successful.');
         }
         setShowConfirmModal(p => ({ ...p, info: true }));
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,7 +113,7 @@ const HomeScreen = () => {
 
 
             {/* Info Modal */}
-            {showConfirmModal.info && <InfoModal type={isInfoError ? "error" : "info"} title={infoTitle} msg={infoMessage} onConfirm={() => { setShowConfirmModal(p => ({ ...p, info: false })); setInfoMessage(''); }} />}
+            {showConfirmModal.info && <InfoModal type="info" title={infoTitle} msg={infoMessage} onConfirm={() => { setShowConfirmModal(p => ({ ...p, info: false })); setInfoMessage(''); }} />}
 
         </View>
     )
