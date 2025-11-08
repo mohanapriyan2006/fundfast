@@ -4,6 +4,8 @@ import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByW
 import AuthContext from "./AuthContext";
 import { Platform } from "react-native";
 import * as Notifications from 'expo-notifications';
+import { getItem, setItem } from "./LocalStorage";
+import { primary } from "../theme/colors";
 
 const DataContext = createContext();
 
@@ -172,14 +174,14 @@ const sampleNotifications = [
 
 const randomTemplates = [
     {
-        type: 'gift',
-        title: 'Daily Cashback',
-        message: () => `You received a cashback of $${(Math.random() * 10 + 1).toFixed(2)}.`,
-    },
-    {
         type: 'offer',
         title: 'Limited Time Offer',
         message: () => `Get ${(Math.floor(Math.random() * 30) + 10)}% off on bill payments today.`,
+    },
+    {
+        type: 'gift',
+        title: 'Daily Cashback',
+        message: () => `You received a cashback of $${(Math.random() * 10 + 1).toFixed(2)}.`,
     },
     {
         type: 'offer',
@@ -190,6 +192,11 @@ const randomTemplates = [
         type: 'offer',
         title: 'Flash Recharge Deal',
         message: () => `Recharge now and save $${(Math.random() * 5 + 1).toFixed(2)}.`,
+    },
+    {
+        type: 'gift',
+        title: 'Surprise Cashback',
+        message: () => `You received a surprise cashback of $${(Math.random() * 10 + 1).toFixed(2)}.`,
     },
 ];
 
@@ -257,7 +264,20 @@ export const DataProvider = ({ children }) => {
         }
     };
 
-    const addNotification = (notification) => {
+    useEffect(() => {
+        (async () => {
+            try {
+                const storedNotifications = await getItem('notifications');
+                if (storedNotifications) {
+                    setNotifications(storedNotifications);
+                }
+            } catch (e) {
+                console.log('Error fetching notifications:', e);
+            }
+        })();
+    }, []);
+
+    const addNotification = async (notification) => {
         const newNotif = {
             id: Date.now(),
             time: new Date().toLocaleString(),
@@ -265,6 +285,7 @@ export const DataProvider = ({ children }) => {
         };
         setNotifications((prevNotifications) => [newNotif, ...prevNotifications.slice(0, 20)]);
         sendLocalPush(newNotif);
+        await setItem('notifications', [newNotif, ...notifications.slice(0, 20)]);
     };
 
     const pushRandomNotification = () => {
@@ -380,7 +401,7 @@ export const DataProvider = ({ children }) => {
 
     const [transactions, setTransactions] = useState(sampleTransactionHistory);
 
-    const fetchAllTransactionsByWallet = async (walletId, pageNo = 0, sortBy = 'time', sortDir = 'desc', pageSize = 3) => {
+    const fetchAllTransactionsByWallet = async (walletId, pageNo = 0, sortBy = 'time', sortDir = 'DESC', pageSize = 3) => {
         try {
             const res = await fetchTransactionsByWalletIdPaginated(walletId, pageNo, pageSize, sortBy, sortDir);
             setTransactions(res);
@@ -509,6 +530,58 @@ export const DataProvider = ({ children }) => {
         }
     }
 
+    // -----------------------------------------------------
+    // Stats Screen functions
+    // -----------------------------------------------------
+
+    const buildWalletMonthlyStats = (transactions, walletId) => {
+      const monthMap = {};
+      const monthOrder = {};
+      transactions.forEach(tx => {
+        if (!tx.timestamp) return;
+        const d = new Date(tx.timestamp);
+        const label = d.toLocaleString('default', { month: 'short' });
+        monthOrder[label] = d.getMonth(); // for sorting
+        if (!monthMap[label]) monthMap[label] = { income: 0, expense: 0 };
+        const toId = tx.toWallet?.id;
+        const fromId = tx.fromWallet?.id;
+        switch (tx.type) {
+          case 'DEPOSIT':
+            if (toId === walletId) monthMap[label].income += tx.amount;
+            break;
+          case 'TRANSFER':
+            if (fromId === walletId) monthMap[label].expense += tx.amount;
+            if (toId === walletId) monthMap[label].income += tx.amount;
+            break;
+          case 'WITHDRAWAL':
+            if (fromId === walletId) monthMap[label].expense += tx.amount;
+            break;
+          default:
+            break;
+        }
+      });
+      const labels = Object.keys(monthMap)
+        .sort((a, b) => monthOrder[a] - monthOrder[b]);
+      const data = [];
+      const colors = [];
+      labels.forEach(l => {
+        data.push(monthMap[l].income);
+        colors.push(() => primary.DEFAULT);
+        data.push(monthMap[l].expense);
+        colors.push(() => primary.dark);
+      });
+      return {
+        labels,
+        datasets: [{ data, colors }],
+        totals: labels.reduce((acc, l) => {
+          acc.income += monthMap[l].income;
+          acc.expense += monthMap[l].expense;
+          return acc;
+        }, { income: 0, expense: 0 })
+      };
+    };
+    // ...existing export/provider...
+
 
     return (
         <DataContext.Provider value={{
@@ -547,6 +620,7 @@ export const DataProvider = ({ children }) => {
             setUpdateWalletState,
             updateWallet,
             deleteWallet,
+            buildWalletMonthlyStats,
         }}>
             {children}
         </DataContext.Provider>

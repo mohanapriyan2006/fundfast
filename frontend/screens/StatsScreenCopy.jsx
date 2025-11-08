@@ -8,9 +8,11 @@ import DataContext from '../context/DataContext'
 
 const StatsScreen = () => {
 
-    const { myWallets, transactions, buildWalletMonthlyStats } = useContext(DataContext); // ensure transactions in context
-    const [walletId, setWalletId] = useState(myWallets[0]?.id || null);
-    const stats = walletId ? buildWalletMonthlyStats(transactions || [], walletId) : {
+    const { myWallets } = useContext(DataContext);
+
+    const [period, setPeriod] = useState(myWallets.length > 0 ? myWallets[0].id : '');
+
+    const chartData = {
         labels: ['Jan', 'Feb', 'Mar', 'Jun'],
         datasets: [{
             data: [1200, 800, 3200, 1500, 1800, 1200, 4500, 2100],
@@ -25,63 +27,83 @@ const StatsScreen = () => {
                 () => primary.dark,      // Jun Expense
             ]
         }],
-        totals: { income: 0, expense: 0 }
     };
-    const totalBalance = myWallets.reduce((sum, w) => sum + (w.balance || 0), 0);
 
+    const screenWidth = Dimensions.get('window').width;
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
             <ScrollView style={{ flex: 1 }}>
+                {/* Header */}
                 <OtherHeader title='Statistics' />
+
+                {/* Statistics Content */}
                 <View style={styles.statContent}>
+                    {/* Total Balance */}
                     <View style={{ padding: 10 }}>
                         <Text style={{ fontSize: 16, fontWeight: '500', color: accent.darker }}>Total Balance</Text>
-                        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>${totalBalance.toFixed(2)}</Text>
+                        <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}>$51,430.65</Text>
                     </View>
 
+                    {/* Overview stats */}
                     <View style={{ marginVertical: 20 }}>
                         <View style={styles.overviewHeader}>
                             <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Overview</Text>
                             <View style={styles.pickerWrapper}>
                                 <Picker
-                                    selectedValue={walletId}
-                                    onValueChange={(v) => setWalletId(v)}
+                                    selectedValue={period}
+                                    onValueChange={(itemValue) => setPeriod(itemValue)}
                                     mode="dropdown"
                                     dropdownIconColor="#fff"
                                     style={styles.picker}
                                     itemStyle={styles.pickerItem}
                                 >
-                                    {myWallets.length
-                                        ? myWallets.map(w => <Picker.Item key={w.id} label={w.walletName} value={w.id} />)
-                                        : <Picker.Item label="No Wallets" value="" />}
+                                    {myWallets.length > 0 ? myWallets.map((wallet) => (
+                                        <Picker.Item
+                                            key={wallet.id}
+                                            label={wallet.walletName}
+                                            value={wallet.id}
+                                        />
+                                    )) : (
+                                        <Picker.Item
+                                            label="No Wallets Available"
+                                            value=""
+                                        />
+                                    )}
                                 </Picker>
                             </View>
                         </View>
 
+                        {/* Bar Chart */}
                         <BarChart
-                            data={stats}
-                            width={Dimensions.get('window').width - 60}
+                            data={chartData}
+                            width={screenWidth - 60}
                             height={200}
                             yAxisLabel="$"
+                            yAxisSuffix="k"
                             chartConfig={{
                                 backgroundColor: accent.DEFAULT,
                                 backgroundGradientFrom: accent.DEFAULT,
                                 backgroundGradientTo: accent.DEFAULT,
                                 decimalPlaces: 0,
-                                color: (o = 1) => `rgba(0,0,0,${o * 0.2})`,
-                                labelColor: (o = 1) => `rgba(0,0,0,${o * 0.6})`,
-                                propsForBackgroundLines: { stroke: '#e0e0e0', strokeDasharray: '', strokeWidth: 1 },
+                                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity * 0.1})`,
+                                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity * 0.5})`,
+                                propsForBackgroundLines: {
+                                    strokeDasharray: '',
+                                    stroke: '#e0e0e0',
+                                    strokeWidth: 1,
+                                },
                                 barPercentage: 0.5,
                             }}
                             style={{ marginVertical: 8, borderRadius: 16 }}
                             fromZero
-                            withInnerLines
+                            withInnerLines={true}
                             showBarTops={false}
-                            withCustomBarColorFromData
-                            flatColor
+                            withCustomBarColorFromData={true}
+                            flatColor={true}
                         />
 
+                        {/* Legend */}
                         <View style={styles.legend}>
                             <View style={styles.legendItem}>
                                 <View style={[styles.legendDot, { backgroundColor: primary.DEFAULT }]} />
@@ -94,22 +116,30 @@ const StatsScreen = () => {
                         </View>
                     </View>
 
+                    {/* Income & Expenses */}
                     <View style={styles.statBoxContainer}>
                         <View style={[styles.statBox, { backgroundColor: primary.DEFAULT }]}>
                             <Text style={{ fontSize: 16, color: 'white', marginBottom: 4 }}>Income</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>${stats.totals.income.toFixed(2)}</Text>
-                            <Image source={require("../assets/images/back-light.png")} style={[styles.statBoxImage, { transform: [{ rotate: '-90deg' }] }]} />
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>$14,560.30</Text>
+                            <Image
+                                source={require("../assets/images/back-light.png")}
+                                style={[styles.statBoxImage, { transform: [{ rotate: '-90deg' }] }]}
+                            />
                         </View>
                         <View style={[styles.statBox, { backgroundColor: primary.dark }]}>
                             <Text style={{ fontSize: 16, color: 'white', marginBottom: 4 }}>Expenses</Text>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>${stats.totals.expense.toFixed(2)}</Text>
-                            <Image source={require("../assets/images/back-light.png")} style={[styles.statBoxImage, { transform: [{ rotate: '90deg' }] }]} />
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>$5,240.42</Text>
+                            <Image
+                                source={require("../assets/images/back-light.png")}
+                                style={[styles.statBoxImage, { transform: [{ rotate: '90deg' }] }]}
+                            />
                         </View>
                     </View>
                 </View>
-            </ScrollView>
-        </View>
-    );
+
+            </ScrollView >
+        </View >
+    )
 }
 
 export default StatsScreen;
@@ -124,12 +154,29 @@ const styles = StyleSheet.create({
         top: -30,
     },
 
+    // overviewContainer: {
+    //     marginTop: 20,
+    // },
+
     overviewHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 15,
     },
+
+    // periodBtn: {
+    //     flexDirection: 'row',
+    //     alignItems: 'center',
+    //     gap: 8,
+    //     paddingHorizontal: 16,
+    //     paddingVertical: 8,
+    //     borderRadius: 20,
+    //     borderWidth: 1,
+    //     borderColor: '#ddd',
+    //     backgroundColor: 'white',
+    // },
+
 
     pickerWrapper: {
         height: 30,
@@ -149,6 +196,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
     },
+
+    // chart: {
+    //     marginVertical: 8,
+    //     borderRadius: 16,
+    // },
 
     legend: {
         flexDirection: 'row',

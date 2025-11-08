@@ -14,7 +14,7 @@ const HistoryModal = () => {
     const [pageNo, setPageNo] = useState(0);
 
     const [sortBy, setSortBy] = useState("time");
-    const [sortOrder, setSortOrder] = useState("ASC");
+    const [sortOrder, setSortOrder] = useState("DESC");
 
     useEffect(() => {
         fetchAllTransactionsByWallet(selectedWallet, pageNo, sortBy, sortOrder);

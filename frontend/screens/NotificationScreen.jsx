@@ -4,6 +4,7 @@ import { accent, primary } from '../theme/colors'
 import OtherHeader from '../components/OtherHeader'
 import ConfirmModal from '../components/ConfirmModal'
 import DataContext from '../context/DataContext'
+import { deleteItem } from '../context/LocalStorage'
 
 const NotificationScreen = () => {
 
@@ -42,8 +43,9 @@ const NotificationScreen = () => {
         }
     };
 
-    const handleClearNotifications = () => {
+    const handleClearNotifications = async () => {
         setNotifications([]);
+        await deleteItem('notifications');
         setShowConfirmModal(false);
     }
 
