@@ -17,6 +17,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { AuthProvider } from "../context/AuthContext";
 import '../global.css';
 import ProtectedRoute, { withAuth } from "../components/ProtectedRoute";
+import MobileOnlyWrapper from "./MobileOnlyWrapper";
 
 const Stack = createStackNavigator();
 
@@ -41,20 +42,22 @@ export default function Index() {
   return (
     <AuthProvider>
       <DataProvider>
-        <Stack.Navigator initialRouteName="main" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="main" component={RootLayout} />
-          <Stack.Screen name="login" component={LoginScreen} />
-          <Stack.Screen name="register" component={RegisterScreen} />
-          <Stack.Screen name="scan" component={withAuth(QRScanScreen)} />
-          <Stack.Screen name="pin" component={withAuth(PINScreen)} />
-          <Stack.Screen name="manage-wallet" component={withAuth(ManageWallet)} />
-          <Stack.Screen name="edit-profile" component={withAuth(EditProfile)} />
-          <Stack.Screen name="change-password" component={withAuth(ChangePassOrPIN)} />
-          <Stack.Screen name="change-pin" component={withAuth(ChangePinComponent)} />
-          <Stack.Screen name="terms-conditions" component={TermsAndConditions} />
-          <Stack.Screen name="about" component={About} />
-          <Stack.Screen name="enter-money" component={withAuth(EnterMoneyModal)} />
-        </Stack.Navigator>
+        <MobileOnlyWrapper>
+          <Stack.Navigator initialRouteName="main" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="main" component={RootLayout} />
+            <Stack.Screen name="login" component={LoginScreen} />
+            <Stack.Screen name="register" component={RegisterScreen} />
+            <Stack.Screen name="scan" component={withAuth(QRScanScreen)} />
+            <Stack.Screen name="pin" component={withAuth(PINScreen)} />
+            <Stack.Screen name="manage-wallet" component={withAuth(ManageWallet)} />
+            <Stack.Screen name="edit-profile" component={withAuth(EditProfile)} />
+            <Stack.Screen name="change-password" component={withAuth(ChangePassOrPIN)} />
+            <Stack.Screen name="change-pin" component={withAuth(ChangePinComponent)} />
+            <Stack.Screen name="terms-conditions" component={TermsAndConditions} />
+            <Stack.Screen name="about" component={About} />
+            <Stack.Screen name="enter-money" component={withAuth(EnterMoneyModal)} />
+          </Stack.Navigator>
+        </MobileOnlyWrapper>
       </DataProvider>
     </AuthProvider>
   );
