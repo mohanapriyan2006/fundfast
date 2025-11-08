@@ -69,6 +69,7 @@ const TransferModal = ({ setShowConfirmModal }) => {
                     </TouchableOpacity>
                 </View>
 
+                {/* error */}
                 {error && <Text style={{ color: 'red', marginBottom: 10 }}>{error}</Text>}
 
                 <View style={styles.pickerWrapper}>

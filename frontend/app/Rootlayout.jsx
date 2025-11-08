@@ -3,13 +3,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "../screens/HomeScreen";
 import { Image } from "expo-image";
 import { primary } from "../theme/colors";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import DataContext from "../context/DataContext";
 import ProfileScreen from "../screens/ProfileScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import QRScanScreen from "../screens/QRScanScreen";
 import { useNavigation } from "@react-navigation/native";
 import StatsScreen from "../screens/StatsScreen";
+import * as Notifications from 'expo-notifications';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,10 +20,20 @@ export default function RootLayout() {
 
   const navigation = useNavigation();
 
+  useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    });
+  }, []);
+
   const APINotConnect = () => {
     return (
-      <View style={{position: 'absolute', top: 50, left: 0, right: 0, zIndex: 10000 }}>
-        <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffe6e6ff' , borderRadius: 10, elevation: 4, padding: 20 , marginHorizontal: 20}}>
+      <View style={{ position: 'absolute', top: 50, left: 0, right: 0, zIndex: 10000 }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffe6e6ff', borderRadius: 10, elevation: 4, padding: 20, marginHorizontal: 20 }}>
           <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginBottom: 10, color: 'red' }}>Connection Error</Text>
           <Text style={{ fontSize: 14, textAlign: 'center' }}>Unable to connect to the server. Please check your internet connection or try again later.</Text>
         </View>

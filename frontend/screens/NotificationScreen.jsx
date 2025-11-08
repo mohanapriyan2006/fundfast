@@ -1,50 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import OtherHeader from '../components/OtherHeader'
 import ConfirmModal from '../components/ConfirmModal'
+import DataContext from '../context/DataContext'
 
 const NotificationScreen = () => {
 
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const { notifications, setNotifications } = useContext(DataContext);
 
-    const notifications = [
-        {
-            id: 1,
-            title: 'Payment Received',
-            message: 'You have received a payment of $250 from John Doe.',
-            time: '10/2/2024 14:30',
-            type: 'received'
-        },
-        {
-            id: 2,
-            title: 'Daily Cashback',
-            message: 'You have received a cashback of $5.',
-            time: '8/2/2024 14:30',
-            type: 'gift'
-        },
-        {
-            id: 3,
-            title: 'Payment Sended',
-            message: 'Your payment of $100 to Alex Johnson has been sent.',
-            time: '8/2/2024 12:00',
-            type: 'sent'
-        },
-        {
-            id: 4,
-            title: 'Friday Offer',
-            message: 'Get 25% off on all recharges every Friday.',
-            time: '8/2/2024 14:30',
-            type: 'offer',
-        },
-        {
-            id: 5,
-            title: 'Payment Sended',
-            message: 'Your payment of $20 to Alex Johnson has been sent.',
-            time: '8/2/2024 8:10',
-            type: 'sent'
-        },
-    ];
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
 
     const getNotificationIcon = (type) => {
@@ -77,6 +42,11 @@ const NotificationScreen = () => {
         }
     };
 
+    const handleClearNotifications = () => {
+        setNotifications([]);
+        setShowConfirmModal(false);
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
             <ScrollView style={{ flex: 1 }}>
@@ -94,7 +64,7 @@ const NotificationScreen = () => {
 
                     {/* Notification Items */}
                     <View style={{ flexDirection: 'column', gap: 10, marginHorizontal: 10, marginBottom: 50 }}>
-                        {notifications.map((item) => (
+                        {notifications.length > 0 ? notifications.map((item) => (
                             <View key={item.id} style={styles.notificationItem}>
                                 <View style={{ borderRadius: 20, padding: 14, backgroundColor: getNotificationColor(item.type) }}>
                                     <Image source={getNotificationIcon(item.type)} style={{ width: 30, height: 30, transform: [{ rotate: item.type === 'sent' ? '90deg' : item.type === 'received' ? '-90deg' : '0deg' }] }} />
@@ -105,14 +75,16 @@ const NotificationScreen = () => {
                                     <Text style={{ fontSize: 12, color: '#999999' }}>{item.time}</Text>
                                 </View>
                             </View>
-                        ))}
+                        )) : (
+                            <Text style={{ fontSize: 14, color: accent.darker, textAlign: 'center', marginTop: 40 }}>No notifications available.</Text>
+                        )}
                     </View>
 
                 </View>
 
             </ScrollView >
 
-            {showConfirmModal && <ConfirmModal title="Clear All Notifications" onConfirm={() => setShowConfirmModal(false)} onCancel={() => setShowConfirmModal(false)} />}
+            {showConfirmModal && <ConfirmModal title="Clear All Notifications" onConfirm={handleClearNotifications} onCancel={() => setShowConfirmModal(false)} />}
 
         </View >
     )

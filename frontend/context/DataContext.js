@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "expo-router";
-import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, getWalletByUsername, loginUser, testHealth, transferToWallet, updateData, verifyPin } from "../service/API";
+import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, getWalletByUsername, loginUser, transferToWallet, updateData, verifyPin } from "../service/API";
 import AuthContext from "./AuthContext";
+import { Platform } from "react-native";
+import * as Notifications from 'expo-notifications';
 
 const DataContext = createContext();
 
@@ -64,7 +66,6 @@ const samplewallets = [
         balance: 1500
     }
 ];
-
 
 const sampleTransactionHistory = [
     {
@@ -131,6 +132,69 @@ const sampleTransactionHistory = [
     },
 ]
 
+const sampleNotifications = [
+    {
+        id: 1,
+        title: 'Payment Received',
+        message: 'You have received a payment of $250 from John Doe.',
+        time: '10/2/2024 14:30',
+        type: 'received'
+    },
+    {
+        id: 2,
+        title: 'Daily Cashback',
+        message: 'You have received a cashback of $5.',
+        time: '8/2/2024 14:30',
+        type: 'gift'
+    },
+    {
+        id: 3,
+        title: 'Payment Sended',
+        message: 'Your payment of $100 to Alex Johnson has been sent.',
+        time: '8/2/2024 12:00',
+        type: 'sent'
+    },
+    {
+        id: 4,
+        title: 'Friday Offer',
+        message: 'Get 25% off on all recharges every Friday.',
+        time: '8/2/2024 14:30',
+        type: 'offer',
+    },
+    {
+        id: 5,
+        title: 'Payment Sended',
+        message: 'Your payment of $20 to Alex Johnson has been sent.',
+        time: '8/2/2024 8:10',
+        type: 'sent'
+    },
+];
+
+const randomTemplates = [
+    {
+        type: 'gift',
+        title: 'Daily Cashback',
+        message: () => `You received a cashback of $${(Math.random() * 10 + 1).toFixed(2)}.`,
+    },
+    {
+        type: 'offer',
+        title: 'Limited Time Offer',
+        message: () => `Get ${(Math.floor(Math.random() * 30) + 10)}% off on bill payments today.`,
+    },
+    {
+        type: 'offer',
+        title: 'Weekend Special',
+        message: () => `You have a chance to win $${(Math.random() * 50 + 10).toFixed(2)} on weekend transactions.`,
+    },
+    {
+        type: 'offer',
+        title: 'Flash Recharge Deal',
+        message: () => `Recharge now and save $${(Math.random() * 5 + 1).toFixed(2)}.`,
+    },
+];
+
+
+
 export const DataProvider = ({ children }) => {
 
     const [activeModal, setActiveModal] = useState("home");
@@ -147,24 +211,78 @@ export const DataProvider = ({ children }) => {
 
     const [confirmationScreen, setConfirmationScreen] = useState('Home');
 
-    // const [isAPIConnected, setIsAPIConnected] = useState(true);
 
-    // const fetchTestHealth = async () => {
-    //     try {
-    //         const res = await testHealth();
-    //         setIsAPIConnected(true);
-    //         return res;
-    //     } catch (error) {
-    //         setIsAPIConnected(false);
-    //         console.log("Error fetching test health:", error);
-    //     }
-    // };
+    // -----------------------------------------------------
+    // Notifications data
+    // -----------------------------------------------------
 
-    // useEffect(() => {
-    //     fetchTestHealth();
-    // });
+    const [notifications, setNotifications] = useState(sampleNotifications);
+    const [notifReady, setNotifReady] = useState(false);
 
+    // Notification setup
+    useEffect(() => {
+        (async () => {
+            try {
+                if (Platform.OS === 'android') {
+                    await Notifications.setNotificationChannelAsync('default', {
+                        name: 'Default',
+                        importance: Notifications.AndroidImportance.MAX,
+                        vibrationPattern: [0, 250, 250, 250],
+                        lightColor: '#2ecc71',
+                    });
+                }
+                let perm = await Notifications.getPermissionsAsync();
+                if (!perm.granted) perm = await Notifications.requestPermissionsAsync();
+                setNotifReady(!!perm.granted);
+            } catch (e) {
+                console.log('Notification setup error:', e);
+            }
+        })();
+    }, []);
 
+    // Function to send local push notification
+    const sendLocalPush = async (n) => {
+        if (!notifReady) return;
+        try {
+            await Notifications.scheduleNotificationAsync({
+                content: {
+                    title: n.title,
+                    body: n.message,
+                    data: { type: n.type },
+                },
+                trigger: null, // show now
+            });
+        } catch (e) {
+            console.log('Local push error:', e);
+        }
+    };
+
+    const addNotification = (notification) => {
+        const newNotif = {
+            id: Date.now(),
+            time: new Date().toLocaleString(),
+            ...notification
+        };
+        setNotifications((prevNotifications) => [newNotif, ...prevNotifications.slice(0, 20)]);
+        sendLocalPush(newNotif);
+    };
+
+    const pushRandomNotification = () => {
+        const tem = randomTemplates[Math.floor(Math.random() * randomTemplates.length)];
+        addNotification({
+            title: tem.title,
+            message: tem.message(),
+            type: tem.type,
+        });
+    }
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            pushRandomNotification();
+        }, 5 * 10 * 1000);
+        return () => clearInterval(interval);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // --------------------------------------------
     // Wallets data
@@ -210,6 +328,11 @@ export const DataProvider = ({ children }) => {
     const handleDepositWallet = async () => {
         try {
             await depositToWallet(depositWalletState.amount, depositWalletState.id || 1);
+            addNotification({
+                title: 'Deposit Successful',
+                message: `You deposited $${depositWalletState.amount} to wallet.`,
+                type: 'received',
+            });
             setDepositWalletState({ amount: '', error: '' });
             fetchAllWallets();
         } catch (error) {
@@ -226,7 +349,12 @@ export const DataProvider = ({ children }) => {
     const handleTransferWallet = async () => {
         try {
             console.log("Transferring amount:", transferState.amount, " from wallet ID:", transferState.from, " to wallet ID:", transferState.to);
-            await transferToWallet(transferState.amount, transferState.from, transferState.to);
+            const res = await transferToWallet(transferState.amount, transferState.from, transferState.to);
+            addNotification({
+                title: 'Payment Sent',
+                message: `You sent $${transferState.amount} from wallet ${res?.fromWallet?.walletName || transferState.from} to ${res?.toWallet?.walletName || transferState.to}.`,
+                type: 'sent',
+            });
             setTransferState({ from: 0, to: 0, amount: '', error: '' });
             fetchAllWallets();
         } catch (error) {
@@ -381,6 +509,7 @@ export const DataProvider = ({ children }) => {
         }
     }
 
+
     return (
         <DataContext.Provider value={{
             pathname,
@@ -390,6 +519,8 @@ export const DataProvider = ({ children }) => {
             setConfirmationScreen,
             paymentList,
             promoAndDiscounts,
+            notifications,
+            setNotifications,
             myWallets,
             fetchAllWallets,
             addWalletState,
