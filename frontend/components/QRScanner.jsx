@@ -10,9 +10,9 @@ const QRScanner = ({ setQrData, onClose }) => {
         if (permission && !permission.granted) requestPermission()
     }, [permission])
 
-    if (Platform.OS === 'web') {
-        return <View style={styles.center}><Text>QR scanning not supported on web.</Text></View>
-    }
+    // if (Platform.OS === 'web') {
+    //     return <View style={styles.center}><Text>QR scanning not supported on web.</Text></View>
+    // }
     if (!permission) {
         return <View style={styles.center}><Text>Requesting camera permission…</Text></View>
     }
@@ -54,10 +54,10 @@ const QRScanner = ({ setQrData, onClose }) => {
 
 const styles = StyleSheet.create({
     fill: {
-        flex: 1,
-        backgroundColor: '#000',
-        height: 200,
-        width: 300
+        ...Platform.select({
+            web: { backgroundColor: '#000', height: '50vh', width: '60vw' },
+            default: { backgroundColor: '#000', height: 200, width: 300 }
+        })
     },
     center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 },
     frame: {
