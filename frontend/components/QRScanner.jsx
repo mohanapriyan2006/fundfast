@@ -55,13 +55,13 @@ const QRScanner = ({ setQrData, onClose }) => {
 const styles = StyleSheet.create({
     fill: {
         ...Platform.select({
-            web: { backgroundColor: '#000', height: '50vh', width: '60vw' },
-            default: { backgroundColor: '#000', height: 200, width: 300 }
+            web: { backgroundColor: '#000', height: 200, width: 300 },
+            default: { backgroundColor: '#000', height: 350, width: 300 }
         })
     },
     center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 },
     frame: {
-        position: 'absolute', top: '18%', left: '12%', right: '12%', height: '60%',
+        position: 'absolute', top: '10%', left: '12%', right: '12%', height: '70%',
         borderWidth: 3, borderColor: '#2ecc71', borderRadius: 14,
     },
     rescan: {
