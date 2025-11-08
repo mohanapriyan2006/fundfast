@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { deleteData, loginUser, registerUser, verifyPin, setAuthToken } from "../service/API";
+import { deleteData, loginUser, registerUser, verifyPin, setAuthToken } from "../service/API.local";
 import { deleteItem, getItem, setItem } from "./LocalStorage";
 
 const AuthContext = createContext();
@@ -26,19 +26,19 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     // JWT Token expiration check
-    useEffect(() => {
-        let interval;
-        if (token) {
-            interval = setInterval(() => {
-                const payload = JSON.parse(atob(token.split('.')[1]));
-                const currentTime = Math.floor(Date.now() / 1000);
-                if (payload.exp - 60 < currentTime) {
-                    logout();
-                }
-            }, 60000); // check every minute
-        }
-        return () => clearInterval(interval);
-    }, [token]);
+    // useEffect(() => {
+    //     let interval;
+    //     if (token) {
+    //         interval = setInterval(() => {
+    //             const payload = JSON.parse(atob(token.split('.')[1]));
+    //             const currentTime = Math.floor(Date.now() / 1000);
+    //             if (payload.exp - 60 < currentTime) {
+    //                 logout();
+    //             }
+    //         }, 60000); // check every minute
+    //     }
+    //     return () => clearInterval(interval);
+    // }, [token]);
 
     const saveAuth = async ({ user, token }) => {
         if (user) {

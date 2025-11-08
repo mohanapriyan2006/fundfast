@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { use, useContext, useEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import OtherHeader from '../components/OtherHeader'
@@ -10,7 +10,7 @@ const StatsScreen = () => {
 
     const { myWallets, transactions, buildWalletMonthlyStats } = useContext(DataContext); // ensure transactions in context
     const [walletId, setWalletId] = useState(myWallets[0]?.id || null);
-    const stats = walletId ? buildWalletMonthlyStats(transactions || [], walletId) : {
+    const [stats, setStats] = useState({
         labels: ['Jan', 'Feb', 'Mar', 'Jun'],
         datasets: [{
             data: [1200, 800, 3200, 1500, 1800, 1200, 4500, 2100],
@@ -26,9 +26,36 @@ const StatsScreen = () => {
             ]
         }],
         totals: { income: 0, expense: 0 }
-    };
+    });
     const totalBalance = myWallets.reduce((sum, w) => sum + (w.balance || 0), 0);
 
+    useEffect(() => {
+        if (myWallets.length > 0 && !walletId) {
+            setWalletId(myWallets[0].id);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [myWallets]);
+
+    useEffect(() => {
+        setStats(() => walletId ? buildWalletMonthlyStats(transactions || [], walletId) : {
+            labels: ['Jan', 'Feb', 'Mar', 'Jun'],
+            datasets: [{
+                data: [1200, 800, 3200, 1500, 1800, 1200, 4500, 2100],
+                colors: [
+                    () => primary.DEFAULT,  // Jan Income
+                    () => primary.dark,      // Jan Expense
+                    () => primary.DEFAULT,  // Feb Income
+                    () => primary.dark,      // Feb Expense
+                    () => primary.DEFAULT,  // Mar Income
+                    () => primary.dark,      // Mar Expense
+                    () => primary.DEFAULT,  // Jun Income
+                    () => primary.dark,      // Jun Expense
+                ]
+            }],
+            totals: { income: 0, expense: 0 }
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>

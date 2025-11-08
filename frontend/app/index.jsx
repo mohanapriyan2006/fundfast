@@ -14,7 +14,7 @@ import QRScanScreen from "../screens/QRScanScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import RootLayout from "./Rootlayout";
 import { createStackNavigator } from "@react-navigation/stack";
-import { testHealth } from "../service/API";
+import { testHealth } from "../service/API.local";
 import { AuthProvider } from "../context/AuthContext";
 
 const Stack = createStackNavigator();

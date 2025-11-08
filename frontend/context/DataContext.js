@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "expo-router";
-import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, getWalletByUsername, loginUser, transferToWallet, updateData, verifyPin } from "../service/API";
+import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, getWalletByUsername, loginUser, transferToWallet, updateData, verifyPin } from "../service/API.local";
 import AuthContext from "./AuthContext";
 import { Platform } from "react-native";
 import * as Notifications from 'expo-notifications';

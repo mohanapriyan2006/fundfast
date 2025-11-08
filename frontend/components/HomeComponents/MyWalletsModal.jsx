@@ -60,7 +60,8 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
             </View>
 
 
-            {showAddWallet ? <View>
+            {showAddWallet ? 
+            <View style={{paddingBottom: 100}}>
                 <View style={[styles.headingContainer, { marginBottom: 20 }]}>
                     <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Add a new wallet</Text>
                     <View style={[styles.headingUnderLine, { width: 130 }]}></View>
