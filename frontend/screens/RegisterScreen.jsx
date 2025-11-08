@@ -94,7 +94,7 @@ const RegisterScreen = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT }}>
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ height: 500 }}>
                 <View style={{ marginTop: 50, marginBottom: 20 }}>
                     <Image source={require('../assets/images/logo-name.png')} style={{ height: 50, width: 200, alignSelf: 'center' }} />
                 </View>

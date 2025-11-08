@@ -47,7 +47,7 @@ const ManageWallet = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ height: 500 }}>
                 {/* Header */}
                 <OtherHeader title='Manage Wallet' />
 

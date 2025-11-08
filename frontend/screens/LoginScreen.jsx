@@ -47,7 +47,7 @@ const LoginScreen = () => {
             await validationSchema.validate(formData, { abortEarly: false });
             setErrors({});
 
-            await login(formData);
+            await login({ ...formData, username: formData.username.toLowerCase() });
 
             // console.log('Login successful!', formData);
             navigation.navigate('main');
@@ -68,7 +68,7 @@ const LoginScreen = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ height: 500 }}>
                 <View style={{ marginTop: 130, marginBottom: 20 }}>
                     <Image source={require('../assets/images/logo-name.png')} style={{ height: 50, width: 200, alignSelf: 'center' }} />
                 </View>
