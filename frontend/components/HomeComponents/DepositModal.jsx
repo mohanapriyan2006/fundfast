@@ -2,7 +2,7 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { accent, primary } from '../../theme/colors';
 import { Picker } from '@react-native-picker/picker';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import DataContext from '../../context/DataContext';
 
 
@@ -10,9 +10,23 @@ const DepositModal = ({ setShowConfirmModal }) => {
 
     const { myWallets, depositWalletState, setDepositWalletState } = useContext(DataContext);
 
+    const [error, setError] = useState('');
+
     const handleWalletChange = (walletId) => {
         setDepositWalletState((prevState) => ({ ...prevState, id: walletId }));
     };
+
+    const handleDepsitSubmit = () => {
+        if (!depositWalletState.id) {
+            setError('Please select a wallet.');
+            return;
+        }
+        if (!depositWalletState.amount || isNaN(depositWalletState.amount) || Number(depositWalletState.amount) <= 0) {
+            setError('Please enter a valid amount.');
+            return;
+        }
+        if (setShowConfirmModal) setShowConfirmModal(p => ({ ...p, deposit: true }));
+    }
 
     return (
         <View style={{ paddingBottom: 140 }}>
@@ -57,9 +71,11 @@ const DepositModal = ({ setShowConfirmModal }) => {
                     />
                 </View>
 
+                {error && <Text style={{ color: 'red', marginBottom: 10 }}>{error}</Text>}
+
                 <TouchableOpacity
                     style={styles.submitButton}
-                    onPress={() => { if (setShowConfirmModal) setShowConfirmModal(p => ({ ...p, deposit: true })); }}
+                    onPress={handleDepsitSubmit}
                 >
                     <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Deposit</Text>
                 </TouchableOpacity>

@@ -10,6 +10,8 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
         setActiveModal,
         addWalletState,
         setAddWalletState,
+        setDepositWalletState,
+        setTransferState,
         fetchAllWallets } = useContext(DataContext);
 
     const [showAddWallet, setShowAddWallet] = useState(false);
@@ -37,13 +39,13 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
                             <View style={styles.walletActionBtns}>
                                 <TouchableOpacity
                                     style={styles.walletDepositBtn}
-                                    onPress={() => { setActiveModal('Deposit'); }}
+                                    onPress={() => { setActiveModal('Deposit'); setDepositWalletState({ id: wallet.id, amount: '' }); }}
                                 >
                                     <Text style={{ fontSize: 14, fontWeight: 'semibold', color: 'white' }}>Deposit</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.walletTransferBtn}
-                                    onPress={() => setActiveModal("Transfer")}
+                                    onPress={() => { setActiveModal("Transfer"); setTransferState({ from: wallet.id, amount: '' }); }}
                                 >
                                     <Text style={{ fontSize: 14, fontWeight: 'semibold', color: 'white' }}>Transfer</Text>
                                 </TouchableOpacity>
