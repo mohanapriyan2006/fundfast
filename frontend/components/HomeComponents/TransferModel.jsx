@@ -9,6 +9,7 @@ const TransferModal = ({ setShowConfirmModal }) => {
     const { transferState, setTransferState, myWallets, fetchWalletByUsername } = useContext(DataContext);
 
     const [toWallets, setToWallets] = useState([]);
+    const [walletFound, setWalletFound] = useState(false);
     const [username, setUsername] = useState("");
     const [error, setError] = useState("");
 
@@ -21,10 +22,30 @@ const TransferModal = ({ setShowConfirmModal }) => {
             const wallets = await fetchWalletByUsername(username);
             setToWallets(wallets.length > 0 ? wallets : []);
             setError("");
+            setWalletFound(wallets.length > 0);
         } catch (error) {
+            setWalletFound(false);
             setError(error.toString() || "Failed to fetch recipient wallet.");
             // console.log("Error fetching recipient wallet:", error);
         }
+    };
+
+    const handleTransferSubmit = () => {
+        // Basic validation
+        if (transferState.from === 0) {
+            setError("Please select a wallet to transfer from.");
+            return;
+        }
+        if (transferState.to === 0) {
+            setError("Please select a wallet to transfer to.");
+            return;
+        }
+        if (transferState.amount <= 0) {
+            setError("Please enter a valid amount.");
+            return;
+        }
+        setError("");
+        if (setShowConfirmModal) setShowConfirmModal(p => ({ ...p, transfer: true }));
     };
 
     return (
@@ -38,10 +59,10 @@ const TransferModal = ({ setShowConfirmModal }) => {
             {/* Form Container */}
             <View style={styles.formContainer}>
                 <Text style={styles.formLabel}>Select Your Wallet:</Text>
-                <View style={styles.pickerWrapper}>
+                <View style={[styles.pickerWrapper, { backgroundColor: primary.mid }]}>
                     <Picker
                         selectedValue={transferState.from}
-                        onValueChange={(v) => setTransferState({ ...transferState, from: v })}
+                        onValueChange={(v) => { setTransferState({ ...transferState, from: v }); setError(""); }}
                         mode="dropdown"
                         dropdownIconColor="#fff"
                         style={styles.picker}
@@ -69,22 +90,19 @@ const TransferModal = ({ setShowConfirmModal }) => {
                     </TouchableOpacity>
                 </View>
 
-                {/* error */}
-                {error && <Text style={{ color: 'red', marginBottom: 10 }}>{error}</Text>}
-
-                <View style={styles.pickerWrapper}>
+                <View style={[styles.pickerWrapper, { backgroundColor: walletFound ? primary.mid : accent.dark }]}>
                     <Picker
                         selectedValue={transferState.to}
-                        onValueChange={(v) => setTransferState({ ...transferState, to: v })}
+                        onValueChange={(v) => { setTransferState({ ...transferState, to: v }); setError(""); }}
                         mode="dropdown"
                         dropdownIconColor="#fff"
                         style={styles.picker}
                         itemStyle={styles.pickerItem}
                     >
-                        <Picker.Item label="Select Wallet" value={0} />
-                        {toWallets.length > 0 ? toWallets.map(wallet => (
+                        <Picker.Item label={walletFound ? "Select Wallet" : "No Wallets Found"} value={0} />
+                        {toWallets.length > 0 && toWallets.map(wallet => (
                             <Picker.Item key={wallet.id} label={wallet.walletName} value={wallet.id} />
-                        )) : <Picker.Item label="No Wallets Found" value={0} />}
+                        ))}
                     </Picker>
                 </View>
 
@@ -96,13 +114,16 @@ const TransferModal = ({ setShowConfirmModal }) => {
                         keyboardType="numeric"
                         style={{ fontSize: 16, color: 'black' }}
                         value={transferState.amount}
-                        onChangeText={(v) => setTransferState({ ...transferState, amount: v })}
+                        onChangeText={(v) => { setTransferState({ ...transferState, amount: v }); setError(""); }}
                     />
                 </View>
 
+                {/* error */}
+                {error && <Text style={{ color: 'red', marginBottom: 10 }}>{error}</Text>}
+
                 <TouchableOpacity
                     style={styles.submitButton}
-                    onPress={() => { if (setShowConfirmModal) setShowConfirmModal(p => ({ ...p, transfer: true })); }}
+                    onPress={handleTransferSubmit}
                 >
                     <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Transfer</Text>
                 </TouchableOpacity>
@@ -144,7 +165,6 @@ const styles = StyleSheet.create({
 
     pickerWrapper: {
         height: 50,
-        backgroundColor: primary.mid,
         borderRadius: 10,
         overflow: 'hidden',
         marginBottom: 20,

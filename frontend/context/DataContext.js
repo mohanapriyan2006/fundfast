@@ -216,7 +216,7 @@ export const DataProvider = ({ children }) => {
     // Notifications data
     // -----------------------------------------------------
 
-    const [notifications, setNotifications] = useState(sampleNotifications);
+    const [notifications, setNotifications] = useState([]);
     const [notifReady, setNotifReady] = useState(false);
 
     // Notification setup

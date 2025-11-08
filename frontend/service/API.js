@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getItem } from '../context/LocalStorage';
 
 // const API_BASE_URL = 'http://10.142.53.50:8080/api';
-const API_BASE_URL = 'http://172.19.86.114:8080/api';
+const API_BASE_URL = 'http://10.225.112.50:8080/api';
 
 export const api = axios.create({
     baseURL: API_BASE_URL,
