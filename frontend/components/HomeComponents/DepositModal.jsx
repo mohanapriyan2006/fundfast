@@ -65,6 +65,7 @@ const DepositModal = ({ setShowConfirmModal }) => {
                     <TextInput
                         placeholder="Enter amount"
                         keyboardType="numeric"
+                        placeholderTextColor={accent.dark}
                         style={{ fontSize: 16, color: 'black' }}
                         value={depositWalletState.amount}
                         onChangeText={(text) => setDepositWalletState((prevState) => ({ ...prevState, amount: text }))}

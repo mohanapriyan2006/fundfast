@@ -93,6 +93,7 @@ const PINScreen = () => {
                     keyboardType="number-pad"
                     maxLength={4}
                     style={styles.hiddenInput}
+                    placeholderTextColor={accent.dark}
                     autoFocus
                 />
 

@@ -40,6 +40,7 @@ const ConfirmDeleteModal = ({ item = "Your Account", onConfirm, onCancel }) => {
                             value={password}
                             onChangeText={setPassword}
                             secureTextEntry={!showPassword}
+                            placeholderTextColor={accent.dark}
                         />
                         <Pressable onPress={() => setShowPassword(!showPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 0, top: 3 }}>
                             <Image source={showPassword ? require('../../assets/images/eye.png') : require('../../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />

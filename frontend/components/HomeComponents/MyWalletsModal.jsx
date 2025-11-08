@@ -60,40 +60,41 @@ const MyWalletsModal = ({ setShowConfirmModal }) => {
             </View>
 
 
-            {showAddWallet ? 
-            <View style={{paddingBottom: 100}}>
-                <View style={[styles.headingContainer, { marginBottom: 20 }]}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Add a new wallet</Text>
-                    <View style={[styles.headingUnderLine, { width: 130 }]}></View>
+            {showAddWallet ?
+                <View style={{ paddingBottom: 100 }}>
+                    <View style={[styles.headingContainer, { marginBottom: 20 }]}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Add a new wallet</Text>
+                        <View style={[styles.headingUnderLine, { width: 130 }]}></View>
+                    </View>
+                    <TextInput
+                        placeholder="Enter wallet's name"
+                        style={styles.inputBox}
+                        placeholderTextColor={accent.dark}
+                        onChangeText={(v) => setAddWalletState({ ...addWalletState, name: v })}
+                        value={addWalletState.name}
+                    />
+
+                    {addWalletState.error && <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>{addWalletState.error}</Text>}
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10 }}>
+
+                        <TouchableOpacity
+                            style={{ backgroundColor: accent.dark, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
+                            onPress={() => setShowAddWallet(false)}
+                        >
+                            <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Cancel</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={{ backgroundColor: primary.DEFAULT, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
+                            onPress={() => { setShowConfirmModal(p => ({ ...p, wallet: true })); }}
+                        >
+                            <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Add</Text>
+                        </TouchableOpacity>
+
+                    </View>
+
                 </View>
-                <TextInput
-                    placeholder="Enter wallet's name"
-                    style={styles.inputBox}
-                    onChangeText={(v) => setAddWalletState({ ...addWalletState, name: v })}
-                    value={addWalletState.name}
-                />
-
-                {addWalletState.error && <Text style={{ color: 'red', textAlign: 'center', marginBottom: 10 }}>{addWalletState.error}</Text>}
-
-                <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 10 }}>
-
-                    <TouchableOpacity
-                        style={{ backgroundColor: accent.dark, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
-                        onPress={() => setShowAddWallet(false)}
-                    >
-                        <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Cancel</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={{ backgroundColor: primary.DEFAULT, width: '40%', borderRadius: 10, padding: 10, alignSelf: 'center', alignItems: 'center' }}
-                        onPress={() => { setShowConfirmModal(p => ({ ...p, wallet: true })); }}
-                    >
-                        <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Add</Text>
-                    </TouchableOpacity>
-
-                </View>
-
-            </View>
                 :
                 <TouchableOpacity
                     style={[{ backgroundColor: primary.DEFAULT, marginHorizontal: 20 }, styles.btn]}

@@ -102,6 +102,7 @@ const ManageWallet = () => {
                                     placeholder="Enter wallet's name"
                                     value={updateWalletState?.name}
                                     onChangeText={(v) => setUpdateWalletState({ ...updateWalletState, name: v })}
+                                    placeholderTextColor={accent.dark}
                                     style={styles.inputBox}
                                 />
 

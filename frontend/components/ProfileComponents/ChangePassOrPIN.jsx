@@ -131,6 +131,7 @@ const ChangePassOrPIN = ({ isPin = false }) => {
                                 <TextInput
                                     placeholder={`Enter your current ${isPin ? "PIN" : "Password"}`}
                                     style={styles.inputBox}
+                                    placeholderTextColor={accent.dark}
                                     secureTextEntry={!showPassword}
                                     onChangeText={(text) => handleOnChange('current', text)}
                                     maxLength={isPin ? 4 : 8}
@@ -151,6 +152,8 @@ const ChangePassOrPIN = ({ isPin = false }) => {
                                     onChangeText={(text) => handleOnChange('new', text)}
                                     maxLength={isPin ? 4 : 8}
                                     keyboardType={isPin ? "numeric" : "default"}
+                                    placeholderTextColor={accent.dark}
+
                                 />
                                 <Pressable onPress={() => setShowNewPassword(!showNewPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 0, top: 3 }}>
                                     <Image source={showNewPassword ? require('../../assets/images/eye.png') : require('../../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />
@@ -167,6 +170,7 @@ const ChangePassOrPIN = ({ isPin = false }) => {
                                     onChangeText={(text) => handleOnChange('confirm', text)}
                                     maxLength={isPin ? 4 : 8}
                                     keyboardType={isPin ? "numeric" : "default"}
+                                    placeholderTextColor={accent.dark}
                                 />
                                 <Pressable onPress={() => setShowCPassword(!showCPassword)} style={{ padding: 10, zIndex: 999, position: 'absolute', right: 0, top: 3 }}>
                                     <Image source={showCPassword ? require('../../assets/images/eye.png') : require('../../assets/images/hidden.png')} style={{ width: 25, height: 25, tintColor: primary.dark }} />

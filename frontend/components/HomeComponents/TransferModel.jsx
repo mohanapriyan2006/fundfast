@@ -19,9 +19,9 @@ const TransferModal = ({ setShowConfirmModal }) => {
             return;
         }
         try {
-            const wallets = await fetchWalletByUsername(username);
+            const wallets = await fetchWalletByUsername(username.toLowerCase().trim());
             setToWallets(wallets.length > 0 ? wallets : []);
-            setError("");
+            setError(wallets.length > 0 ? "" : "No wallets found for this username.");
             setWalletFound(wallets.length > 0);
         } catch (error) {
             setWalletFound(false);
@@ -82,6 +82,7 @@ const TransferModal = ({ setShowConfirmModal }) => {
                         placeholder="Search Wallet by username"
                         style={{ fontSize: 16, color: 'black' }}
                         value={username}
+                        placeholderTextColor={accent.dark}
                         onChangeText={(v) => setUsername(v)}
                         onSubmitEditing={handleRecipientUsernameSubmit}
                     />
@@ -112,6 +113,7 @@ const TransferModal = ({ setShowConfirmModal }) => {
                     <TextInput
                         placeholder="Enter amount"
                         keyboardType="numeric"
+                        placeholderTextColor={accent.dark}
                         style={{ fontSize: 16, color: 'black' }}
                         value={transferState.amount}
                         onChangeText={(v) => { setTransferState({ ...transferState, amount: v }); setError(""); }}

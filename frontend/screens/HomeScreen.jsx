@@ -11,6 +11,7 @@ import HomeHeaderModal from '../components/HomeComponents/HomeHeaderModal'
 import ConfirmModal from '../components/ConfirmModal'
 import { useNavigation } from '@react-navigation/native'
 import InfoModal from '../components/InfoModal'
+import AuthContext from '../context/AuthContext'
 
 
 const HomeScreen = () => {
@@ -22,8 +23,17 @@ const HomeScreen = () => {
         transferWalletState,
         confirmationScreen, } = useContext(DataContext);
 
+    const { userDetails } = useContext(AuthContext);
+
 
     const navigation = useNavigation();
+
+    useEffect(() => {
+        if (!userDetails) {
+            navigation.navigate("login");
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeModal]);
 
     const [showConfirmModal, setShowConfirmModal] = useState(
         {

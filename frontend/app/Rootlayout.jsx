@@ -11,6 +11,7 @@ import QRScanScreen from "../screens/QRScanScreen";
 import { useNavigation } from "@react-navigation/native";
 import StatsScreen from "../screens/StatsScreen";
 import * as Notifications from 'expo-notifications';
+import ProtectedRoute, { withAuth } from "../components/ProtectedRoute";
 
 const Tab = createBottomTabNavigator();
 
@@ -30,16 +31,17 @@ export default function RootLayout() {
     });
   }, []);
 
-  const APINotConnect = () => {
-    return (
-      <View style={{ position: 'absolute', top: 50, left: 0, right: 0, zIndex: 10000 }}>
-        <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffe6e6ff', borderRadius: 10, elevation: 4, padding: 20, marginHorizontal: 20 }}>
-          <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginBottom: 10, color: 'red' }}>Connection Error</Text>
-          <Text style={{ fontSize: 14, textAlign: 'center' }}>Unable to connect to the server. Please check your internet connection or try again later.</Text>
-        </View>
-      </View>
-    );
-  }
+  // const APINotConnect = () => {
+  //   return (
+  //     <View style={{ position: 'absolute', top: 50, left: 0, right: 0, zIndex: 10000 }}>
+  //       <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffe6e6ff', borderRadius: 10, elevation: 4, padding: 20, marginHorizontal: 20 }}>
+  //         <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginBottom: 10, color: 'red' }}>Connection Error</Text>
+  //         <Text style={{ fontSize: 14, textAlign: 'center' }}>Unable to connect to the server. Please check your internet connection or try again later.</Text>
+  //       </View>
+  //     </View>
+  //   );
+  // }
+
 
   return (
     <View style={{ flex: 1 }}>
@@ -91,9 +93,9 @@ export default function RootLayout() {
         })}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Stats" component={StatsScreen} />
+        <Tab.Screen name="Stats" component={withAuth(StatsScreen)} />
         <Tab.Screen name="Qr" component={QRScanScreen} />
-        <Tab.Screen name="Notification" component={NotificationScreen} />
+        <Tab.Screen name="Notification" component={withAuth(NotificationScreen)} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
 

@@ -57,6 +57,7 @@ const EditProfile = () => {
                                 style={styles.inputBox}
                                 value={editProfileState.name}
                                 onChangeText={(text) => setEditProfileState({ ...editProfileState, name: text })}
+                                placeholderTextColor={accent.dark}
                             />
                             {/* Username */}
                             <Text style={styles.formLabel}>Username :</Text>
@@ -65,6 +66,7 @@ const EditProfile = () => {
                                 style={styles.inputBox}
                                 value={editProfileState.username}
                                 onChangeText={(text) => setEditProfileState({ ...editProfileState, username: text })}
+                                placeholderTextColor={accent.dark}
                             />
                             {/* Email */}
                             <Text style={styles.formLabel}>Email :</Text>
@@ -73,6 +75,7 @@ const EditProfile = () => {
                                 style={styles.inputBox}
                                 value={editProfileState.email}
                                 onChangeText={(text) => setEditProfileState({ ...editProfileState, email: text })}
+                                placeholderTextColor={accent.dark}
                             />
 
                             {/* Error Message */}

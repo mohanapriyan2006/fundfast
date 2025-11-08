@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { act, createContext, use, useContext, useEffect, useState } from "react";
 import { usePathname } from "expo-router";
 import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, getWalletByUsername, loginUser, transferToWallet, updateData, verifyPin } from "../service/API.local";
 import AuthContext from "./AuthContext";
@@ -204,6 +204,8 @@ const randomTemplates = [
 
 export const DataProvider = ({ children }) => {
 
+    const { userId, userDetails, saveAuth } = useContext(AuthContext);
+
     const [activeModal, setActiveModal] = useState("home");
 
     const pathname = usePathname().substring(6);
@@ -214,7 +216,6 @@ export const DataProvider = ({ children }) => {
         setActiveModal("home");
     }, [pathname]);
 
-    const { userId, userDetails, saveAuth } = useContext(AuthContext);
 
     const [confirmationScreen, setConfirmationScreen] = useState('Home');
 

@@ -16,6 +16,7 @@ import RootLayout from "./Rootlayout";
 import { createStackNavigator } from "@react-navigation/stack";
 import { AuthProvider } from "../context/AuthContext";
 import '../global.css';
+import ProtectedRoute, { withAuth } from "../components/ProtectedRoute";
 
 const Stack = createStackNavigator();
 
@@ -44,15 +45,15 @@ export default function Index() {
           <Stack.Screen name="main" component={RootLayout} />
           <Stack.Screen name="login" component={LoginScreen} />
           <Stack.Screen name="register" component={RegisterScreen} />
-          <Stack.Screen name="scan" component={QRScanScreen} />
-          <Stack.Screen name="pin" component={PINScreen} />
-          <Stack.Screen name="manage-wallet" component={ManageWallet} />
-          <Stack.Screen name="edit-profile" component={EditProfile} />
-          <Stack.Screen name="change-password" component={ChangePassOrPIN} />
-          <Stack.Screen name="change-pin" component={ChangePinComponent} />
+          <Stack.Screen name="scan" component={withAuth(QRScanScreen)} />
+          <Stack.Screen name="pin" component={withAuth(PINScreen)} />
+          <Stack.Screen name="manage-wallet" component={withAuth(ManageWallet)} />
+          <Stack.Screen name="edit-profile" component={withAuth(EditProfile)} />
+          <Stack.Screen name="change-password" component={withAuth(ChangePassOrPIN)} />
+          <Stack.Screen name="change-pin" component={withAuth(ChangePinComponent)} />
           <Stack.Screen name="terms-conditions" component={TermsAndConditions} />
           <Stack.Screen name="about" component={About} />
-          <Stack.Screen name="enter-money" component={EnterMoneyModal} />
+          <Stack.Screen name="enter-money" component={withAuth(EnterMoneyModal)} />
         </Stack.Navigator>
       </DataProvider>
     </AuthProvider>

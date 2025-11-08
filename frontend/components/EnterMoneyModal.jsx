@@ -73,6 +73,7 @@ const EnterMoneyModal = () => {
                     <TextInput
                         placeholder="$ Enter amount"
                         style={styles.inputBox}
+                        placeholderTextColor={accent.dark}
                         keyboardType="numeric"
                         maxLength={8}
                         value={amount}
