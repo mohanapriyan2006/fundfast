@@ -9,7 +9,7 @@ const LoginScreen = () => {
 
     const { login } = useContext(AuthContext);
 
-    const [showPassword, setShowPassword] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigation = useNavigation();
 

@@ -26,9 +26,19 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     // JWT Token expiration check
-    // useEffect(() => {
-
-    // })
+    useEffect(() => {
+        let interval;
+        if (token) {
+            interval = setInterval(() => {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const currentTime = Math.floor(Date.now() / 1000);
+                if (payload.exp - 60 < currentTime) {
+                    logout();
+                }
+            }, 60000); // check every minute
+        }
+        return () => clearInterval(interval);
+    }, [token]);
 
     const saveAuth = async ({ user, token }) => {
         if (user) {
@@ -73,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     const deleteAccount = async () => {
         try {
             console.log("Deleting account for user ID:", userDetails.id);
-            await deleteData("user" , userDetails.id);
+            await deleteData("user", userDetails.id);
             setUserDetails(null);
             setToken(null);
             setAuthToken(null);

@@ -1,64 +1,75 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, Text, View, StyleSheet } from 'react-native'
+import { Platform, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { CameraView, useCameraPermissions } from 'expo-camera'
 
-let Scanner = null
-let askPermission = null
-try {
-    if (Platform.OS !== 'web') {
-        const mod = require('expo-barcode-scanner')
-        Scanner = mod.BarCodeScanner
-        askPermission = mod.requestPermissionsAsync
-    }
-} catch { /* noop */ }
-
-const QRScanner = ({ setQRData, onClose }) => {
-    const [hasPermission, setHasPermission] = useState(null)
+const QRScanner = ({ setQrData, onClose }) => {
+    const [permission, requestPermission] = useCameraPermissions()
     const [scanned, setScanned] = useState(false)
 
     useEffect(() => {
-        let mounted = true
-            ; (async () => {
-                if (!Scanner || !askPermission) {
-                    if (mounted) setHasPermission(false)
-                    return
-                }
-                const { status } = await askPermission()
-                if (mounted) setHasPermission(status === 'granted')
-            })()
-        return () => { mounted = false }
-    }, [])
+        if (permission && !permission.granted) requestPermission()
+    }, [permission])
 
-    if (!Scanner) {
+    if (Platform.OS === 'web') {
+        return <View style={styles.center}><Text>QR scanning not supported on web.</Text></View>
+    }
+    if (!permission) {
+        return <View style={styles.center}><Text>Requesting camera permission…</Text></View>
+    }
+    if (!permission.granted) {
         return (
             <View style={styles.center}>
-                <Text style={{ color: 'white' }}>QR scanning not supported here. Use Android/iOS build.</Text>
+                <Text>Camera permission is required.</Text>
+                <TouchableOpacity style={styles.btn} onPress={requestPermission}>
+                    <Text style={styles.btnText}>Allow Camera</Text>
+                </TouchableOpacity>
             </View>
         )
     }
-    if (hasPermission === null) {
-        return <View style={styles.center}><Text style={{ color: 'white' }}>Requesting camera permission…</Text></View>
-    }
-    if (hasPermission === false) {
-        return <View style={styles.center}><Text style={{ color: 'white' }}>No access to camera</Text></View>
+
+    const onScanned = ({ data }) => {
+        // console.log("QR:", data)
+        setScanned(true)
+        setQrData?.(data)
+        onClose?.()
     }
 
     return (
         <View style={styles.fill}>
-            <Scanner
-                onBarCodeScanned={scanned ? undefined : ({ data }) => {
-                    setScanned(true)
-                    setQRData?.(data)
-                    onClose?.()
-                }}
+            <CameraView
                 style={StyleSheet.absoluteFillObject}
+                facing="back"
+                onBarcodeScanned={scanned ? undefined : onScanned}
+                barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
             />
+            <View style={styles.frame} pointerEvents="none" />
+            {scanned && (
+                <TouchableOpacity style={styles.rescan} onPress={() => setScanned(false)}>
+                    <Text style={styles.btnText}>Scan again</Text>
+                </TouchableOpacity>
+            )}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-    fill: { flex: 1 },
+    fill: {
+        flex: 1,
+        backgroundColor: '#000',
+        height: 200,
+        width: 300
+    },
+    center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 },
+    frame: {
+        position: 'absolute', top: '18%', left: '12%', right: '12%', height: '60%',
+        borderWidth: 3, borderColor: '#2ecc71', borderRadius: 14,
+    },
+    rescan: {
+        position: 'absolute', bottom: 28, alignSelf: 'center',
+        backgroundColor: '#2ecc71', paddingHorizontal: 16, paddingVertical: 10, borderRadius: 10,
+    },
+    btn: { marginTop: 12, backgroundColor: '#2ecc71', paddingHorizontal: 14, paddingVertical: 10, borderRadius: 8 },
+    btnText: { color: '#fff', fontWeight: '600' },
 })
 
 export default QRScanner

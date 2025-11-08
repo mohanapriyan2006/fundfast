@@ -9,11 +9,16 @@ const QRScanScreen = () => {
 
     const navigation = useNavigation();
 
-    const [qrData, setQrData] = useState(null);
+    const [qrData, setQrData] = useState("");
     const [isScanning, setIsScanning] = useState(false);
 
     const waveAnim = useRef(new Animated.Value(0)).current;
 
+    useEffect(() => {
+        if (qrData) {
+            console.log("Scanned QR Data:", qrData);
+        }
+    }, [qrData]);
 
     useEffect(() => {
         // Wave animation
@@ -104,9 +109,9 @@ const QRScanScreen = () => {
                     <TouchableOpacity
                         style={[styles.scanBtn, { backgroundColor: qrData ? primary.DEFAULT : accent.dark }]}
                         onPress={() => { if (qrData || true) navigation.navigate("enter-money"); }}
-                    // disabled={!qrData}
+                        disabled={!qrData}
                     >
-                        <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Scan</Text>
+                        <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Proceed</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

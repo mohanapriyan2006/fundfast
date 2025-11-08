@@ -38,7 +38,7 @@ const EnterMoneyModal = () => {
             return;
         }
         setError('');
-        navigation.navigate("pin" , { type: 'payment' });
+        navigation.navigate("pin" , { type: 'payment' , amount: Number(amount) });
     }
 
     return (
@@ -57,13 +57,12 @@ const EnterMoneyModal = () => {
                         <Text style={styles.formLabel}>Select Wallet :</Text>
                         <View style={styles.pickerWrapper}>
                             <Picker
-                                selectedValue={0}
+                                selectedValue={myWallets.length > 0 ? myWallets[0].id : ''}
                                 mode="dropdown"
                                 dropdownIconColor="#fff"
                                 style={styles.picker}
                                 itemStyle={styles.pickerItem}
                             >
-                                <Picker.Item label="Select Wallet" value={0} />
                                 {myWallets.map((wallet, index) => (
                                     <Picker.Item key={index} label={wallet.walletName} value={wallet.id} />
                                 ))}

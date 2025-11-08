@@ -63,7 +63,7 @@ const HomeScreen = () => {
             setInfoTitle('Transfer Successful');
             setInfoMessage('Your transfer was successful.');
             // setIsInfoError(false);
-        }else{
+        } else {
             setInfoTitle('Payment Successful');
             setInfoMessage('Your payment was successful.');
         }
@@ -107,9 +107,9 @@ const HomeScreen = () => {
 
             {showConfirmModal.wallet && <ConfirmModal title='Add Wallet' onConfirm={handleAddWalletSubmit} onCancel={() => setShowConfirmModal(p => ({ ...p, wallet: false }))} />}
 
-            {showConfirmModal.deposit && <ConfirmModal title='Deposit' onConfirm={() => { setShowConfirmModal(p => ({ ...p, deposit: false })); navigation.navigate("pin", { type: "deposit" }); }} onCancel={() => setShowConfirmModal(p => ({ ...p, deposit: false }))} />}
+            {showConfirmModal.deposit && <ConfirmModal title='Deposit' onConfirm={() => { setShowConfirmModal(p => ({ ...p, deposit: false })); navigation.navigate("pin", { type: "deposit", amount: depositWalletState?.amount }); }} onCancel={() => setShowConfirmModal(p => ({ ...p, deposit: false }))} />}
 
-            {showConfirmModal.transfer && <ConfirmModal title='Transfer' onConfirm={() => { setShowConfirmModal(p => ({ ...p, transfer: false })); navigation.navigate("pin", { type: "transfer" }); }} onCancel={() => setShowConfirmModal(p => ({ ...p, transfer: false }))} />}
+            {showConfirmModal.transfer && <ConfirmModal title='Transfer' onConfirm={() => { setShowConfirmModal(p => ({ ...p, transfer: false })); navigation.navigate("pin", { type: "transfer", amount: transferWalletState?.amount }); }} onCancel={() => setShowConfirmModal(p => ({ ...p, transfer: false }))} />}
 
 
             {/* Info Modal */}

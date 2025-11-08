@@ -11,6 +11,7 @@ const PINScreen = () => {
     const navigation = useNavigation();
 
     const type = navigation.getState().routes[navigation.getState().index].params?.type || 'payment';
+    const amount = navigation.getState().routes[navigation.getState().index].params?.amount || 120;
 
     const { handleDepositWallet, handleTransferWallet, setConfirmationScreen } = useContext(DataContext);
 
@@ -67,7 +68,7 @@ const PINScreen = () => {
                     </View>
                 </View>
                 <View style={styles.amtContainer}>
-                    <Text style={{ color: primary.dark, fontSize: 24, fontWeight: 'bold', textAlign: 'center' }}>$230</Text>
+                    <Text style={{ color: primary.dark, fontSize: 24, fontWeight: 'bold', textAlign: 'center' }}>${amount}</Text>
                 </View>
 
                 {/* PIN input */}
