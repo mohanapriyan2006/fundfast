@@ -1,4 +1,4 @@
-import { StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Linking, Platform, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "../screens/HomeScreen";
 import { Image } from "expo-image";
@@ -105,6 +105,20 @@ export default function RootLayout() {
       >
         <Image style={{ width: 50, height: 50 }} source={require("../assets/images/qrscan.png")} />
       </TouchableOpacity>
+
+      {Platform.OS === 'web' && <TouchableOpacity
+        style={{
+          position: 'absolute',
+          bottom: 100, right: '5%',
+          zIndex: 9999,
+          padding: 10,
+          backgroundColor: "#005631b1",
+          borderRadius: 10,
+          elevation: 4,
+        }} onPress={() => Linking.openURL('https://github.com/mohanapriyan2006/fundfast/releases')}
+      >
+        <Text style={{ color: 'white' }}>Download APK</Text>
+      </TouchableOpacity>}
 
       {/* {!isAPIConnected && <APINotConnect />} */}
 

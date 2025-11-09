@@ -56,19 +56,98 @@ const About = () => {
                         </View>
                     </View>
 
+                    {/* Tech Stack */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Technology Stack</Text>
+
+                        <Text style={styles.techCategory}>Frontend</Text>
+                        <View style={styles.techGrid}>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>React Native</Text>
+                            </View>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>Expo</Text>
+                            </View>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>AsyncStorage</Text>
+                            </View>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>React Navigation</Text>
+                            </View>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>Expo Camera</Text>
+                            </View>
+                        </View>
+
+                        <Text style={styles.techCategory}>Backend</Text>
+                        <View style={styles.techGrid}>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>Java Spring Boot</Text>
+                            </View>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>Spring Security</Text>
+                            </View>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>JWT Auth</Text>
+                            </View>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>MySQL</Text>
+                            </View>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>REST API</Text>
+                            </View>
+                            <View style={styles.techChip}>
+                                <Text style={styles.techText}>Swagger</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    {/* Developer */}
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Developer</Text>
+                        <View style={styles.developerCard}>
+                            <View style={styles.developerInfo}>
+                                <Text style={styles.developerName}>Mohanapriyan M</Text>
+                                <Text style={styles.developerRole}>Full Stack Developer</Text>
+                            </View>
+
+                            <View style={styles.developerLinks}>
+                                <TouchableOpacity
+                                    style={styles.devLinkButton}
+                                    onPress={() => Linking.openURL('https://mohanapriyan.netlify.app/')}
+                                >
+                                    <Text style={styles.devLinkIcon}>🌐</Text>
+                                    <Text style={styles.devLinkText}>Portfolio</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={styles.devLinkButton}
+                                    onPress={() => Linking.openURL('https://github.com/mohanapriyan2006')}
+                                >
+                                    <Text style={styles.devLinkIcon}>💻</Text>
+                                    <Text style={styles.devLinkText}>GitHub</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+
                     {/* Contact */}
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Contact Us</Text>
-                        <TouchableOpacity onPress={() => Linking.openURL('mailto:support@fundfast.com')}>
-                            <Text style={styles.link}>support@fundfast.com</Text>
+                        <Text style={styles.sectionTitle}>Contact & Links</Text>
+                        <TouchableOpacity onPress={() => Linking.openURL('https://github.com/mohanapriyan2006/fundfast')}>
+                            <Text style={styles.link}>📦 View Source Code</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => Linking.openURL('https://www.fundfast.com')}>
-                            <Text style={styles.link}>www.fundfast.com</Text>
+                        <TouchableOpacity onPress={() => Linking.openURL('https://github.com/mohanapriyan2006/fundfast/releases')}>
+                            <Text style={styles.link}>📲 Download Latest APK</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => Linking.openURL('mailto:mohanapriyan.dev@gmail.com')}>
+                            <Text style={styles.link}>✉️ Email Support</Text>
                         </TouchableOpacity>
                     </View>
 
                     {/* Copyright */}
                     <View style={styles.footer}>
+                        <Text style={styles.copyright}>Made with ❤️ by Mohanapriyan</Text>
                         <Text style={styles.copyright}>© 2025 FundFast. All rights reserved.</Text>
                     </View>
                 </View>
@@ -177,5 +256,93 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: accent.darker,
         textAlign: 'center',
+        marginBottom: 5,
+    },
+
+    techCategory: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: primary.dark,
+        marginTop: 15,
+        marginBottom: 10,
+    },
+
+    techGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+        marginBottom: 10,
+    },
+
+    techChip: {
+        backgroundColor: primary.lighter,
+        paddingVertical: 8,
+        paddingHorizontal: 14,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: primary.light,
+    },
+
+    techText: {
+        fontSize: 13,
+        color: 'white',
+        fontWeight: '500',
+    },
+
+    developerCard: {
+        backgroundColor: '#f8f9fa',
+        padding: 20,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#e0e0e0',
+    },
+
+    developerInfo: {
+        marginBottom: 15,
+        alignItems: 'center',
+    },
+
+    developerName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: primary.dark,
+        marginBottom: 4,
+    },
+
+    developerRole: {
+        fontSize: 14,
+        color: '#666',
+        fontStyle: 'italic',
+    },
+
+    developerLinks: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 12,
+    },
+
+    devLinkButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: primary.DEFAULT,
+        paddingVertical: 10,
+        paddingHorizontal: 18,
+        borderRadius: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+
+    devLinkIcon: {
+        fontSize: 16,
+        marginRight: 6,
+    },
+
+    devLinkText: {
+        fontSize: 14,
+        color: '#fff',
+        fontWeight: '600',
     },
 })

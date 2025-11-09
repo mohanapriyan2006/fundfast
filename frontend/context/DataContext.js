@@ -301,7 +301,7 @@ export const DataProvider = ({ children }) => {
     useEffect(() => {
         const interval = setInterval(() => {
             pushRandomNotification();
-        }, 2 * 60 * 1000); // every 2 minutes
+        }, 1 * 60 * 1000); // every 1 minute
         return () => clearInterval(interval);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

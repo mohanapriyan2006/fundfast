@@ -55,7 +55,7 @@ const QRScanner = ({ setQrData, onClose }) => {
 const styles = StyleSheet.create({
     fill: {
         ...Platform.select({
-            web: { backgroundColor: '#000', height: 200, width: 300 },
+            web: { backgroundColor: '#000', height: 350, width: 300 },
             default: { backgroundColor: '#000', height: 350, width: 300 }
         })
     },

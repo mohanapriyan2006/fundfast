@@ -21,7 +21,7 @@ const ensureCollection = async (key, seed = []) => {
     if (!v) {
         // seed default demo user + wallet for easier preview testing
         if (key === 'user') {
-            const demo = { id: 1, username: 'demo', password: 'demo', name: 'Demo User', email: 'demo@example.com', pin: '1234' };
+            const demo = { id: 1, username: 'demo', password: 'Demo123', name: 'Demo User', email: 'demo@example.com', pin: '1234' };
             await setItem('user', [demo]);
             await setItem(seqKey('user'), 1);
             // create a wallet for demo user
