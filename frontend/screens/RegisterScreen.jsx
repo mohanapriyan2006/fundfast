@@ -73,7 +73,7 @@ const RegisterScreen = () => {
             await validationSchema.validate(formData, { abortEarly: false });
             setErrors({});
 
-            await register(formData);
+            await register({...formData , username: formData.username.toLowerCase()});
 
             // console.log('Registration successful!', formData);
             navigation.navigate('login');
@@ -120,6 +120,7 @@ const RegisterScreen = () => {
                     <TextInput
                         placeholder='Username'
                         placeholderTextColor={"#6e6e6eff"}
+                        autoCapitalize='none'
                         style={[styles.input, errors.username && styles.inputError]}
                         onChangeText={(value) => handleOnChange('username', value)}
                         value={formData.username}

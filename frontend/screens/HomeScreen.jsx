@@ -20,7 +20,7 @@ const HomeScreen = () => {
         activeModal,
         handleAddWallet,
         depositWalletState,
-        transferWalletState,
+        transferState: transferWalletState,
         confirmationScreen, } = useContext(DataContext);
 
     const { userDetails } = useContext(AuthContext);
@@ -119,7 +119,7 @@ const HomeScreen = () => {
 
             {showConfirmModal.deposit && <ConfirmModal title='Deposit' onConfirm={() => { setShowConfirmModal(p => ({ ...p, deposit: false })); navigation.navigate("pin", { type: "deposit", amount: depositWalletState?.amount }); }} onCancel={() => setShowConfirmModal(p => ({ ...p, deposit: false }))} />}
 
-            {showConfirmModal.transfer && <ConfirmModal title='Transfer' onConfirm={() => { setShowConfirmModal(p => ({ ...p, transfer: false })); navigation.navigate("pin", { type: "transfer", amount: transferWalletState?.amount }); }} onCancel={() => setShowConfirmModal(p => ({ ...p, transfer: false }))} />}
+            {showConfirmModal.transfer && <ConfirmModal title='Transfer' onConfirm={() => { setShowConfirmModal(p => ({ ...p, transfer: false })); navigation.navigate("pin", { type: "transfer", amount: transferWalletState.amount }); }} onCancel={() => setShowConfirmModal(p => ({ ...p, transfer: false }))} />}
 
 
             {/* Info Modal */}

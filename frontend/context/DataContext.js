@@ -1,4 +1,4 @@
-import { act, createContext, use, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "expo-router";
 import { createWalletByUserId, deleteData, depositToWallet, fetchTransactionsByWalletIdPaginated, getWalletByUserId, getWalletByUsername, loginUser, transferToWallet, updateData, verifyPin } from "../service/API.local";
 import AuthContext from "./AuthContext";
@@ -357,6 +357,8 @@ export const DataProvider = ({ children }) => {
             });
             setDepositWalletState({ amount: '', error: '' });
             fetchAllWallets();
+            // refresh transactions for stats
+            await fetchAllTransactionsByWallet(depositWalletState.id || myWallets[0]?.id);
         } catch (error) {
             // console.log("Error Depositing wallet:", error);
             setDepositWalletState({ ...depositWalletState, error: error.toString() || "Failed to deposit amount. Please try again." });
@@ -379,6 +381,9 @@ export const DataProvider = ({ children }) => {
             });
             setTransferState({ from: 0, to: 0, amount: '', error: '' });
             fetchAllWallets();
+            // refresh transactions for involved wallets
+            if (transferState.from) await fetchAllTransactionsByWallet(transferState.from);
+            if (transferState.to && transferState.to !== transferState.from) await fetchAllTransactionsByWallet(transferState.to);
         } catch (error) {
             // console.log("Error Transferring to wallet:", error);
             setTransferState({ ...transferState, error: "Failed to transfer amount. Please try again." });
@@ -401,11 +406,14 @@ export const DataProvider = ({ children }) => {
     // --------------------------------------------
 
     const [transactions, setTransactions] = useState(sampleTransactionHistory);
+    const [txVersion, setTxVersion] = useState(0); // increment whenever transactions refresh
 
     const fetchAllTransactionsByWallet = async (walletId, pageNo = 0, sortBy = 'time', sortDir = 'DESC', pageSize = 3) => {
+        if (!walletId) return;
         try {
             const res = await fetchTransactionsByWalletIdPaginated(walletId, pageNo, pageSize, sortBy, sortDir);
             setTransactions(res);
+            setTxVersion(v => v + 1);
             // console.log("Fetched transactions:", res);
         } catch (error) {
             console.log("Error fetching transactions by wallet:", error);
@@ -535,52 +543,65 @@ export const DataProvider = ({ children }) => {
     // Stats Screen functions
     // -----------------------------------------------------
 
-    const buildWalletMonthlyStats = (transactions, walletId) => {
-      const monthMap = {};
-      const monthOrder = {};
-      transactions.forEach(tx => {
-        if (!tx.timestamp) return;
-        const d = new Date(tx.timestamp);
-        const label = d.toLocaleString('default', { month: 'short' });
-        monthOrder[label] = d.getMonth(); // for sorting
-        if (!monthMap[label]) monthMap[label] = { income: 0, expense: 0 };
-        const toId = tx.toWallet?.id;
-        const fromId = tx.fromWallet?.id;
-        switch (tx.type) {
-          case 'DEPOSIT':
-            if (toId === walletId) monthMap[label].income += tx.amount;
-            break;
-          case 'TRANSFER':
-            if (fromId === walletId) monthMap[label].expense += tx.amount;
-            if (toId === walletId) monthMap[label].income += tx.amount;
-            break;
-          case 'WITHDRAWAL':
-            if (fromId === walletId) monthMap[label].expense += tx.amount;
-            break;
-          default:
-            break;
-        }
-      });
-      const labels = Object.keys(monthMap)
-        .sort((a, b) => monthOrder[a] - monthOrder[b]);
-      const data = [];
-      const colors = [];
-      labels.forEach(l => {
-        data.push(monthMap[l].income);
-        colors.push(() => primary.DEFAULT);
-        data.push(monthMap[l].expense);
-        colors.push(() => primary.dark);
-      });
-      return {
-        labels,
-        datasets: [{ data, colors }],
-        totals: labels.reduce((acc, l) => {
-          acc.income += monthMap[l].income;
-          acc.expense += monthMap[l].expense;
-          return acc;
-        }, { income: 0, expense: 0 })
-      };
-    };
+        const buildWalletMonthlyStats = (txList, walletId) => {
+            const transactions = Array.isArray(txList) ? txList : [];
+            const monthMap = {}; // { 'Jan': { income, expense } }
+            const monthOrder = {}; // { 'Jan': 0 }
+
+            transactions.forEach(tx => {
+                if (!tx || !tx.timestamp) return;
+                const d = new Date(tx.timestamp);
+                if (isNaN(d.getTime())) return;
+                const label = d.toLocaleString('default', { month: 'short' });
+                monthOrder[label] = d.getMonth();
+                if (!monthMap[label]) monthMap[label] = { income: 0, expense: 0 };
+                const amount = Number(tx.amount) || 0;
+                const toId = tx.toWallet?.id;
+                const fromId = tx.fromWallet?.id;
+                switch (tx.type) {
+                    case 'DEPOSIT':
+                        if (String(toId) === String(walletId)) monthMap[label].income += amount;
+                        break;
+                    case 'TRANSFER':
+                        if (String(fromId) === String(walletId)) monthMap[label].expense += amount;
+                        if (String(toId) === String(walletId)) monthMap[label].income += amount;
+                        break;
+                    case 'WITHDRAWAL':
+                        if (String(fromId) === String(walletId)) monthMap[label].expense += amount;
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            let baseLabels = Object.keys(monthMap).sort((a, b) => (monthOrder[a] ?? 0) - (monthOrder[b] ?? 0));
+            if (baseLabels.length === 0) {
+                const nowLabel = new Date().toLocaleString('default', { month: 'short' });
+                monthMap[nowLabel] = { income: 0, expense: 0 };
+                baseLabels = [nowLabel];
+            }
+
+            // For BarChart we duplicate labels so data length matches labels length
+            const labels = baseLabels.flatMap(l => [l, '']);
+            const data = [];
+            const colors = [];
+            baseLabels.forEach(l => {
+                const inc = Number(monthMap[l].income || 0);
+                const exp = Number(monthMap[l].expense || 0);
+                data.push(inc);
+                colors.push(() => primary.DEFAULT);
+                data.push(exp);
+                colors.push(() => primary.dark);
+            });
+
+            const totals = baseLabels.reduce((acc, l) => {
+                acc.income += Number(monthMap[l].income || 0);
+                acc.expense += Number(monthMap[l].expense || 0);
+                return acc;
+            }, { income: 0, expense: 0 });
+
+            return { labels, datasets: [{ data, colors }], totals };
+        };
     // ...existing export/provider...
 
 
@@ -608,6 +629,7 @@ export const DataProvider = ({ children }) => {
             fetchWalletByUsername,
             handleTransferWallet,
             transactions,
+            txVersion,
             fetchAllTransactionsByWallet,
             verifyPassword,
             editProfileState,

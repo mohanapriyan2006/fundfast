@@ -1,14 +1,15 @@
-import React, { use, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { Image, ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native'
 import { accent, primary } from '../theme/colors'
 import OtherHeader from '../components/OtherHeader'
 import { BarChart } from 'react-native-chart-kit'
 import { Picker } from '@react-native-picker/picker'
+import { useFocusEffect } from '@react-navigation/native'
 import DataContext from '../context/DataContext'
 
 const StatsScreen = () => {
 
-    const { myWallets, transactions, buildWalletMonthlyStats } = useContext(DataContext); // ensure transactions in context
+    const { myWallets, transactions, txVersion, fetchAllTransactionsByWallet, buildWalletMonthlyStats } = useContext(DataContext); // ensure transactions in context
     const [walletId, setWalletId] = useState(myWallets[0]?.id || null);
     const [stats, setStats] = useState({
         labels: ['Jan', 'Feb', 'Mar', 'Jun'],
@@ -36,26 +37,41 @@ const StatsScreen = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [myWallets]);
 
+    // recompute stats whenever transactions or wallet changes
     useEffect(() => {
         setStats(() => walletId ? buildWalletMonthlyStats(transactions || [], walletId) : {
             labels: ['Jan', 'Feb', 'Mar', 'Jun'],
             datasets: [{
                 data: [1200, 800, 3200, 1500, 1800, 1200, 4500, 2100],
                 colors: [
-                    () => primary.DEFAULT,  // Jan Income
-                    () => primary.dark,      // Jan Expense
-                    () => primary.DEFAULT,  // Feb Income
-                    () => primary.dark,      // Feb Expense
-                    () => primary.DEFAULT,  // Mar Income
-                    () => primary.dark,      // Mar Expense
-                    () => primary.DEFAULT,  // Jun Income
-                    () => primary.dark,      // Jun Expense
+                    () => primary.DEFAULT,
+                    () => primary.dark,
+                    () => primary.DEFAULT,
+                    () => primary.dark,
+                    () => primary.DEFAULT,
+                    () => primary.dark,
+                    () => primary.DEFAULT,
+                    () => primary.dark,
                 ]
             }],
             totals: { income: 0, expense: 0 }
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [walletId, transactions, txVersion]);
+
+    // refresh transactions when wallet changes
+    useEffect(() => {
+        if (walletId) fetchAllTransactionsByWallet(walletId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [walletId]);
+
+    // refresh when screen gains focus
+    useFocusEffect(
+        useCallback(() => {
+            if (walletId) fetchAllTransactionsByWallet(walletId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [walletId])
+    );
 
     return (
         <View style={{ flex: 1, backgroundColor: accent.DEFAULT, paddingBottom: 40 }}>
