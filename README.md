@@ -14,13 +14,11 @@
 
 </div>
 
----
-
+---------------------
 <div align="center">
-    <p> Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9ltMKMqpXcVUq1FWyXHAn) </p>
-</div>
 
----
+Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9ltMKMqpXcVUq1FWyXHAn) 📥 </div>
+----------------------------
 
 ## 🌟 Features
 
@@ -229,6 +227,11 @@ fundfast/
 - Expense = outgoing TRANSFER
 - Chart displays monthly trends with bar graphs
 - Wallet-specific filtering
+
+---------------------
+<div align="center">
+
+Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9ltMKMqpXcVUq1FWyXHAn) 📥 </div>
 
 ---
 
