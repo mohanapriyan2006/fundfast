@@ -16,6 +16,12 @@
 
 ---
 
+<div align="center">
+    <p> Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9ltMKMqpXcVUq1FWyXHAn) </p>
+</div>
+
+---
+
 ## 🌟 Features
 
 ### 💳 Core Wallet Features
