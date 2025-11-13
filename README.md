@@ -1,6 +1,8 @@
 <div align="center">
 
-# 💰 FundFast - E-Wallet Application
+ ![fundfast](frontend\assets\images\logo-name.png) 
+###  E-Wallet Application
+
 
 [![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
 [![Expo](https://img.shields.io/badge/Expo-1B1F23?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
@@ -81,6 +83,97 @@ Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9l
 
 ---
 
+## 📱 Screenshots
+
+<div align="center">
+
+| Home | MyWallets | Statistics |
+|-------|------|---------|
+| ![Home](screenshots/home.jpg) | ![myWallet](screenshots/wallet.jpg) | ![stats](screenshots/stats.jpg) |
+
+| Transfer | Notification | Profile |
+|----------|-----------|---------|
+| ![Transfer](screenshots/transfer.jpg) | ![Notification](screenshots/notification.jpg) | ![Profile](screenshots/profile.jpg) |
+
+| Qr | History | PIN |
+|----------|-----------|---------|
+| ![qr](screenshots/qr.jpg) | ![history](screenshots/history.jpg) | ![pin](screenshots/pin.jpg) |
+
+</div>
+
+---
+
+## Web View
+
+<div align="center">
+
+![webview](screenshots/pc.png)
+
+</div>
+
+## 📁 Project Structure
+
+```
+fundfast/
+├── backend/                    # Spring Boot backend
+│   ├── src/main/java/
+│   │   └── com/e_wallet/fundfast/
+│   │       ├── config/         # Security, CORS, JWT
+│   │       ├── controller/     # REST Controllers
+│   │       ├── entity/         # JPA Entities
+│   │       ├── repository/     # Data Access Layer
+│   │       ├── service/        # Business Logic
+│   │       └── util/           # JWT utilities
+│   └── pom.xml
+│
+└── frontend/                   # React Native app
+    ├── app/                    # Navigation & Routing
+    ├── assets/                 # Images, icons
+    ├── components/             # Reusable components
+    │   ├── HomeComponents/
+    │   ├── ProfileComponents/
+    │   └── RoundMenuComponents/
+    ├── context/                # Global state (Auth, Data)
+    ├── screens/                # Main screens
+    ├── service/                # API integration
+    └── theme/                  # Colors, styles
+```
+
+---
+
+## 🔑 Key Features Explained
+
+### 🔐 Authentication Flow
+1. User registers with name, email, username, password, and 4-digit PIN
+2. Yup validation ensures strong passwords (min 6 chars, uppercase, lowercase, number)
+3. Backend encrypts password with BCrypt
+4. Login returns JWT token stored in AsyncStorage
+5. All protected routes require valid JWT in `Authorization: Bearer <token>`
+
+### 💸 Transaction Flow
+1. User selects source wallet
+2. Enters amount and destination wallet
+3. PIN verification for security
+4. Backend validates balance and performs atomic transfer
+5. Transaction record created with timestamp
+6. Real-time balance updates
+7. Push notification sent to both parties
+
+### 📊 Statistics Generation
+- Transactions grouped by month (DEPOSIT, TRANSFER in/out)
+- Income = DEPOSIT + incoming TRANSFER
+- Expense = outgoing TRANSFER
+- Chart displays monthly trends with bar graphs
+- Wallet-specific filtering
+
+---------------------
+<div align="center">
+
+Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9ltMKMqpXcVUq1FWyXHAn) 📥 </div>
+
+---
+
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -157,84 +250,6 @@ Once the backend is running, access the interactive API documentation:
 
 ---
 
-## 📱 Screenshots
-
-<div align="center">
-
-| Login | Home | Wallets |
-|-------|------|---------|
-| ![Login](assets/screenshots/login.png) | ![Home](assets/screenshots/home.png) | ![Wallets](assets/screenshots/wallets.png) |
-
-| Transfer | Statistics | Profile |
-|----------|-----------|---------|
-| ![Transfer](assets/screenshots/transfer.png) | ![Stats](assets/screenshots/stats.png) | ![Profile](assets/screenshots/profile.png) |
-
-</div>
-
----
-
-## 📁 Project Structure
-
-```
-fundfast/
-├── backend/                    # Spring Boot backend
-│   ├── src/main/java/
-│   │   └── com/e_wallet/fundfast/
-│   │       ├── config/         # Security, CORS, JWT
-│   │       ├── controller/     # REST Controllers
-│   │       ├── entity/         # JPA Entities
-│   │       ├── repository/     # Data Access Layer
-│   │       ├── service/        # Business Logic
-│   │       └── util/           # JWT utilities
-│   └── pom.xml
-│
-└── frontend/                   # React Native app
-    ├── app/                    # Navigation & Routing
-    ├── assets/                 # Images, icons
-    ├── components/             # Reusable components
-    │   ├── HomeComponents/
-    │   ├── ProfileComponents/
-    │   └── RoundMenuComponents/
-    ├── context/                # Global state (Auth, Data)
-    ├── screens/                # Main screens
-    ├── service/                # API integration
-    └── theme/                  # Colors, styles
-```
-
----
-
-## 🔑 Key Features Explained
-
-### 🔐 Authentication Flow
-1. User registers with name, email, username, password, and 4-digit PIN
-2. Yup validation ensures strong passwords (min 6 chars, uppercase, lowercase, number)
-3. Backend encrypts password with BCrypt
-4. Login returns JWT token stored in AsyncStorage
-5. All protected routes require valid JWT in `Authorization: Bearer <token>`
-
-### 💸 Transaction Flow
-1. User selects source wallet
-2. Enters amount and destination wallet
-3. PIN verification for security
-4. Backend validates balance and performs atomic transfer
-5. Transaction record created with timestamp
-6. Real-time balance updates
-7. Push notification sent to both parties
-
-### 📊 Statistics Generation
-- Transactions grouped by month (DEPOSIT, TRANSFER in/out)
-- Income = DEPOSIT + incoming TRANSFER
-- Expense = outgoing TRANSFER
-- Chart displays monthly trends with bar graphs
-- Wallet-specific filtering
-
----------------------
-<div align="center">
-
-Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9ltMKMqpXcVUq1FWyXHAn) 📥 </div>
-
----
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please follow these steps:
@@ -247,11 +262,6 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 👨‍💻 Author
 
