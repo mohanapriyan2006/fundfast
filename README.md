@@ -1,6 +1,6 @@
 <div align="center">
 
- ![fundfast](frontend\assets\images\logo-name.png) 
+ ![fundfast](frontend/assets/images/logo-name.png) 
 ###  E-Wallet Application
 
 
