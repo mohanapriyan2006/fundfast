@@ -55,7 +55,13 @@ Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9l
 
 ## App Video
 
-https://github.com/mohanapriyan2006/fundfast/raw/main/screenshots/fundfast-video.mp4
+<div align="center">
+
+[![video](https://mohanapriyan.netlify.app/assets/fundfast-DfGk2S4h.png)](https://www.linkedin.com/posts/mohanapriyan-m2006_fundfast-fintech-ewallet-activity-7395392504474304512-FbKb?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEdfjWABL_2j98un4JlBtZDRvHOOIBs2IsE)
+
+[Click to view video](https://www.linkedin.com/posts/mohanapriyan-m2006_fundfast-fintech-ewallet-activity-7395392504474304512-FbKb?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEdfjWABL_2j98un4JlBtZDRvHOOIBs2IsE)
+
+</div>
 
 -----
 
