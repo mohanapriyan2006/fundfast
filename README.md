@@ -22,6 +22,47 @@
 Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9ltMKMqpXcVUq1FWyXHAn) 📥 </div>
 ----------------------------
 
+
+## 📱 Screenshots
+
+<div align="center">
+
+| Home | MyWallets | Statistics |
+|-------|------|---------|
+| ![Home](screenshots/home.jpg) | ![myWallet](screenshots/wallet.jpg) | ![stats](screenshots/stats.jpg) |
+
+| Transfer | Notification | Profile |
+|----------|-----------|---------|
+| ![Transfer](screenshots/transfer.jpg) | ![Notification](screenshots/notification.jpg) | ![Profile](screenshots/profile.jpg) |
+
+| Qr | History | PIN |
+|----------|-----------|---------|
+| ![qr](screenshots/qr.jpg) | ![history](screenshots/history.jpg) | ![pin](screenshots/pin.jpg) |
+
+</div>
+
+---
+
+## Web View
+
+<div align="center">
+
+![webview](screenshots/pc.png)
+
+</div>
+
+---
+
+## App Video
+
+<div align="center">
+
+<video src="screenshots/fundfast-video.mp4" controls preload></video>
+
+</div>
+
+-----
+
 ## 🌟 Features
 
 ### 💳 Core Wallet Features
@@ -81,35 +122,7 @@ Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9l
 🔐 BCrypt Password Encoding
 ```
 
----
-
-## 📱 Screenshots
-
-<div align="center">
-
-| Home | MyWallets | Statistics |
-|-------|------|---------|
-| ![Home](screenshots/home.jpg) | ![myWallet](screenshots/wallet.jpg) | ![stats](screenshots/stats.jpg) |
-
-| Transfer | Notification | Profile |
-|----------|-----------|---------|
-| ![Transfer](screenshots/transfer.jpg) | ![Notification](screenshots/notification.jpg) | ![Profile](screenshots/profile.jpg) |
-
-| Qr | History | PIN |
-|----------|-----------|---------|
-| ![qr](screenshots/qr.jpg) | ![history](screenshots/history.jpg) | ![pin](screenshots/pin.jpg) |
-
-</div>
-
----
-
-## Web View
-
-<div align="center">
-
-![webview](screenshots/pc.png)
-
-</div>
+----
 
 ## 📁 Project Structure
 
