@@ -55,11 +55,7 @@ Click here for [**APK Download**](https://drive.google.com/file/d/1oUTYrMIFgxt9l
 
 ## App Video
 
-<div align="center">
-
-<video src="screenshots/fundfast-video.mp4" controls preload></video>
-
-</div>
+https://github.com/mohanapriyan2006/fundfast/raw/main/screenshots/fundfast-video.mp4
 
 -----
 
